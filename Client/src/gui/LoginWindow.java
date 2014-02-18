@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -82,6 +84,15 @@ public class LoginWindow extends JFrame {
 		loginButton.setPreferredSize(new Dimension(150, 30));
 		Utils.setGBC(gbc, 1, 3, 2, 1, GridBagConstraints.NONE);
 		add(loginButton, gbc);
+		
+		//test code
+		loginButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new MainWindow().setVisible(true);
+				LoginWindow.this.dispose();
+			}
+		});
 		
 		// forgotten password label
 		passwordLabel = new JLabel("<html><a href=\"\">"+ "Forgotten Password?" +"</a></html>");
