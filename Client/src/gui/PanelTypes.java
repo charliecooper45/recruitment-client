@@ -5,5 +5,5 @@ package gui;
  * @author Charlie
  */
 public enum PanelTypes {
-	VACANCIES;
+	VACANCIES, PIPELINE, ORGANISATIONS, SEARCH;
 }

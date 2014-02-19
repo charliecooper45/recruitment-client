@@ -17,6 +17,9 @@ import javax.swing.JPanel;
 public class TopMenuPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private MenuPanel[] menuOptions;
+	
+	// listener that alerts the MainWindow to changes in the displayed panel
+	private ChangePanelListener changePanelListener;
 
 	public TopMenuPanel() {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -28,14 +31,18 @@ public class TopMenuPanel extends JPanel{
 	private void init() {
 		// menu options
 		menuOptions = new MenuPanel[4];
-		menuOptions[0] = new MenuPanel("Vacancies");
+		menuOptions[0] = new MenuPanel("Vacancies", PanelTypes.VACANCIES);
 		menuOptions[0].setSelected(true);
-		menuOptions[1] = new MenuPanel("My Candidate Pipeline");
-		menuOptions[2] = new MenuPanel("Organisations");
-		menuOptions[3] = new MenuPanel("Search Candidates");
+		menuOptions[1] = new MenuPanel("My Candidate Pipeline", PanelTypes.PIPELINE);
+		menuOptions[2] = new MenuPanel("Organisations", PanelTypes.ORGANISATIONS);
+		menuOptions[3] = new MenuPanel("Search Candidates", PanelTypes.SEARCH);
 		for(MenuPanel panel : menuOptions) {
 			add(panel);
 		}
+	}
+	
+	public void setChangePanelListener(ChangePanelListener changePanelListener) {
+		this.changePanelListener = changePanelListener;
 	}
 	
 	/**
@@ -47,11 +54,13 @@ public class TopMenuPanel extends JPanel{
 		private static final int HEIGHT = 135;
 		
 		private String name;
+		private PanelTypes panelType;
 		
 		// components
 		private JLabel nameLbl;
 		
-		public MenuPanel(String name) {
+		public MenuPanel(String name, PanelTypes panelType) {
+			this.panelType = panelType;
 			this.name = name;
 			setBackground(Color.GRAY);
 			setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -69,6 +78,7 @@ public class TopMenuPanel extends JPanel{
 						panel.setSelected(false);
 					}
 					setSelected(true);
+					changePanelListener.changePanel(panelType);
 				}
 			});
 		}
@@ -82,6 +92,5 @@ public class TopMenuPanel extends JPanel{
 				nameLbl.setForeground(Color.BLACK);
 			}
 		}
-		
 	}
 }

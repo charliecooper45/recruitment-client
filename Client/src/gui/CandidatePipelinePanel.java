@@ -7,8 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -16,27 +15,31 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Displays the vacancies to the user
+ * Displays the pipeline (current user or everyones) to the user
  * @author Charlie
  */
-public class VacanciesPanel extends JPanel {
+public class CandidatePipelinePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-
+	
 	private GridBagConstraints gbc;
 	
 	// components - topPanel
 	private JPanel topPanel;
+	private JCheckBox[] chckBoxes;
+	private JCheckBox shortlistedChckBox;
+	private JCheckBox cvsChckBox;
+	private JCheckBox interviewsChckBox;
+	private JCheckBox placementsChckBox;
 	private ButtonGroup group;
-	private JRadioButton openVacanciesRdBtn;
-	private JRadioButton allVacanciesRdBtn;
-	private JComboBox<String> userCombo;
+	private JRadioButton myPipelineRdBtn;
+	private JRadioButton companyPipelineRdBtn;
 	
 	// components - mainPanel
 	private JPanel mainPanel;
-	private JTable vacanciesTbl;
+	private JTable pipelineTbl;
 	private JScrollPane tableScrll;
 	
-	public VacanciesPanel() {
+	public CandidatePipelinePanel() {
 		setLayout(new BorderLayout());
 		init();
 	}
@@ -47,8 +50,8 @@ public class VacanciesPanel extends JPanel {
 	}
 	
 	private void initTopPanel() {
-		JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		JPanel leftJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JPanel rightJPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		Insets leftInsets = new Insets(30, 20, 0, 0);
 		Insets rightInsets = new Insets(30, 0, 0, 20);
 		
@@ -57,29 +60,35 @@ public class VacanciesPanel extends JPanel {
 		gbc = new GridBagConstraints();
 		gbc.weightx = 1;
 		gbc.weighty = 1;
-
+		
 		// left JPanel
-		group = new ButtonGroup();
-		openVacanciesRdBtn = new JRadioButton("Open Vacancies");
-		group.add(openVacanciesRdBtn);
-		leftPanel.add(openVacanciesRdBtn);
-		allVacanciesRdBtn = new JRadioButton("All Vacancies");
-		group.add(allVacanciesRdBtn);
-		leftPanel.add(allVacanciesRdBtn);
+		shortlistedChckBox = new JCheckBox("Shortlisted Candidates");
+		cvsChckBox = new JCheckBox("CVs Sent");
+		interviewsChckBox = new JCheckBox("Interviews");
+		placementsChckBox = new JCheckBox("Placements");
+		chckBoxes = new JCheckBox[4];
+		chckBoxes[0] = shortlistedChckBox;
+		chckBoxes[1] = cvsChckBox;
+		chckBoxes[2] = interviewsChckBox;
+		chckBoxes[3] = placementsChckBox;
+		for(JCheckBox box : chckBoxes) {
+			leftJPanel.add(box);
+		}
 		gbc.insets = leftInsets;
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.HORIZONTAL);
-		topPanel.add(leftPanel, gbc);
+		topPanel.add(leftJPanel, gbc);
 		
 		// right JPanel
-		rightPanel.add(new JLabel("User:"));
-		userCombo = new JComboBox<String>();
-		userCombo.addItem("All Users");
-		userCombo.addItem("CC01 - Charlie Cooper");
-		userCombo.addItem("MC01 - Martine Cooper");
-		rightPanel.add(userCombo);
+		group = new ButtonGroup();
+		myPipelineRdBtn = new JRadioButton("My Pipeline");
+		companyPipelineRdBtn = new JRadioButton("Company Pipeline");
+		group.add(myPipelineRdBtn);
+		rightJPanel.add(myPipelineRdBtn);
+		group.add(companyPipelineRdBtn);
+		rightJPanel.add(companyPipelineRdBtn);
 		gbc.insets = rightInsets;
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL);
-		topPanel.add(rightPanel, gbc);
+		topPanel.add(rightJPanel, gbc);
 		
 		add(topPanel, BorderLayout.NORTH);
 	}
@@ -90,9 +99,9 @@ public class VacanciesPanel extends JPanel {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.insets = new Insets(30, 20, 30, 20);
-		vacanciesTbl = new JTable(new DefaultTableModel() {
+		pipelineTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = {"Job Title", "Organisation", "Start Date", "User", "CVs Sent", "Interviews", "Closed"};
+			private String[] columns = {"Candidate", "Event", "Job Title", "Organisation", "Date", "User"};
 
 			@Override
 			public Object getValueAt(int arg0, int arg1) {
@@ -106,7 +115,7 @@ public class VacanciesPanel extends JPanel {
 			
 			@Override
 			public int getColumnCount() {
-				return 7;
+				return 6;
 			}
 
 			@Override
@@ -114,8 +123,8 @@ public class VacanciesPanel extends JPanel {
 				return columns[index];
 			}
 		});
-		vacanciesTbl.setRowHeight(30);
-		tableScrll = new JScrollPane(vacanciesTbl);
+		pipelineTbl.setRowHeight(30);
+		tableScrll = new JScrollPane(pipelineTbl);
 		tableScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tableScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);

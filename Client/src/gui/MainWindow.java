@@ -25,10 +25,11 @@ public class MainWindow extends JFrame {
 	private ExecutorService timeThreadExecutor;
 
 	// JPanels that form the static elements of the GUI
-	private JPanel topMenuPanel;
+	private TopMenuPanel topMenuPanel;
 	private JPanel taskListPanel;
 	
 	// JPanels that fill the centre of the GUI
+	private PanelTypes displayedPanel;
 	private Map<PanelTypes, JPanel> centrePanels;
 	
 	public MainWindow() {
@@ -61,6 +62,12 @@ public class MainWindow extends JFrame {
 		setLayout(borderLayout);
 		
 		topMenuPanel = new TopMenuPanel();
+		topMenuPanel.setChangePanelListener(new ChangePanelListener() {
+			@Override
+			public void changePanel(PanelTypes panelType) {
+				changeDisplayedPanel(panelType);
+			}
+		});
 		add(topMenuPanel, BorderLayout.NORTH);
 		taskListPanel = new TaskListPanel();
 		add(taskListPanel, BorderLayout.EAST);
@@ -68,6 +75,9 @@ public class MainWindow extends JFrame {
 		// first panel displayed is the vacancies panel
 		centrePanels = new HashMap<>();
 		centrePanels.put(PanelTypes.VACANCIES, new VacanciesPanel());
+		centrePanels.put(PanelTypes.PIPELINE, new CandidatePipelinePanel());
+		centrePanels.put(PanelTypes.ORGANISATIONS, new OrganisationsPanel());
+		centrePanels.put(PanelTypes.SEARCH, new SearchPanel());
 		changeDisplayedPanel(PanelTypes.VACANCIES);
 	}
 	
@@ -76,6 +86,10 @@ public class MainWindow extends JFrame {
 		if(!(centreComponent == null)) 
 			remove(centreComponent);
 		
+		displayedPanel = panel;
 		add(centrePanels.get(panel));
+		
+		revalidate();
+		repaint();
 	}
 }
