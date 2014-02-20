@@ -8,7 +8,6 @@ import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -22,11 +21,11 @@ import javax.swing.table.DefaultTableModel;
  * Panel that allows the user to search for candidates 
  * @author Charlie
  */
-public class SearchPanel extends JPanel{
+public class SearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
+
 	private GridBagConstraints gbc;
-	
+
 	// components - leftPanel
 	private JPanel leftPanel;
 	private JPanel topPanel;
@@ -44,7 +43,6 @@ public class SearchPanel extends JPanel{
 	private JList<String> prefLst;
 	private JButton searchButton;
 
-	
 	// components - rightPanel
 	private JPanel rightPanel;
 	private JTable resultsTbl;
@@ -52,26 +50,29 @@ public class SearchPanel extends JPanel{
 	private JComboBox<String> vacancyCmBx;
 	private JButton shortlistBtn;
 	
+	// data for the results table
+	private Object[][] resultsArray = {{new Boolean(true), "Charlie"}};
+
 	public SearchPanel() {
 		init();
 	}
-	
+
 	private void init() {
 		setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints();
 		initLeftPanel();
 		initRightPanel();
 	}
-	
+
 	private void initLeftPanel() {
 		leftPanel = new JPanel(new GridBagLayout());
+		leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		GridBagConstraints leftGbc = new GridBagConstraints();
 		leftGbc.weightx = 1;
 		leftGbc.weighty = 1;
-		
+
 		// topPanel
 		topPanel = new JPanel(new GridBagLayout());
-		topPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		GridBagConstraints topPanelGbc = new GridBagConstraints();
 		topPanelGbc.weightx = 1;
 		topPanelGbc.weighty = 1;
@@ -87,13 +88,12 @@ public class SearchPanel extends JPanel{
 		jobTxt = new JTextField(20);
 		Utils.setGBC(topPanelGbc, 2, 2, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(jobTxt, topPanelGbc);
-		
+
 		Utils.setGBC(leftGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		leftPanel.add(topPanel, leftGbc);
-		
+
 		// middlePanel
 		middlePanel = new JPanel(new GridBagLayout());
-		middlePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		GridBagConstraints middlePanelGbc = new GridBagConstraints();
 		middlePanelGbc.weightx = 1;
 		middlePanelGbc.weighty = 1;
@@ -129,10 +129,10 @@ public class SearchPanel extends JPanel{
 		prefScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		Utils.setGBC(middlePanelGbc, 1, 5, 3, 1, GridBagConstraints.NONE);
 		middlePanel.add(prefScrlPane, middlePanelGbc);
-		
+
 		Utils.setGBC(leftGbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		leftPanel.add(middlePanel, leftGbc);
-		
+
 		// bottonPanel
 		bottomPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints bottomPanelGbc = new GridBagConstraints();
@@ -140,21 +140,20 @@ public class SearchPanel extends JPanel{
 		bottomPanelGbc.weighty = 1;
 		Insets buttonInsets = new Insets(0, 10, 0, 10);
 		bottomPanelGbc.insets = buttonInsets;
-		bottomPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		searchButton = new JButton("Search");
 		searchButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 		Utils.setGBC(bottomPanelGbc, 1, 1, 1, 1, GridBagConstraints.HORIZONTAL);
 		bottomPanel.add(searchButton, bottomPanelGbc);
-		
+
 		Utils.setGBC(leftGbc, 1, 3, 1, 1, GridBagConstraints.BOTH);
 		leftPanel.add(bottomPanel, leftGbc);
-		
+
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		add(leftPanel, gbc);
 	}
-	
+
 	private void initRightPanel() {
 		rightPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints rightPanelGbc = new GridBagConstraints();
@@ -167,18 +166,26 @@ public class SearchPanel extends JPanel{
 		rightPanel.add(resultsLabel, rightPanelGbc);
 		resultsTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = {"", "Name", "Skills", "Job Title", "Company", "Phone Number", "Address", "User"};
+			private String[] columns = { "", "Name", "Skills", "Job Title", "Company", "Phone Number", "Address", "User" };
 
 			@Override
-			public Object getValueAt(int arg0, int arg1) {
+			public Object getValueAt(int row, int column) {
+				if(column == 0) 
+					return resultsArray[0][0];
 				return null;
 			}
 			
 			@Override
-			public int getRowCount() {
-				return 5;
+			public void setValueAt(Object aValue, int row, int column) {
+				if(column == 0)
+					resultsArray[0][0] = aValue;
 			}
-			
+
+			@Override
+			public int getRowCount() {
+				return 1;
+			}
+
 			@Override
 			public int getColumnCount() {
 				return 8;
@@ -188,6 +195,19 @@ public class SearchPanel extends JPanel{
 			public String getColumnName(int index) {
 				return columns[index];
 			}
+			
+		    @Override
+		    public Class<?> getColumnClass(int col) {
+		        if (col == 0) {
+		            return Boolean.class;
+		        }
+		        return super.getColumnClass(col);
+		    }
+			
+		    @Override
+		    public boolean isCellEditable(int row, int col) {
+		        return col == 0;
+		    }
 		});
 		resultsTbl.setRowHeight(30);
 		resultsTblScrlPane = new JScrollPane(resultsTbl);
@@ -209,7 +229,7 @@ public class SearchPanel extends JPanel{
 		rightPanelGbc.anchor = GridBagConstraints.LINE_START;
 		Utils.setGBC(rightPanelGbc, 3, 3, 1, 1, GridBagConstraints.NONE);
 		rightPanel.add(shortlistBtn, rightPanelGbc);
-		
+
 		gbc.insets = new Insets(30, 20, 30, 20);
 		gbc.weightx = 5;
 		gbc.weighty = 1;

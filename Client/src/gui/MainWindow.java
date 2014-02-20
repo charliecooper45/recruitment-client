@@ -35,7 +35,7 @@ public class MainWindow extends JFrame {
 	public MainWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setMinimumSize(new Dimension(850, 600));
+		setMinimumSize(new Dimension(1000, 500));
 		// thread that updates the title bar of the JFrame to the current time and date
 		timeThreadExecutor = Executors.newSingleThreadExecutor();
 		timeThreadExecutor.execute(new Runnable() {
