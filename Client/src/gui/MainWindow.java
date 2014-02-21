@@ -1,5 +1,7 @@
 package gui;
 
+import gui.listeners.*;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -12,7 +14,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+
 //TODO NEXT: sort out resizing/minimum size
 /**
  * Main window that displays once the user has logged in
@@ -58,6 +64,26 @@ public class MainWindow extends JFrame {
 	}
 
 	private void init() {
+		// create the menu
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Database Editor");
+		JMenu addMenu = new JMenu("Add");
+		JMenu removeMenu = new JMenu("Remove");
+		String[] itemNames = {"Add Candidate", "Add Vacancy", "Add Organisation", "Remove Candidate", "Remove Vacancy", "Remove Organisation"};			
+		JMenuItem[] menuItems = new JMenuItem[6];
+		for(int i = 0; i < menuItems.length; i++) {
+			menuItems[i] = new JMenuItem(itemNames[i]);
+			if(i < 3) {
+				addMenu.add(menuItems[i]);
+			} else {
+				removeMenu.add(menuItems[i]);
+			}
+		}
+		menu.add(addMenu);
+		menu.add(removeMenu);
+		menuBar.add(menu);
+		setJMenuBar(menuBar);
+		
 		borderLayout = new BorderLayout();
 		setLayout(borderLayout);
 		
@@ -78,7 +104,17 @@ public class MainWindow extends JFrame {
 		centrePanels.put(PanelTypes.PIPELINE, new CandidatePipelinePanel());
 		centrePanels.put(PanelTypes.ORGANISATIONS, new OrganisationsPanel());
 		centrePanels.put(PanelTypes.SEARCH, new SearchPanel());
+		centrePanels.put(PanelTypes.VACANCY, new VacancyPanel());
 		changeDisplayedPanel(PanelTypes.VACANCIES);
+		
+		// add listeners to the centre panels
+		VacanciesPanel vacanciesPanel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
+		vacanciesPanel.setVacancyDisplayedListener(new VacancyDisplayedListener() {
+			@Override
+			public void vacancyDisplayed() {
+				changeDisplayedPanel(PanelTypes.VACANCY);
+			}
+		});
 	}
 	
 	private void changeDisplayedPanel(PanelTypes panel) {

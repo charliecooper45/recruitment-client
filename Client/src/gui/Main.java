@@ -12,7 +12,9 @@ public class Main {
 			@Override
 			public void run() {
 				//new LoginWindow().setVisible(true);
-				new MainWindow().setVisible(true);
+				MainWindow window = new MainWindow();
+				window.setVisible(true);
+				window.requestFocus();
 			}
 		});
 	}

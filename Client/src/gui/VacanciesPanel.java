@@ -1,10 +1,13 @@
 package gui;
 
+import gui.listeners.*;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
@@ -23,6 +26,9 @@ public class VacanciesPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GridBagConstraints gbc;
+	
+	// alerts the GUI when a vacancy needs to be displayed to the user
+	private VacancyDisplayedListener vacancyDisplayedListener;
 	
 	// components - topPanel
 	private JPanel topPanel;
@@ -96,7 +102,7 @@ public class VacanciesPanel extends JPanel {
 
 			@Override
 			public Object getValueAt(int arg0, int arg1) {
-				return null;
+				return "Test Data";
 			}
 			
 			@Override
@@ -113,8 +119,23 @@ public class VacanciesPanel extends JPanel {
 			public String getColumnName(int index) {
 				return columns[index];
 			}
+			
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
 		});
 		vacanciesTbl.setRowHeight(30);
+		
+		vacanciesTbl.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1){
+					vacancyDisplayedListener.vacancyDisplayed();
+				}
+			}
+		});
+		
 		tableScrll = new JScrollPane(vacanciesTbl);
 		tableScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tableScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -122,5 +143,12 @@ public class VacanciesPanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 		
 		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	/**
+	 * @param vacancyDisplayedListener the vacancyDisplayedListener to set
+	 */
+	public void setVacancyDisplayedListener(VacancyDisplayedListener vacancyDisplayedListener) {
+		this.vacancyDisplayedListener = vacancyDisplayedListener;
 	}
 }
