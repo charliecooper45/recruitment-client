@@ -7,25 +7,24 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-public class VacancyPanel extends JPanel{
+public class CandidatePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-
+	
 	private GridBagConstraints gbc;
 	
 	// components - leftTopPanel
 	private JPanel leftTopPanel;
-	private JLabel vacancyNameLbl;
+	private JLabel candidateNameLbl;
 	private JLabel createdByLbl;
-	private JComboBox<String> statusCmbBox;
-	private JTextField dateTxtFld;
-	private JTextField contactTxtFld;
+	private JTextField titleTxtFld;
 	private JTextField phoneNoTxtFld;
+	private JTextField emailTxtFld;
+	private JTextField addressTxtFld;
 	
 	// components = leftBottomPanel
 	private JPanel leftBottomPanel;
@@ -34,7 +33,7 @@ public class VacancyPanel extends JPanel{
 	private JPanel rightPanel;
 	private JTabbedPane tabbedPane;
 	
-	public VacancyPanel() {
+	public CandidatePanel() {
 		init();
 	}
 	
@@ -57,10 +56,10 @@ public class VacancyPanel extends JPanel{
 		leftTopPnlGbc.weighty = 1;
 		leftTopPnlGbc.anchor = GridBagConstraints.CENTER;
 		
-		vacancyNameLbl = new JLabel("Project Co-Ordinator @ Accenture");
-		vacancyNameLbl.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+		candidateNameLbl = new JLabel("Lionel Messi");
+		candidateNameLbl.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		Utils.setGBC(leftTopPnlGbc, 1, 1, 2, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(vacancyNameLbl, leftTopPnlGbc);
+		leftTopPanel.add(candidateNameLbl, leftTopPnlGbc);
 		createdByLbl = new JLabel("Created by: MC01");
 		Utils.setGBC(leftTopPnlGbc, 1, 2, 2, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(createdByLbl, leftTopPnlGbc);
@@ -69,29 +68,29 @@ public class VacancyPanel extends JPanel{
 		leftTopPnlGbc.insets = new Insets(0, 15, 0, 0);
 		leftTopPnlGbc.anchor = GridBagConstraints.LINE_START;
 		Utils.setGBC(leftTopPnlGbc, 1, 3, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Job Status:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Job Title:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 4, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Opened:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Phone Number:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 5, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Contact:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Email Address:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 6, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Contact Phone Number:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Address:"), leftTopPnlGbc);
 		
 		// fields
 		leftTopPnlGbc.insets = new Insets(0, 0, 0, 15);
 		leftTopPnlGbc.weightx = 3;
-		statusCmbBox = new JComboBox<>();
+		titleTxtFld = new JTextField();
 		Utils.setGBC(leftTopPnlGbc, 2, 3, 1, 1, GridBagConstraints.HORIZONTAL);
-		leftTopPanel.add(statusCmbBox, leftTopPnlGbc);
-		dateTxtFld = new JTextField();
-		Utils.setGBC(leftTopPnlGbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
-		leftTopPanel.add(dateTxtFld, leftTopPnlGbc);
-		contactTxtFld = new JTextField();
-		Utils.setGBC(leftTopPnlGbc, 2, 5, 1, 1, GridBagConstraints.HORIZONTAL);
-		leftTopPanel.add(contactTxtFld, leftTopPnlGbc);
+		leftTopPanel.add(titleTxtFld, leftTopPnlGbc);
 		phoneNoTxtFld = new JTextField();
-		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(leftTopPnlGbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(phoneNoTxtFld, leftTopPnlGbc);
+		emailTxtFld = new JTextField();
+		Utils.setGBC(leftTopPnlGbc, 2, 5, 1, 1, GridBagConstraints.HORIZONTAL);
+		leftTopPanel.add(emailTxtFld, leftTopPnlGbc);
+		addressTxtFld = new JTextField();
+		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
+		leftTopPanel.add(addressTxtFld, leftTopPnlGbc);
 		
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		add(leftTopPanel, gbc);
@@ -105,8 +104,8 @@ public class VacancyPanel extends JPanel{
 		leftBottomPanelGbc.weighty = 1;
 		
 		Utils.setGBC(leftBottomPanelGbc, 1, 1, 2, 1, GridBagConstraints.NONE);
-		leftBottomPanel.add(new JLabel("Vacancy Options:"), leftBottomPanelGbc);
-
+		leftBottomPanel.add(new JLabel("Candidate Options:"), leftBottomPanelGbc);
+		
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		add(leftBottomPanel, gbc);
 	}
@@ -119,9 +118,10 @@ public class VacancyPanel extends JPanel{
 		rightPanelGbc.weighty = 1;
 		
 		tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("Role Profile", new JPanel());
-		tabbedPane.addTab("Shortlist", new JPanel());
-		tabbedPane.addTab("Progress Report", new JPanel());
+		tabbedPane.addTab("LinkedIn Profile", new JPanel());
+		tabbedPane.addTab("CV", new JPanel());
+		tabbedPane.addTab("Key Skills", new JPanel());
+		tabbedPane.addTab("Activities", new JPanel());
 		tabbedPane.addTab("Notes", new JPanel());
 		Utils.setGBC(rightPanelGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		rightPanel.add(tabbedPane, rightPanelGbc);

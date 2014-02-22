@@ -1,10 +1,14 @@
 package gui;
 
+import gui.listeners.CandidateDisplayedListener;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -22,6 +26,9 @@ public class CandidatePipelinePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private GridBagConstraints gbc;
+	
+	// alerts the GUI when a candidate needs to be displayed to the user
+	private CandidateDisplayedListener candidateDisplayedListener;
 	
 	// components - topPanel
 	private JPanel topPanel;
@@ -105,7 +112,7 @@ public class CandidatePipelinePanel extends JPanel {
 
 			@Override
 			public Object getValueAt(int arg0, int arg1) {
-				return null;
+				return "Test Data";
 			}
 			
 			@Override
@@ -122,6 +129,19 @@ public class CandidatePipelinePanel extends JPanel {
 			public String getColumnName(int index) {
 				return columns[index];
 			}
+		
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
+		pipelineTbl.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1){
+					candidateDisplayedListener.candidateDisplayed();
+				}
+			}
 		});
 		pipelineTbl.setRowHeight(30);
 		tableScrll = new JScrollPane(pipelineTbl);
@@ -131,5 +151,12 @@ public class CandidatePipelinePanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 		
 		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	/**
+	 * @param candidateDisplayedListener the candidateDisplayedListener to set
+	 */
+	public void setCandidateDisplayedListener(CandidateDisplayedListener candidateDisplayedListener) {
+		this.candidateDisplayedListener = candidateDisplayedListener;
 	}
 }

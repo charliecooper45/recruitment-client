@@ -1,10 +1,14 @@
 package gui;
 
+import gui.listeners.CandidateDisplayedListener;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,6 +30,9 @@ public class SearchPanel extends JPanel {
 
 	private GridBagConstraints gbc;
 
+	// alerts the GUI when a candidate needs to be displayed to the user
+	private CandidateDisplayedListener candidateDisplayedListener;
+	
 	// components - leftPanel
 	private JPanel leftPanel;
 	private JPanel topPanel;
@@ -172,7 +179,7 @@ public class SearchPanel extends JPanel {
 			public Object getValueAt(int row, int column) {
 				if(column == 0) 
 					return resultsArray[0][0];
-				return null;
+				return "Test Data";
 			}
 			
 			@Override
@@ -209,6 +216,14 @@ public class SearchPanel extends JPanel {
 		        return col == 0;
 		    }
 		});
+		resultsTbl.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1){
+					candidateDisplayedListener.candidateDisplayed();
+				}
+			}
+		});
 		resultsTbl.setRowHeight(30);
 		resultsTblScrlPane = new JScrollPane(resultsTbl);
 		resultsTblScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -235,5 +250,12 @@ public class SearchPanel extends JPanel {
 		gbc.weighty = 1;
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.BOTH);
 		add(rightPanel, gbc);
+	}
+
+	/**
+	 * @param candidateDisplayedListener the candidateDisplayedListener to set
+	 */
+	public void setCandidateDisplayedListener(CandidateDisplayedListener candidateDisplayedListener) {
+		this.candidateDisplayedListener = candidateDisplayedListener;
 	}
 }

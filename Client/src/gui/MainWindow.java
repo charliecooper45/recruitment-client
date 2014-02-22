@@ -1,14 +1,16 @@
 package gui;
 
-import gui.listeners.*;
+import gui.listeners.CandidateDisplayedListener;
+import gui.listeners.ChangePanelListener;
+import gui.listeners.VacancyDisplayedListener;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.EnumMap;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -99,12 +101,15 @@ public class MainWindow extends JFrame {
 		add(taskListPanel, BorderLayout.EAST);
 		
 		// first panel displayed is the vacancies panel
-		centrePanels = new HashMap<>();
+		centrePanels = new EnumMap<>(PanelTypes.class);
 		centrePanels.put(PanelTypes.VACANCIES, new VacanciesPanel());
 		centrePanels.put(PanelTypes.PIPELINE, new CandidatePipelinePanel());
 		centrePanels.put(PanelTypes.ORGANISATIONS, new OrganisationsPanel());
 		centrePanels.put(PanelTypes.SEARCH, new SearchPanel());
+		centrePanels.put(PanelTypes.ADMIN, new AdminPanel());
 		centrePanels.put(PanelTypes.VACANCY, new VacancyPanel());
+		centrePanels.put(PanelTypes.CANDIDATE, new CandidatePanel());
+		centrePanels.put(PanelTypes.ORGANISATION, new OrganisationPanel());
 		changeDisplayedPanel(PanelTypes.VACANCIES);
 		
 		// add listeners to the centre panels
@@ -113,6 +118,27 @@ public class MainWindow extends JFrame {
 			@Override
 			public void vacancyDisplayed() {
 				changeDisplayedPanel(PanelTypes.VACANCY);
+			}
+		});
+		CandidatePipelinePanel candidatePipelinePanel = (CandidatePipelinePanel) centrePanels.get(PanelTypes.PIPELINE);
+		candidatePipelinePanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
+			@Override
+			public void candidateDisplayed() {
+				changeDisplayedPanel(PanelTypes.CANDIDATE);
+			}
+		});
+		OrganisationsPanel organisationsPanel = (OrganisationsPanel) centrePanels.get(PanelTypes.ORGANISATIONS);
+		organisationsPanel.setOrganisationDisplayedListener(new OrganisationDisplayedListener() {
+			@Override
+			public void organisationDisplayed() {
+				changeDisplayedPanel(PanelTypes.ORGANISATION);
+			}
+		});
+		SearchPanel searchPanel = (SearchPanel) centrePanels.get(PanelTypes.SEARCH);
+		searchPanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
+			@Override
+			public void candidateDisplayed() {
+				changeDisplayedPanel(PanelTypes.CANDIDATE);
 			}
 		});
 	}

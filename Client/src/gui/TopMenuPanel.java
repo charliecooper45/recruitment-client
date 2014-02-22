@@ -18,14 +18,15 @@ import javax.swing.JPanel;
  * Displays the top menu 
  * @author Charlie
  */
-public class TopMenuPanel extends JPanel{
+public class TopMenuPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
+
 	private GridBagConstraints gbc;
-	
-	private JPanel menuPanelsPanel;
+
 	private MenuPanel[] menuOptions;
-	
+	private JPanel menuPanelsPanel;
+	private JPanel adminPanel;
+
 	// listener that alerts the MainWindow to changes in the displayed panel
 	private ChangePanelListener changePanelListener;
 
@@ -35,43 +36,50 @@ public class TopMenuPanel extends JPanel{
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		init();
 	}
-	
+
 	private void init() {
 		gbc = new GridBagConstraints();
 		gbc.weightx = 5;
 		gbc.weighty = 1;
-		
+
 		// menu options
 		menuPanelsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		menuOptions = new MenuPanel[4];
+		menuOptions = new MenuPanel[5];
 		menuOptions[0] = new MenuPanel("Vacancies", PanelTypes.VACANCIES);
 		menuOptions[0].setSelected(true);
 		menuOptions[1] = new MenuPanel("My Candidate Pipeline", PanelTypes.PIPELINE);
 		menuOptions[2] = new MenuPanel("Organisations", PanelTypes.ORGANISATIONS);
 		menuOptions[3] = new MenuPanel("Search Candidates", PanelTypes.SEARCH);
-		for(MenuPanel panel : menuOptions) {
-			menuPanelsPanel.add(panel);
+		for (int i = 0; i < 4; i++) {
+			menuPanelsPanel.add(menuOptions[i]);
 		}
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		add(menuPanelsPanel, gbc);
+		
+		// admin option
+		adminPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		menuOptions[4] = new MenuPanel("Admin", PanelTypes.ADMIN);
+		adminPanel.add(menuOptions[4]);
+		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.BOTH);
+		add(adminPanel, gbc);
 	}
-	
+
 	public void setChangePanelListener(ChangePanelListener changePanelListener) {
 		this.changePanelListener = changePanelListener;
 	}
-	
+
 	/**
 	 * A panel that holds each menu option in the TopMenuPanel 
 	 */
-	private class MenuPanel extends JPanel{
+	private class MenuPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
-		
+
 		private String name;
 		private PanelTypes panelType;
-		
+
 		// components
 		private JLabel nameLbl;
-		
+
 		public MenuPanel(String name, PanelTypes panelType) {
 			this.panelType = panelType;
 			this.name = name;
@@ -80,14 +88,14 @@ public class TopMenuPanel extends JPanel{
 			setBorder(BorderFactory.createRaisedBevelBorder());
 			init();
 		}
-		
+
 		private void init() {
 			nameLbl = new JLabel(name);
 			add(nameLbl);
 			addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					for(MenuPanel panel : TopMenuPanel.this.menuOptions) {
+					for (MenuPanel panel : TopMenuPanel.this.menuOptions) {
 						panel.setSelected(false);
 					}
 					setSelected(true);
@@ -95,9 +103,9 @@ public class TopMenuPanel extends JPanel{
 				}
 			});
 		}
-		
+
 		private void setSelected(boolean selected) {
-			if(selected) {
+			if (selected) {
 				setBorder(BorderFactory.createLoweredBevelBorder());
 				nameLbl.setForeground(Color.WHITE);
 			} else {

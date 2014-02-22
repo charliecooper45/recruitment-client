@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -18,6 +20,9 @@ public class OrganisationsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GridBagConstraints gbc;
+	
+	// alerts the GUI when an organisation needs to be displayed to the user
+	private OrganisationDisplayedListener organisationDisplayedListener;
 	
 	// components - topPanel
 	private JPanel topPanel;
@@ -74,7 +79,7 @@ public class OrganisationsPanel extends JPanel {
 
 			@Override
 			public Object getValueAt(int arg0, int arg1) {
-				return null;
+				return "Test Data";
 			}
 			
 			@Override
@@ -91,8 +96,21 @@ public class OrganisationsPanel extends JPanel {
 			public String getColumnName(int index) {
 				return columns[index];
 			}
+			
+			@Override
+			public boolean isCellEditable(int arg0, int arg1) {
+				return false;
+			}
 		});
 		organisationsTbl.setRowHeight(30);
+		organisationsTbl.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1){
+					organisationDisplayedListener.organisationDisplayed();
+				}
+			}
+		});
 		tableScrll = new JScrollPane(organisationsTbl);
 		tableScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tableScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -100,5 +118,12 @@ public class OrganisationsPanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 		
 		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	/**
+	 * @param organisationDisplayedListener the organisationDisplayedListener to set
+	 */
+	public void setOrganisationDisplayedListener(OrganisationDisplayedListener organisationDisplayedListener) {
+		this.organisationDisplayedListener = organisationDisplayedListener;
 	}
 }

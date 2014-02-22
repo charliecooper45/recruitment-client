@@ -126,7 +126,6 @@ public class VacanciesPanel extends JPanel {
 			}
 		});
 		vacanciesTbl.setRowHeight(30);
-		
 		vacanciesTbl.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -135,7 +134,6 @@ public class VacanciesPanel extends JPanel {
 				}
 			}
 		});
-		
 		tableScrll = new JScrollPane(vacanciesTbl);
 		tableScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tableScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
