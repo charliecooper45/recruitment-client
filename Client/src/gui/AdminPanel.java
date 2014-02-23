@@ -29,8 +29,8 @@ public class AdminPanel extends JPanel {
 		
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		tabbedPane.addTab("User management", new JPanel());
-		tabbedPane.addTab("Skills management", new JPanel());
+		tabbedPane.addTab("User management", new UserManagementPanel());
+		tabbedPane.addTab("Skills management", new SkillsManagementPanel());
 		tabbedPane.addTab("Activity report", new JPanel());
 		tabbedPane.addTab("Upload candidates", new JPanel());
 		
