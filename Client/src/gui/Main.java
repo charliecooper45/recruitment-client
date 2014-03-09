@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.SwingUtilities;
 
+//TODO NEXT: Sort GIT configuration
 /**
  * Starts the application on the Event Dispatch Thread
  * @author Charlie

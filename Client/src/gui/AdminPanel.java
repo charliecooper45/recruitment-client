@@ -31,7 +31,7 @@ public class AdminPanel extends JPanel {
 		tabbedPane.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
 		tabbedPane.addTab("User management", new UserManagementPanel());
 		tabbedPane.addTab("Skills management", new SkillsManagementPanel());
-		tabbedPane.addTab("Activity report", new JPanel());
+		tabbedPane.addTab("Activity report", new ReportPanel());
 		tabbedPane.addTab("Upload candidates", new JPanel());
 		
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
