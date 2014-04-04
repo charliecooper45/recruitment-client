@@ -12,10 +12,10 @@ public class Main {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				//new LoginWindow().setVisible(true);
-				MainWindow window = new MainWindow();
-				window.setVisible(true);
-				window.requestFocus();
+				new LoginWindow().setVisible(true);
+				//MainWindow window = new MainWindow();
+				//window.setVisible(true);
+				//window.requestFocus();
 			}
 		});
 	}

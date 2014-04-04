@@ -98,7 +98,7 @@ public class VacanciesPanel extends JPanel {
 		gbc.insets = new Insets(30, 20, 30, 20);
 		vacanciesTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = {"Job Title", "Organisation", "Start Date", "User", "CVs Sent", "Interviews", "Closed"};
+			private String[] columns = {"Job Title", "Organisation", "Date Added", "User", "CVs Sent", "Interviews", "Closed"};
 
 			@Override
 			public Object getValueAt(int arg0, int arg1) {

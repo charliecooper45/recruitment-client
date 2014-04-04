@@ -71,7 +71,7 @@ public class VacancyPanel extends JPanel{
 		Utils.setGBC(leftTopPnlGbc, 1, 3, 1, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(new JLabel("Job Status:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 4, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Opened:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Added:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 5, 1, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(new JLabel("Contact:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 6, 1, 1, GridBagConstraints.NONE);

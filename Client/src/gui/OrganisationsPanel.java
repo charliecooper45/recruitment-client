@@ -28,6 +28,7 @@ public class OrganisationsPanel extends JPanel {
 	private JPanel topPanel;
 	private JTextField searchTxt;
 	private JButton searchBtn;
+	private JButton showAllBtn;
 	
 	// components - mainPanel
 	private JPanel mainPanel;
@@ -56,10 +57,12 @@ public class OrganisationsPanel extends JPanel {
 
 		// left JPanel
 		searchTxt = new JTextField(30);
+		searchTxt.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
 		leftJPanel.add(searchTxt);
 		searchBtn = new JButton("Search");
-		searchTxt.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
 		leftJPanel.add(searchBtn);
+		showAllBtn = new JButton("Show All");
+		leftJPanel.add(showAllBtn);
 		gbc.insets = leftInsets;
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.HORIZONTAL);
 		topPanel.add(leftJPanel, gbc);
