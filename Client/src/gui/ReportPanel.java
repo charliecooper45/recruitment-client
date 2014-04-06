@@ -185,7 +185,7 @@ public class ReportPanel extends JPanel {
 	private void initVacancyTbl() {
 		vacancyTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = {"Vacancy Name", "Organisation", "CVs Sent", "1st Interviews", "2nd Interviews", "3rd Interviews", "Final Interviews"};
+			private String[] columns = {"Vacancy Name", "Organisation", "CVs Sent", "1st Interviews", "2nd Interviews", "3rd Interviews", "Final Interviews", "Status"};
 
 			@Override
 			public Object getValueAt(int row, int col) {
@@ -199,7 +199,7 @@ public class ReportPanel extends JPanel {
 
 			@Override
 			public int getColumnCount() {
-				return 7;
+				return 8;
 			}
 
 			@Override

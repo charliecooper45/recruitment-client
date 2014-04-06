@@ -26,9 +26,11 @@ public class UserManagementPanel extends JPanel {
 	// components - topPanel
 	private JPanel topPanel;
 	private JComboBox<String> userTypeCmbBox;
+	private JComboBox<String> userStatusCmbBox;
 	private JButton addUserBtn;
 	private JButton userActBtn;
 	private JButton delUserBtn;
+	private JButton resetPasswordBtn;
 
 	// components - mainPanel
 	private JPanel mainPanel;
@@ -54,26 +56,43 @@ public class UserManagementPanel extends JPanel {
 		gbc.insets = new Insets(20, 0, 20, 5);
 		gbc.anchor = GridBagConstraints.LINE_END;
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.NONE);
-		topPanel.add(new JLabel("Filter Table:"), gbc);
+		topPanel.add(new JLabel("Account Status:"), gbc);
 
 		gbc.insets = new Insets(10, 0, 10, 0);
-		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.anchor = GridBagConstraints.LINE_START;
 		userTypeCmbBox = new JComboBox<>();
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL);
 		topPanel.add(userTypeCmbBox, gbc);
-
-		addUserBtn = new JButton("Add User");
+		
+		gbc.insets = new Insets(20, 0, 20, 5);
+		gbc.anchor = GridBagConstraints.LINE_END;
 		Utils.setGBC(gbc, 3, 1, 1, 1, GridBagConstraints.NONE);
+		topPanel.add(new JLabel("Account Type:"), gbc);
+		
+		gbc.insets = new Insets(10, 0, 10, 0);
+		gbc.anchor = GridBagConstraints.LINE_START;
+		userStatusCmbBox = new JComboBox<>();
+		Utils.setGBC(gbc, 4, 1, 1, 1, GridBagConstraints.HORIZONTAL);
+		topPanel.add(userStatusCmbBox, gbc);
+
+		gbc.insets = new Insets(10, 40, 10, 0);
+		gbc.anchor = GridBagConstraints.CENTER;
+		addUserBtn = new JButton("Add User");
+		Utils.setGBC(gbc, 5, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(addUserBtn, gbc);
 
 		delUserBtn = new JButton("Delete User");
-		Utils.setGBC(gbc, 4, 1, 1, 1, GridBagConstraints.NONE);
+		Utils.setGBC(gbc, 6, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(delUserBtn, gbc);
 
 		userActBtn = new JButton("View User Activity");
-		Utils.setGBC(gbc, 5, 1, 1, 1, GridBagConstraints.NONE);
+		Utils.setGBC(gbc, 7, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(userActBtn, gbc);
-
+		
+		resetPasswordBtn = new JButton("Reset Password");
+		Utils.setGBC(gbc, 8, 1, 1, 1, GridBagConstraints.NONE);
+		topPanel.add(resetPasswordBtn, gbc);
+		
 		add(topPanel, BorderLayout.NORTH);
 	}
 
@@ -85,7 +104,7 @@ public class UserManagementPanel extends JPanel {
 		gbc.insets = new Insets(0, 20, 10, 20);
 		usersTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = { "UserID", "First Name", "Surname", "Account Type" };
+			private String[] columns = { "UserID", "First Name", "Surname", "Email address", "Phone number", "Account status", "Account Type" };
 
 			@Override
 			public Object getValueAt(int row, int col) {
@@ -94,12 +113,12 @@ public class UserManagementPanel extends JPanel {
 
 			@Override
 			public int getRowCount() {
-				return 5;
+				return 7;
 			}
 
 			@Override
 			public int getColumnCount() {
-				return 4;
+				return 7;
 			}
 
 			@Override

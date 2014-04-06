@@ -119,7 +119,7 @@ public class VacancyPanel extends JPanel{
 		rightPanelGbc.weighty = 1;
 		
 		tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("Role Profile", new JPanel());
+		tabbedPane.addTab("Vacancy Profile", new JPanel());
 		tabbedPane.addTab("Shortlist", new JPanel());
 		tabbedPane.addTab("Progress Report", new JPanel());
 		tabbedPane.addTab("Notes", new JPanel());
