@@ -121,7 +121,7 @@ public class CandidatePanel extends JPanel {
 		tabbedPane.addTab("LinkedIn Profile", new JPanel());
 		tabbedPane.addTab("CV", new JPanel());
 		tabbedPane.addTab("Key Skills", new JPanel());
-		tabbedPane.addTab("Activities", new JPanel());
+		tabbedPane.addTab("Events", new JPanel());
 		tabbedPane.addTab("Notes", new JPanel());
 		Utils.setGBC(rightPanelGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		rightPanel.add(tabbedPane, rightPanelGbc);

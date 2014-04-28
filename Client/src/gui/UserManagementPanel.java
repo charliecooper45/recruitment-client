@@ -31,6 +31,7 @@ public class UserManagementPanel extends JPanel {
 	private JButton userActBtn;
 	private JButton delUserBtn;
 	private JButton resetPasswordBtn;
+	private JButton changeActStsBtn;
 
 	// components - mainPanel
 	private JPanel mainPanel;
@@ -92,6 +93,10 @@ public class UserManagementPanel extends JPanel {
 		resetPasswordBtn = new JButton("Reset Password");
 		Utils.setGBC(gbc, 8, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(resetPasswordBtn, gbc);
+		
+		changeActStsBtn = new JButton("Change Status");
+		Utils.setGBC(gbc, 9, 1, 1, 1, GridBagConstraints.NONE);
+		topPanel.add(changeActStsBtn, gbc);
 		
 		add(topPanel, BorderLayout.NORTH);
 	}
