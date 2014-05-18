@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import model.ClientModel;
+import model.LoginAttempt;
 
 /**
  * Controller part of MVC, responsible for interaction between the view and the model.
@@ -22,14 +23,15 @@ public class ClientController {
 		// shows the GUI to the user and sets the login listener for the login screen
 		view.showGUI(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				String userId = ClientController.this.view.getUserId();
-				String password = ClientController.this.view.getPassword();
+			public void actionPerformed(ActionEvent event) {
+				LoginAttempt attempt = ClientController.this.view.getLoginAttempt();
+				String message = ClientController.this.model.login(attempt);
 				
-				String error = ClientController.this.model.login(userId, password);
-				
-				if(error != null) {
-					System.out.println(error);
+				if(message != null) {
+					ClientController.this.view.showLoginErrorMessage(message);
+				} else {
+					// the user has logged in successfully
+					ClientController.this.view.displayMainWindow();
 				}
 			}
 		});

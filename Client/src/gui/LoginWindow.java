@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -17,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import model.LoginAttempt;
+
 /**
  * Displays the window that allows the user to login to the client 
  * @author Charlie
@@ -26,9 +29,10 @@ public class LoginWindow extends JFrame {
 	private GridBagConstraints gbc;
 	
 	// components
-	private JTextField userIDTxtField;
+	private JTextField userIdTxtField;
 	private JPasswordField passwordTxtField;
 	private JButton loginButton;
+	private JLabel errorLabel;
 	private JLabel passwordLabel;
 	
 	public LoginWindow(ActionListener loginListener) {
@@ -66,10 +70,10 @@ public class LoginWindow extends JFrame {
 		gbc.anchor = GridBagConstraints.LINE_START;
 		Insets txtFieldInsets = new Insets(0, 0, 0, 20);
 		gbc.insets = txtFieldInsets;
-		userIDTxtField = new JTextField();
-		userIDTxtField.setFont(lblFont);
+		userIdTxtField = new JTextField();
+		userIdTxtField.setFont(lblFont);
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL);
-		add(userIDTxtField, gbc);
+		add(userIdTxtField, gbc);
 		passwordTxtField = new JPasswordField();
 		passwordTxtField.setFont(lblFont);
 		Utils.setGBC(gbc, 2, 2, 1, 1, GridBagConstraints.HORIZONTAL);
@@ -85,7 +89,16 @@ public class LoginWindow extends JFrame {
 		Utils.setGBC(gbc, 1, 3, 2, 1, GridBagConstraints.NONE);
 		add(loginButton, gbc);
 		
+		// error label
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weighty = 0.1;
+		Utils.setGBC(gbc, 1, 4, 2, 1, GridBagConstraints.NONE);
+		errorLabel = new JLabel("Error Label!");
+		errorLabel.setForeground(this.getBackground());
+		add(errorLabel, gbc);
+		
 		// forgotten password label
+		gbc.weighty = 1;
 		passwordLabel = new JLabel("<html><a href=\"\">"+ "Forgotten Password?" +"</a></html>");
 		passwordLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -94,15 +107,18 @@ public class LoginWindow extends JFrame {
 			}
 		});
 		passwordLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		Utils.setGBC(gbc, 1, 4, 2, 1, GridBagConstraints.NONE);
+		Utils.setGBC(gbc, 1, 5, 2, 1, GridBagConstraints.NONE);
 		add(passwordLabel, gbc);
 	}
 
-	public String getUserId() {
-		return userIDTxtField.getText();
+	public LoginAttempt getLoginAttempt() {
+		String userId = userIdTxtField.getText();
+		char[] password = passwordTxtField.getPassword();
+		return new LoginAttempt(userId, password);
 	}
 	
-	public String getPassword() {
-		return new String(passwordTxtField.getPassword());
+	public void showErrorMessage(String message) {
+		errorLabel.setText(message);
+		errorLabel.setForeground(Color.RED);
 	}
 }

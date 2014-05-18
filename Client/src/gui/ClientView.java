@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
 
 import model.ClientModel;
+import model.LoginAttempt;
 import controller.ClientController;
 
 /**
@@ -13,10 +14,25 @@ import controller.ClientController;
  */
 public class ClientView {
 	private LoginWindow loginWindow;
+	private MainWindow mainWindow;
 	
 	public void showGUI(ActionListener loginListener) {
 		this.loginWindow = new LoginWindow(loginListener);
 		loginWindow.setVisible(true);
+	}
+
+	public LoginAttempt getLoginAttempt() {
+		return loginWindow.getLoginAttempt();
+	}
+	
+	public void showLoginErrorMessage(String message) {
+		loginWindow.showErrorMessage(message);
+	}
+	
+	public void displayMainWindow() {
+		mainWindow = new MainWindow();
+		mainWindow.setVisible(true);
+		loginWindow.dispose();
 	}
 	
 	public static void main(String[] args) {
@@ -29,13 +45,5 @@ public class ClientView {
 				ClientController controller = new ClientController(view, model);
 			}
 		});
-	}
-
-	public String getUserId() {
-		return loginWindow.getUserId();
-	}
-	
-	public String getPassword() {
-		return loginWindow.getPassword();
 	}
 }

@@ -20,14 +20,19 @@ public class ClientModel implements ServerInterface {
 	private static LoginInterface LOGIN_SERVER;
 	private static ServerInterface SERVER;
 	
-	public String login(String userId, String password) {
+	public String login(LoginAttempt attempt) {
 		try {
 			LOGIN_SERVER = (LoginInterface) Naming.lookup(SERVER_URL);
-			SERVER = LOGIN_SERVER.login(userId, password);
+			SERVER = LOGIN_SERVER.login(attempt.getUserId(), attempt.getPassword());
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-			return "Unable to connect to the server, please contact your administrator";
+			return "Error: cannot connect to server.";
 		} catch(SecurityException e) {
 			return e.getMessage();
+		}
+		
+		// test code
+		if(SERVER != null) {
+			System.out.println(SERVER.listCandidates());
 		}
 		
 		return null;
