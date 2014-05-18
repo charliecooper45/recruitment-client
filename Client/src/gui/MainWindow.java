@@ -37,7 +37,6 @@ public class MainWindow extends JFrame {
 	private JPanel taskListPanel;
 	
 	// JPanels that fill the centre of the GUI
-	private PanelTypes displayedPanel;
 	private Map<PanelTypes, JPanel> centrePanels;
 	
 	public MainWindow() {
@@ -148,7 +147,6 @@ public class MainWindow extends JFrame {
 		if(!(centreComponent == null)) 
 			remove(centreComponent);
 		
-		displayedPanel = panel;
 		add(centrePanels.get(panel));
 		
 		revalidate();

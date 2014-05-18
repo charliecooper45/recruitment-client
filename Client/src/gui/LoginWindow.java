@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -32,17 +31,17 @@ public class LoginWindow extends JFrame {
 	private JButton loginButton;
 	private JLabel passwordLabel;
 	
-	public LoginWindow() {
+	public LoginWindow(ActionListener loginListener) {
 		//TODO NEXT B: Add logo
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setTitle("Recruitment Software Login");
 		setSize(300, 400);
 		setResizable(false);
-		init();
+		init(loginListener);
 	}
 	
-	private void init() {
+	private void init(ActionListener loginListener) {
 		setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints();
 		gbc.weightx = 1;
@@ -81,18 +80,10 @@ public class LoginWindow extends JFrame {
 		Insets blankInsets = new Insets(0, 0, 0, 0);
 		gbc.insets = blankInsets;
 		loginButton = new JButton("Login");
+		loginButton.addActionListener(loginListener);
 		loginButton.setPreferredSize(new Dimension(150, 30));
 		Utils.setGBC(gbc, 1, 3, 2, 1, GridBagConstraints.NONE);
 		add(loginButton, gbc);
-		
-		//test code
-		loginButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				new MainWindow().setVisible(true);
-				LoginWindow.this.dispose();
-			}
-		});
 		
 		// forgotten password label
 		passwordLabel = new JLabel("<html><a href=\"\">"+ "Forgotten Password?" +"</a></html>");
@@ -105,5 +96,13 @@ public class LoginWindow extends JFrame {
 		passwordLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		Utils.setGBC(gbc, 1, 4, 2, 1, GridBagConstraints.NONE);
 		add(passwordLabel, gbc);
+	}
+
+	public String getUserId() {
+		return userIDTxtField.getText();
+	}
+	
+	public String getPassword() {
+		return new String(passwordTxtField.getPassword());
 	}
 }

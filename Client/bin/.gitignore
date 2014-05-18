@@ -1,1 +1,6 @@
 /gui
+/interfaces
+/database
+/model
+/controller
+/security
