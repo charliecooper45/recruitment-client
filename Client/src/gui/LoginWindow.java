@@ -35,17 +35,17 @@ public class LoginWindow extends JFrame {
 	private JLabel errorLabel;
 	private JLabel passwordLabel;
 	
-	public LoginWindow(ActionListener loginListener) {
+	public LoginWindow() {
 		//TODO NEXT B: Add logo
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setTitle("Recruitment Software Login");
 		setSize(300, 400);
 		setResizable(false);
-		init(loginListener);
+		init();
 	}
 	
-	private void init(ActionListener loginListener) {
+	private void init() {
 		setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints();
 		gbc.weightx = 1;
@@ -84,7 +84,6 @@ public class LoginWindow extends JFrame {
 		Insets blankInsets = new Insets(0, 0, 0, 0);
 		gbc.insets = blankInsets;
 		loginButton = new JButton("Login");
-		loginButton.addActionListener(loginListener);
 		loginButton.setPreferredSize(new Dimension(150, 30));
 		Utils.setGBC(gbc, 1, 3, 2, 1, GridBagConstraints.NONE);
 		add(loginButton, gbc);
@@ -120,5 +119,9 @@ public class LoginWindow extends JFrame {
 	public void showErrorMessage(String message) {
 		errorLabel.setText(message);
 		errorLabel.setForeground(Color.RED);
+	}
+	
+	public void setLoginListener(ActionListener listener) {
+		loginButton.addActionListener(listener);
 	}
 }

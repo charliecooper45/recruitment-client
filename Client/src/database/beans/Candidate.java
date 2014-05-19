@@ -3,7 +3,7 @@ package database.beans;
 import java.io.Serializable;
 
 /**
- * Bean that represents an instance of the entity Candidate on the recruitment database. 
+ * Bean that represents an instance of the entity Candidate in the recruitment database. 
  * @author Charlie
  */
 public class Candidate implements Serializable {
@@ -18,7 +18,7 @@ public class Candidate implements Serializable {
 	private String linkedInProfile;
 	private String CV;
 	private String userId;
-	
+
 	public Candidate(int id, String firstName, String surname, String jobTitle, String phoneNumber, String emailAddress, String address, String notes, String linkedInProfile, String cV, String userId) {
 		this.id = id;
 		this.firstName = firstName;

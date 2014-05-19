@@ -1,13 +1,16 @@
 package gui;
 
-import gui.listeners.*;
+import gui.listeners.VacancyDisplayedListener;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
@@ -17,6 +20,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import database.beans.User;
+import database.beans.Vacancy;
 
 /**
  * Displays the vacancies to the user
@@ -29,6 +35,9 @@ public class VacanciesPanel extends JPanel {
 	
 	// alerts the GUI when a vacancy needs to be displayed to the user
 	private VacancyDisplayedListener vacancyDisplayedListener;
+	
+	// list of vacancies to be displayed
+	private List<Vacancy> vacancies;
 	
 	// components - topPanel
 	private JPanel topPanel;
@@ -67,6 +76,7 @@ public class VacanciesPanel extends JPanel {
 		// left JPanel
 		group = new ButtonGroup();
 		openVacanciesRdBtn = new JRadioButton("Open Vacancies");
+		openVacanciesRdBtn.setSelected(true);
 		group.add(openVacanciesRdBtn);
 		leftPanel.add(openVacanciesRdBtn);
 		allVacanciesRdBtn = new JRadioButton("All Vacancies");
@@ -98,16 +108,46 @@ public class VacanciesPanel extends JPanel {
 		gbc.insets = new Insets(30, 20, 30, 20);
 		vacanciesTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = {"Job Title", "Organisation", "Date Added", "User", "CVs Sent", "Interviews", "Closed"};
+			private String[] columns = {"Job Title", "Organisation", "Date Added", "User", "CVs Sent", "Interviews", "Status"};
 
 			@Override
-			public Object getValueAt(int arg0, int arg1) {
-				return "Test Data";
+			public Object getValueAt(int row, int column) {
+				Vacancy vacancy; 
+				
+				if(vacancies != null) {
+					vacancy = vacancies.get(row);
+					switch(column) {
+					case 0:
+						return vacancy.getName();
+					case 1:
+						return vacancy.getOrganisationName();
+					case 2:
+						return vacancy.getVacancyDate();
+					case 3:
+						return vacancy.getUserId();
+					case 4:
+						// TODO NEXT: Fill in the CV sent and interview fields for vacancy
+						return 0;
+					case 5:
+						return 0;
+					case 6:
+						if(vacancy.getStatus() == true) {
+							return "Open";
+						} else { 
+							return "Closed";
+						}
+					}
+				}
+				return "test data";
 			}
 			
 			@Override
 			public int getRowCount() {
-				return 5;
+				if(vacancies != null) {
+					return vacancies.size();
+				} else { 
+					return 0;
+				}
 			}
 			
 			@Override
@@ -148,5 +188,25 @@ public class VacanciesPanel extends JPanel {
 	 */
 	public void setVacancyDisplayedListener(VacancyDisplayedListener vacancyDisplayedListener) {
 		this.vacancyDisplayedListener = vacancyDisplayedListener;
+	}
+
+	public void updateDisplayedVacancies(List<Vacancy> vacancies) {
+		this.vacancies = vacancies;
+		DefaultTableModel model = (DefaultTableModel) vacanciesTbl.getModel();
+		model.fireTableDataChanged();
+	}
+
+	public boolean getVacancyType() {
+		return openVacanciesRdBtn.isSelected();
+	}
+
+	public User getUser() {
+		//TODO NEXT: retrieve the list of users
+		return null;
+	}
+
+	public void setActionListener(ActionListener listener) {
+		openVacanciesRdBtn.addActionListener(listener);
+		allVacanciesRdBtn.addActionListener(listener);
 	}
 }
