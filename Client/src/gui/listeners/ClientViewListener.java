@@ -6,5 +6,7 @@ import database.beans.User;
 import database.beans.Vacancy;
 
 public interface ClientViewListener {
-	public List<Vacancy> listVacancies(boolean open, User user);
+	public List<Vacancy> getVacancies(boolean open, User user);
+
+	public List<User> getUsers(String userType, boolean status);
 }

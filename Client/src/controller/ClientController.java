@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JRadioButton;
 
 import model.ClientModel;
@@ -43,33 +45,50 @@ public class ClientController {
 			}
 		}, new ClientViewListener() {
 			@Override
-			public List<Vacancy> listVacancies(boolean open, User user) {
-				return ClientController.this.model.listVacancies(open, user);
+			public List<Vacancy> getVacancies(boolean open, User user) {
+				return ClientController.this.model.getVacancies(open, user);
+			}
+
+			@Override
+			public List<User> getUsers(String userType, boolean status) {
+				return ClientController.this.model.getUsers(userType, status);
+				//return ClientController.this.model.listUsers();
 			}
 		});
 		
 		// sets the listeners for the GUI
 		view.setVacanciesListener(new ActionListener() {
 			private boolean openVacancies = true;
-			private User user = null;
+			private User selectedUser = null;
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object source = e.getSource();
 				
 				if(source instanceof JRadioButton) {
+					// deal with changes to the type of vacancies to be shown
 					JRadioButton button = (JRadioButton) source;
 					if(button.getText().equals("All Vacancies")) {
 						openVacancies = false;
-						List<Vacancy> vacancies = ClientController.this.model.listVacancies(openVacancies, user);
+						List<Vacancy> vacancies = ClientController.this.model.getVacancies(openVacancies, selectedUser);
 						ClientController.this.view.updateVacanciesPanel(vacancies);
 					} else {
 						openVacancies = true;
-						List<Vacancy> vacancies = ClientController.this.model.listVacancies(openVacancies, user);
+						List<Vacancy> vacancies = ClientController.this.model.getVacancies(openVacancies, selectedUser);
 						ClientController.this.view.updateVacanciesPanel(vacancies);
 					}
-				} else {
-					//TODO NEXT: add code to deal with a change in user
+				} else if(source instanceof JComboBox<?>){
+					// change whose vacancies are shown 
+					JComboBox<?> usersCombo = (JComboBox<?>) source;
+					selectedUser = (User) usersCombo.getSelectedItem();
+					
+					if(selectedUser.getUserId() == null) {
+						// this means we need to get all user`s vacancies
+						selectedUser = null;
+					}
+					
+					List<Vacancy> vacancies = ClientController.this.model.getVacancies(openVacancies, selectedUser);
+					ClientController.this.view.updateVacanciesPanel(vacancies);
 				}
 			}
 		}); 

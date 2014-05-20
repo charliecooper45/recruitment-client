@@ -1,7 +1,5 @@
 package gui;
 
-import gui.listeners.VacancyDisplayedListener;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -24,6 +22,8 @@ import javax.swing.table.DefaultTableModel;
 import database.beans.User;
 import database.beans.Vacancy;
 
+import gui.listeners.VacancyDisplayedListener;
+
 /**
  * Displays the vacancies to the user
  * @author Charlie
@@ -39,12 +39,15 @@ public class VacanciesPanel extends JPanel {
 	// list of vacancies to be displayed
 	private List<Vacancy> vacancies;
 	
+	// list of users to be displayed
+	private List<User> users;
+	
 	// components - topPanel
 	private JPanel topPanel;
 	private ButtonGroup group;
 	private JRadioButton openVacanciesRdBtn;
 	private JRadioButton allVacanciesRdBtn;
-	private JComboBox<String> userCombo;
+	private JComboBox<User> userCombo;
 	
 	// components - mainPanel
 	private JPanel mainPanel;
@@ -88,10 +91,7 @@ public class VacanciesPanel extends JPanel {
 		
 		// right JPanel
 		rightPanel.add(new JLabel("User:"));
-		userCombo = new JComboBox<String>();
-		userCombo.addItem("All Users");
-		userCombo.addItem("CC01 - Charlie Cooper");
-		userCombo.addItem("MC01 - Martine Cooper");
+		userCombo = new JComboBox<>();
 		rightPanel.add(userCombo);
 		gbc.insets = rightInsets;
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL);
@@ -196,6 +196,18 @@ public class VacanciesPanel extends JPanel {
 		model.fireTableDataChanged();
 	}
 
+	public void updateDisplayedUsers(List<User> users) {
+		this.users = users;
+		
+		// add the default all users option
+		userCombo.addItem(new User(null, null, "All", "Users", null, null, false, null));
+		
+		// add the users stored on the database
+		for(User user: users) {
+			userCombo.addItem(user);
+		}
+	}
+	
 	public boolean getVacancyType() {
 		return openVacanciesRdBtn.isSelected();
 	}
@@ -208,5 +220,6 @@ public class VacanciesPanel extends JPanel {
 	public void setActionListener(ActionListener listener) {
 		openVacanciesRdBtn.addActionListener(listener);
 		allVacanciesRdBtn.addActionListener(listener);
+		userCombo.addActionListener(listener);
 	}
 }

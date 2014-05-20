@@ -78,6 +78,8 @@ public class LoginWindow extends JFrame {
 		passwordTxtField.setFont(lblFont);
 		Utils.setGBC(gbc, 2, 2, 1, 1, GridBagConstraints.HORIZONTAL);
 		add(passwordTxtField, gbc);
+		userIdTxtField.setText("BS01");
+		passwordTxtField.setText("test");
 		
 		// login button
 		gbc.anchor = GridBagConstraints.CENTER;

@@ -30,4 +30,12 @@ public class User implements Serializable {
 	public String getUserId() {
 		return userId;
 	}
+	
+	@Override
+	public String toString() {
+		if(userId == null) {
+			return firstName + " " + surname;
+		}
+		return userId + ": " + firstName + " " + surname;
+	}
 }

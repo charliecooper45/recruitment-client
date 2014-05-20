@@ -16,6 +16,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import gui.listeners.OrganisationDisplayedListener;
+
 public class OrganisationsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 

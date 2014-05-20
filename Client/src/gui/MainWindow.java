@@ -4,6 +4,7 @@ import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.ChangePanelListener;
 import gui.listeners.ClientViewListener;
 import gui.listeners.VacancyDisplayedListener;
+import gui.listeners.OrganisationDisplayedListener;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -167,8 +168,10 @@ public class MainWindow extends JFrame {
 		add(panel);
 		
 		if(panelType == PanelTypes.VACANCIES) {
+			// when the vacancies panel is displayed update the necessary fields from the server
 			VacanciesPanel vPanel = (VacanciesPanel) panel;
-			vPanel.updateDisplayedVacancies(clientViewListener.listVacancies(vPanel.getVacancyType(), vPanel.getUser()));
+			vPanel.updateDisplayedVacancies(clientViewListener.getVacancies(vPanel.getVacancyType(), vPanel.getUser()));
+			vPanel.updateDisplayedUsers(clientViewListener.getUsers(null, true));
 		}
 		
 		revalidate();

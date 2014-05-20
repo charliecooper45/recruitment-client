@@ -13,6 +13,8 @@ import database.beans.Vacancy;
  * @author Charlie
  */
 public interface ServerInterface extends Remote{
-	public List<Candidate> listCandidates() throws RemoteException;
-	public List<Vacancy> listVacancies(boolean open, User user) throws RemoteException;
+	// methods callable by standard users and administrators
+	public List<Candidate> getCandidates() throws RemoteException;
+	public List<Vacancy> getVacancies(boolean open, User user) throws RemoteException;
+	public List<User> getUsers(String userType, boolean status) throws RemoteException;
 }
