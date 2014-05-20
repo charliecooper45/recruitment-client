@@ -2,6 +2,7 @@ package model;
 
 import interfaces.LoginInterface;
 import interfaces.ServerInterface;
+import interfaces.UserType;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -24,16 +25,19 @@ public class ClientModel implements ServerInterface {
 	private static ServerInterface SERVER;
 
 	public String login(LoginAttempt attempt) {
+		UserType userType = null;
 		try {
 			LOGIN_SERVER = (LoginInterface) Naming.lookup(SERVER_URL);
 			SERVER = LOGIN_SERVER.login(attempt.getUserId(), attempt.getPassword());
+			
+			// get the user type of the user
+			userType = SERVER.getUserType(attempt.getUserId());
+			return userType.toString();
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			return "Error: cannot connect to server.";
 		} catch (SecurityException e) {
 			return e.getMessage();
 		}
-
-		return null;
 	}
 
 	@Override
@@ -59,7 +63,7 @@ public class ClientModel implements ServerInterface {
 	}
 
 	@Override
-	public List<User> getUsers(String userType, boolean status) {
+	public List<User> getUsers(UserType userType, boolean status) {
 		try {
 			return SERVER.getUsers(userType, status);
 		} catch (RemoteException e) {
@@ -67,5 +71,22 @@ public class ClientModel implements ServerInterface {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public UserType getUserType(String userId) throws RemoteException {
+		throw new UnsupportedOperationException("Method is not implemented for the ClientModel class");
+	}
+
+	public Vacancy getVacancy(int vacancyId) {
+		try {
+			return SERVER.getVacancy(vacancyId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			e.printStackTrace();
+			return null;
+		}
+		
+		//TODO NEXT: if null is returned the vacancy has been deleted, handle this
 	}
 }

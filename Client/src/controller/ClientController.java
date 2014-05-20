@@ -1,14 +1,16 @@
 package controller;
 
 import gui.ClientView;
-import gui.listeners.ClientViewListener;
+import interfaces.UserType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JComboBox;
-import javax.swing.JList;
 import javax.swing.JRadioButton;
 
 import model.ClientModel;
@@ -36,28 +38,23 @@ public class ClientController {
 				LoginAttempt attempt = ClientController.this.view.getLoginAttempt();
 				String message = ClientController.this.model.login(attempt);
 				
-				if(message != null) {
+				List<Vacancy> vacancies = ClientController.this.model.getVacancies(true, null);
+				List<User> users = ClientController.this.model.getUsers(null, true);
+				
+				if(message.equals(UserType.ADMINISTRATOR.toString())) {
+					// the user is an administrator
+					ClientController.this.view.displayMainWindow(UserType.ADMINISTRATOR, vacancies, users);
+				} else if (message.equals(UserType.STANDARD.toString())) {
+					// the user is a standard user
+					ClientController.this.view.displayMainWindow(UserType.STANDARD, vacancies, users);
+				}else {
 					ClientController.this.view.showLoginErrorMessage(message);
-				} else {
-					// the user has logged in successfully
-					ClientController.this.view.displayMainWindow();
 				}
-			}
-		}, new ClientViewListener() {
-			@Override
-			public List<Vacancy> getVacancies(boolean open, User user) {
-				return ClientController.this.model.getVacancies(open, user);
-			}
-
-			@Override
-			public List<User> getUsers(String userType, boolean status) {
-				return ClientController.this.model.getUsers(userType, status);
-				//return ClientController.this.model.listUsers();
 			}
 		});
 		
 		// sets the listeners for the GUI
-		view.setVacanciesListener(new ActionListener() {
+		view.setVacanciesPanelListeners(new ActionListener() {
 			private boolean openVacancies = true;
 			private User selectedUser = null;
 			
@@ -89,6 +86,16 @@ public class ClientController {
 					
 					List<Vacancy> vacancies = ClientController.this.model.getVacancies(openVacancies, selectedUser);
 					ClientController.this.view.updateVacanciesPanel(vacancies);
+				}
+			}
+		}, new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1){
+					// retrieve the selected vacancy so it`s values can be updated from the server before the user sees it
+					Vacancy selectedVacancy = ClientController.this.view.getSelectedVacancy();
+					Vacancy updatedVacancy = ClientController.this.model.getVacancy(selectedVacancy.getVacancyId());
+					ClientController.this.view.showVacancyPanel(updatedVacancy);
 				}
 			}
 		}); 

@@ -6,8 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -22,8 +21,6 @@ import javax.swing.table.DefaultTableModel;
 import database.beans.User;
 import database.beans.Vacancy;
 
-import gui.listeners.VacancyDisplayedListener;
-
 /**
  * Displays the vacancies to the user
  * @author Charlie
@@ -32,9 +29,6 @@ public class VacanciesPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GridBagConstraints gbc;
-	
-	// alerts the GUI when a vacancy needs to be displayed to the user
-	private VacancyDisplayedListener vacancyDisplayedListener;
 	
 	// list of vacancies to be displayed
 	private List<Vacancy> vacancies;
@@ -166,14 +160,6 @@ public class VacanciesPanel extends JPanel {
 			}
 		});
 		vacanciesTbl.setRowHeight(30);
-		vacanciesTbl.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1){
-					vacancyDisplayedListener.vacancyDisplayed();
-				}
-			}
-		});
 		tableScrll = new JScrollPane(vacanciesTbl);
 		tableScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tableScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -181,13 +167,6 @@ public class VacanciesPanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 		
 		add(mainPanel, BorderLayout.CENTER);
-	}
-
-	/**
-	 * @param vacancyDisplayedListener the vacancyDisplayedListener to set
-	 */
-	public void setVacancyDisplayedListener(VacancyDisplayedListener vacancyDisplayedListener) {
-		this.vacancyDisplayedListener = vacancyDisplayedListener;
 	}
 
 	public void updateDisplayedVacancies(List<Vacancy> vacancies) {
@@ -208,18 +187,14 @@ public class VacanciesPanel extends JPanel {
 		}
 	}
 	
-	public boolean getVacancyType() {
-		return openVacanciesRdBtn.isSelected();
+	public Vacancy getSelectedVacancy() {
+		return vacancies.get(vacanciesTbl.getSelectedRow());
 	}
-
-	public User getUser() {
-		//TODO NEXT: retrieve the list of users
-		return null;
-	}
-
-	public void setActionListener(ActionListener listener) {
-		openVacanciesRdBtn.addActionListener(listener);
-		allVacanciesRdBtn.addActionListener(listener);
-		userCombo.addActionListener(listener);
+	
+	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
+		openVacanciesRdBtn.addActionListener(actionListener);
+		allVacanciesRdBtn.addActionListener(actionListener);
+		userCombo.addActionListener(actionListener);
+		vacanciesTbl.addMouseListener(mouseListener);
 	}
 }

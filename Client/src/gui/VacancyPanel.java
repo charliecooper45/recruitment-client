@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import database.beans.Vacancy;
+
 public class VacancyPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 
@@ -81,6 +83,8 @@ public class VacancyPanel extends JPanel{
 		leftTopPnlGbc.insets = new Insets(0, 0, 0, 15);
 		leftTopPnlGbc.weightx = 3;
 		statusCmbBox = new JComboBox<>();
+		statusCmbBox.addItem("Open");
+		statusCmbBox.addItem("Closed");
 		Utils.setGBC(leftTopPnlGbc, 2, 3, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(statusCmbBox, leftTopPnlGbc);
 		dateTxtFld = new JTextField();
@@ -128,5 +132,21 @@ public class VacancyPanel extends JPanel{
 		
 		Utils.setGBC(gbc, 2, 1, 1, 2, GridBagConstraints.BOTH);
 		add(rightPanel, gbc);
+	}
+
+	public void setDisplayedVacancy(Vacancy updatedVacancy) {
+
+		vacancyNameLbl.setText(updatedVacancy.getName() + " @ " + updatedVacancy.getOrganisationName());
+		createdByLbl.setText(updatedVacancy.getUserId());
+		dateTxtFld.setText(updatedVacancy.getVacancyDate().toString());
+		contactTxtFld.setText(updatedVacancy.getContactName());
+		phoneNoTxtFld.setText(updatedVacancy.getContactPhoneNumber());
+		
+		boolean open = updatedVacancy.getStatus();
+		if(open) {
+			statusCmbBox.setSelectedItem("Open");
+		} else {
+			statusCmbBox.setSelectedItem("Closed");
+		}
 	}
 }

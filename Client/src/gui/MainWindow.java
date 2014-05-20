@@ -2,14 +2,14 @@ package gui;
 
 import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.ChangePanelListener;
-import gui.listeners.ClientViewListener;
-import gui.listeners.VacancyDisplayedListener;
 import gui.listeners.OrganisationDisplayedListener;
+import interfaces.UserType;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.EnumMap;
@@ -25,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import database.beans.User;
 import database.beans.Vacancy;
 
 //TODO NEXT: sort out resizing/minimum size
@@ -44,9 +45,6 @@ public class MainWindow extends JFrame {
 	
 	// JPanels that fill the centre of the GUI
 	private Map<PanelTypes, JPanel> centrePanels;
-	
-	// sends messages to the ClientView class 
-	private ClientViewListener clientViewListener;
 	
 	public MainWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,10 +68,19 @@ public class MainWindow extends JFrame {
 			}
 		});
 		
-		init();
+		// first panel displayed is the vacancies panel
+		centrePanels = new EnumMap<>(PanelTypes.class);
+		centrePanels.put(PanelTypes.VACANCIES, new VacanciesPanel());
+		centrePanels.put(PanelTypes.PIPELINE, new CandidatePipelinePanel());
+		centrePanels.put(PanelTypes.ORGANISATIONS, new OrganisationsPanel());
+		centrePanels.put(PanelTypes.SEARCH, new SearchPanel());
+		centrePanels.put(PanelTypes.ADMIN, new AdminPanel());
+		centrePanels.put(PanelTypes.VACANCY, new VacancyPanel());
+		centrePanels.put(PanelTypes.CANDIDATE, new CandidatePanel());
+		centrePanels.put(PanelTypes.ORGANISATION, new OrganisationPanel());
 	}
 
-	private void init() {
+	private void init(UserType userType) {
 		// create the menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Database Editor");
@@ -97,82 +104,65 @@ public class MainWindow extends JFrame {
 		borderLayout = new BorderLayout();
 		setLayout(borderLayout);
 		
-		topMenuPanel = new TopMenuPanel();
+		topMenuPanel = new TopMenuPanel(userType);
 		topMenuPanel.setChangePanelListener(new ChangePanelListener() {
 			@Override
 			public void changePanel(PanelTypes panelType) {
-				changeDisplayedPanel(panelType);
+				// changeDisplayedPanel(panelType);
 			}
 		});
 		add(topMenuPanel, BorderLayout.NORTH);
 		taskListPanel = new TaskListPanel();
 		add(taskListPanel, BorderLayout.EAST);
 		
-		// first panel displayed is the vacancies panel
-		centrePanels = new EnumMap<>(PanelTypes.class);
-		centrePanels.put(PanelTypes.VACANCIES, new VacanciesPanel());
-		centrePanels.put(PanelTypes.PIPELINE, new CandidatePipelinePanel());
-		centrePanels.put(PanelTypes.ORGANISATIONS, new OrganisationsPanel());
-		centrePanels.put(PanelTypes.SEARCH, new SearchPanel());
-		centrePanels.put(PanelTypes.ADMIN, new AdminPanel());
-		centrePanels.put(PanelTypes.VACANCY, new VacancyPanel());
-		centrePanels.put(PanelTypes.CANDIDATE, new CandidatePanel());
-		centrePanels.put(PanelTypes.ORGANISATION, new OrganisationPanel());
-		
-		// add listeners to the centre panels
+		// add listeners for switching GUI elements to the centre panels
 		VacanciesPanel vacanciesPanel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
-		vacanciesPanel.setVacancyDisplayedListener(new VacancyDisplayedListener() {
-			@Override
-			public void vacancyDisplayed() {
-				changeDisplayedPanel(PanelTypes.VACANCY);
-			}
-		});
 		CandidatePipelinePanel candidatePipelinePanel = (CandidatePipelinePanel) centrePanels.get(PanelTypes.PIPELINE);
 		candidatePipelinePanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
 			@Override
 			public void candidateDisplayed() {
-				changeDisplayedPanel(PanelTypes.CANDIDATE);
+				// changeDisplayedPanel(PanelTypes.CANDIDATE);
 			}
 		});
 		OrganisationsPanel organisationsPanel = (OrganisationsPanel) centrePanels.get(PanelTypes.ORGANISATIONS);
 		organisationsPanel.setOrganisationDisplayedListener(new OrganisationDisplayedListener() {
 			@Override
 			public void organisationDisplayed() {
-				changeDisplayedPanel(PanelTypes.ORGANISATION);
+				// changeDisplayedPanel(PanelTypes.ORGANISATION);
 			}
 		});
 		SearchPanel searchPanel = (SearchPanel) centrePanels.get(PanelTypes.SEARCH);
 		searchPanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
 			@Override
 			public void candidateDisplayed() {
-				changeDisplayedPanel(PanelTypes.CANDIDATE);
+				// changeDisplayedPanel(PanelTypes.CANDIDATE);
 			}
 		});
 	}
 	
-	@Override
-	public void setVisible(boolean b) {
-		if(b) {
-			changeDisplayedPanel(PanelTypes.VACANCIES);
-		}
-		super.setVisible(b);
-	}
-	
-	private void changeDisplayedPanel(PanelTypes panelType) {
+	private void removeCentreComponent() {
 		Component centreComponent = borderLayout.getLayoutComponent(BorderLayout.CENTER);
 		if(!(centreComponent == null)) 
 			remove(centreComponent);
-		
-		JPanel panel = centrePanels.get(panelType);
-		
-		add(panel);
-		
-		if(panelType == PanelTypes.VACANCIES) {
-			// when the vacancies panel is displayed update the necessary fields from the server
-			VacanciesPanel vPanel = (VacanciesPanel) panel;
-			vPanel.updateDisplayedVacancies(clientViewListener.getVacancies(vPanel.getVacancyType(), vPanel.getUser()));
-			vPanel.updateDisplayedUsers(clientViewListener.getUsers(null, true));
+	}
+	
+	public void setVisible(boolean b, UserType userType, List<Vacancy> vacancies, List<User> users) {
+		init(userType);
+		if(b) {
+		 	showVacanciesPanel(vacancies, users);
 		}
+		this.setVisible(b);
+	}
+	
+	public void showVacanciesPanel(List<Vacancy> vacancies, List<User> users) {
+		removeCentreComponent();
+		
+		// when the vacancies panel is displayed update the necessary fields from the server
+		JPanel panel = centrePanels.get(PanelTypes.VACANCIES);
+		VacanciesPanel vPanel = (VacanciesPanel) panel;
+		vPanel.updateDisplayedUsers(users);
+		vPanel.updateDisplayedVacancies(vacancies);
+		add(panel);
 		
 		revalidate();
 		repaint();
@@ -182,13 +172,28 @@ public class MainWindow extends JFrame {
 		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
 		panel.updateDisplayedVacancies(vacancies);
 	}
-	
-	public void setClientViewListener(ClientViewListener clientViewListener) {
-		this.clientViewListener = clientViewListener;
+
+	public void showVacancyPanel(Vacancy updatedVacancy) {
+		removeCentreComponent();
+		
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		panel.setDisplayedVacancy(updatedVacancy);
+		//VacanciesPanel vPanel = (VacanciesPanel) panel;
+		///vPanel.updateDisplayedUsers(users);
+		//vPanel.updateDisplayedVacancies(vacancies);
+		add(panel);
+		
+		revalidate();
+		repaint();
 	}
 	
-	public void setVacanciesListener(ActionListener listener) {
+	public Vacancy getSelectedVacancy() {
+		VacanciesPanel vPanel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
+		return vPanel.getSelectedVacancy();
+	}
+	
+	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
 		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
-		panel.setActionListener(listener);
+		panel.setVacanciesPanelListeners(actionListener, mouseListener);
 	}
 }

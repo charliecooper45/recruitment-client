@@ -1,6 +1,7 @@
 package gui;
 
-import gui.listeners.*;
+import gui.listeners.ChangePanelListener;
+import interfaces.UserType;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,14 +31,14 @@ public class TopMenuPanel extends JPanel {
 	// listener that alerts the MainWindow to changes in the displayed panel
 	private ChangePanelListener changePanelListener;
 
-	public TopMenuPanel() {
+	public TopMenuPanel(UserType userType) {
 		setLayout(new GridBagLayout());
 		setPreferredSize(new Dimension(500, 150));
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		init();
+		init(userType);
 	}
 
-	private void init() {
+	private void init(UserType userType) {
 		gbc = new GridBagConstraints();
 		gbc.weightx = 5;
 		gbc.weighty = 1;
@@ -55,13 +56,15 @@ public class TopMenuPanel extends JPanel {
 		}
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		add(menuPanelsPanel, gbc);
-		
-		// admin option
-		adminPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		menuOptions[4] = new MenuPanel("Admin", PanelTypes.ADMIN);
-		adminPanel.add(menuOptions[4]);
-		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.BOTH);
-		add(adminPanel, gbc);
+
+		if (userType == UserType.ADMINISTRATOR) {
+			// admin option
+			adminPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			menuOptions[4] = new MenuPanel("Admin", PanelTypes.ADMIN);
+			adminPanel.add(menuOptions[4]);
+			Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.BOTH);
+			add(adminPanel, gbc);
+		}
 	}
 
 	public void setChangePanelListener(ChangePanelListener changePanelListener) {

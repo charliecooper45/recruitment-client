@@ -1,8 +1,9 @@
 package gui;
 
-import gui.listeners.ClientViewListener;
+import interfaces.UserType;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
@@ -10,6 +11,7 @@ import javax.swing.SwingUtilities;
 import model.ClientModel;
 import model.LoginAttempt;
 import controller.ClientController;
+import database.beans.User;
 import database.beans.Vacancy;
 
 /**
@@ -26,9 +28,8 @@ public class ClientView {
 		mainWindow = new MainWindow();
 	}
 	
-	public void showGUI(ActionListener loginListener, ClientViewListener clientViewListener) {
+	public void showGUI(ActionListener loginListener) {
 		loginWindow.setLoginListener(loginListener);
-		mainWindow.setClientViewListener(clientViewListener);
 		loginWindow.setVisible(true);
 	}
 
@@ -40,21 +41,33 @@ public class ClientView {
 		loginWindow.showErrorMessage(message);
 	}
 	
-	public void displayMainWindow() {
-		mainWindow.setVisible(true);
+	public void displayMainWindow(UserType userType, List<Vacancy> vacancies, List<User> users) {
+		mainWindow.setVisible(true, userType, vacancies, users);
 		loginWindow.dispose();
 	}
 	
 	public void updateVacanciesPanel(List<Vacancy> vacancies) {
 		mainWindow.updateVacanciesPanel(vacancies);
+	} 
+	
+	public void showVacanciesPanel(List<Vacancy> vacancies, List<User> users) {
+		mainWindow.showVacanciesPanel(vacancies, users);
+	}
+	
+	public void showVacancyPanel(Vacancy updatedVacancy) {
+		mainWindow.showVacancyPanel(updatedVacancy);
+	}
+	
+	public Vacancy getSelectedVacancy() {
+		return mainWindow.getSelectedVacancy();
 	}
 	
 	public void setController(ClientController controller) {
 		this.controller = controller;
 	}
 	
-	public void setVacanciesListener(ActionListener listener) {
-		mainWindow.setVacanciesListener(listener);
+	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
+		mainWindow.setVacanciesPanelListeners(actionListener, mouseListener);
 	}
 	
 	public static void main(String[] args) {
@@ -67,4 +80,6 @@ public class ClientView {
 			}
 		});
 	}
+
+
 }
