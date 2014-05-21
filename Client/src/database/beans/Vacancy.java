@@ -73,4 +73,8 @@ public class Vacancy implements Serializable {
 	public String getContactPhoneNumber() {
 		return contactPhoneNumber;
 	}
+	
+	public String getProfile() {
+		return profile;
+	}
 }

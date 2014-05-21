@@ -7,7 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Date;
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -15,6 +18,10 @@ import javax.swing.JRadioButton;
 
 import model.ClientModel;
 import model.LoginAttempt;
+
+import com.healthmarketscience.rmiio.RemoteInputStream;
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -95,9 +102,44 @@ public class ClientController {
 					// retrieve the selected vacancy so it`s values can be updated from the server before the user sees it
 					Vacancy selectedVacancy = ClientController.this.view.getSelectedVacancy();
 					Vacancy updatedVacancy = ClientController.this.model.getVacancy(selectedVacancy.getVacancyId());
+					
+					// get the vacancy profile
+					try {
+						RemoteInputStream remoteFileData = ClientController.this.model.getVacancyProfile(selectedVacancy.getProfile());
+						InputStream fileData = RemoteInputStreamClient.wrap(remoteFileData);
+						storeFile(fileData, "C:/Users/Charlie/Desktop/temp/test vacany profile.txt");
+						//TODO NEXT: output this file to the GUI
+					} catch (IOException e1) {
+						// TODO NEXT B: Possible display an error message here
+						e1.printStackTrace();
+					}
 					ClientController.this.view.showVacancyPanel(updatedVacancy);
 				}
 			}
 		}); 
+	}
+	
+	private boolean storeFile(InputStream inStream, String filePath) {
+		try {
+			BufferedInputStream bufferedInputStream = new BufferedInputStream(inStream);
+			FileOutputStream outputStream;
+
+			outputStream = new FileOutputStream(filePath);
+
+			int size = 0;
+			byte[] byteBuff = new byte[1024];
+			while ((size = bufferedInputStream.read(byteBuff)) != -1) {
+				outputStream.write(byteBuff, 0, size);
+			}
+
+			outputStream.close();
+			bufferedInputStream.close();
+			
+			System.out.println("finished writing to the file");
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} 
 	}
 }

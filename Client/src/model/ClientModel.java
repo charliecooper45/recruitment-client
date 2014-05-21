@@ -10,6 +10,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
+
 import database.beans.Candidate;
 import database.beans.User;
 import database.beans.Vacancy;
@@ -88,5 +90,17 @@ public class ClientModel implements ServerInterface {
 		}
 		
 		//TODO NEXT: if null is returned the vacancy has been deleted, handle this
+	}
+
+	@Override
+	public RemoteInputStream getVacancyProfile(String fileName) {
+		try {
+			return SERVER.getVacancyProfile(fileName);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
