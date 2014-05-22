@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.EnumMap;
@@ -173,14 +174,11 @@ public class MainWindow extends JFrame {
 		panel.updateDisplayedVacancies(vacancies);
 	}
 
-	public void showVacancyPanel(Vacancy updatedVacancy) {
+	public void showVacancyPanel(Vacancy updatedVacancy, Path tempFile) {
 		removeCentreComponent();
 		
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
-		panel.setDisplayedVacancy(updatedVacancy);
-		//VacanciesPanel vPanel = (VacanciesPanel) panel;
-		///vPanel.updateDisplayedUsers(users);
-		//vPanel.updateDisplayedVacancies(vacancies);
+		panel.setDisplayedVacancy(updatedVacancy, tempFile);
 		add(panel);
 		
 		revalidate();

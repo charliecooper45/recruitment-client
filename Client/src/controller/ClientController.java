@@ -11,6 +11,8 @@ import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -102,29 +104,37 @@ public class ClientController {
 					// retrieve the selected vacancy so it`s values can be updated from the server before the user sees it
 					Vacancy selectedVacancy = ClientController.this.view.getSelectedVacancy();
 					Vacancy updatedVacancy = ClientController.this.model.getVacancy(selectedVacancy.getVacancyId());
+					Path tempFile = null;
 					
 					// get the vacancy profile
 					try {
-						RemoteInputStream remoteFileData = ClientController.this.model.getVacancyProfile(selectedVacancy.getProfile());
-						InputStream fileData = RemoteInputStreamClient.wrap(remoteFileData);
-						storeFile(fileData, "C:/Users/Charlie/Desktop/temp/test vacany profile.txt");
+						String vacancyProfile = selectedVacancy.getProfile();
+						if(vacancyProfile != null) {
+							RemoteInputStream remoteFileData = ClientController.this.model.getVacancyProfile(vacancyProfile);
+							InputStream fileData = RemoteInputStreamClient.wrap(remoteFileData);
+							tempFile = storeFile(fileData, vacancyProfile);
+						} 
 						//TODO NEXT: output this file to the GUI
 					} catch (IOException e1) {
 						// TODO NEXT B: Possible display an error message here
 						e1.printStackTrace();
 					}
-					ClientController.this.view.showVacancyPanel(updatedVacancy);
+					ClientController.this.view.showVacancyPanel(updatedVacancy, tempFile);
 				}
 			}
 		}); 
 	}
 	
-	private boolean storeFile(InputStream inStream, String filePath) {
+	private Path storeFile(InputStream inStream, String name) {
+		// write the file to a temp file
 		try {
+			String suffix = name.substring(name.lastIndexOf("."));
+			Path tempFile = Files.createTempFile(null, suffix);
+			tempFile.toFile().deleteOnExit();
 			BufferedInputStream bufferedInputStream = new BufferedInputStream(inStream);
 			FileOutputStream outputStream;
 
-			outputStream = new FileOutputStream(filePath);
+			outputStream = new FileOutputStream(tempFile.toFile());
 
 			int size = 0;
 			byte[] byteBuff = new byte[1024];
@@ -135,11 +145,10 @@ public class ClientController {
 			outputStream.close();
 			bufferedInputStream.close();
 			
-			System.out.println("finished writing to the file");
-			return true;
+			return tempFile;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		} 
 	}
 }

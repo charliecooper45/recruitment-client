@@ -4,6 +4,7 @@ import interfaces.UserType;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.nio.file.Path;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
@@ -54,8 +55,8 @@ public class ClientView {
 		mainWindow.showVacanciesPanel(vacancies, users);
 	}
 	
-	public void showVacancyPanel(Vacancy updatedVacancy) {
-		mainWindow.showVacancyPanel(updatedVacancy);
+	public void showVacancyPanel(Vacancy updatedVacancy, Path tempFile) {
+		mainWindow.showVacancyPanel(updatedVacancy, tempFile);
 	}
 	
 	public Vacancy getSelectedVacancy() {
