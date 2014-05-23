@@ -4,6 +4,7 @@ import interfaces.UserType;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -59,16 +60,36 @@ public class ClientView {
 		mainWindow.showVacancyPanel(updatedVacancy, tempFile);
 	}
 	
+	public File showFileChooser(DialogTypes messageType) {
+		return mainWindow.showFileChooser(messageType);
+	}
+	
+	public boolean showDialog(DialogTypes dialogType) {
+		return mainWindow.showDialog(dialogType);
+	}
+	
+	public void showErrorDialog(ErrorMessages errorMessage) {
+		mainWindow.showErrorDialog(errorMessage);
+	}
+	
 	public Vacancy getSelectedVacancy() {
 		return mainWindow.getSelectedVacancy();
 	}
-	
+
+	public Vacancy getDisplayedVacancy() {
+		return mainWindow.getDisplayedVacancy();
+	}
+
 	public void setController(ClientController controller) {
 		this.controller = controller;
 	}
 	
 	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
 		mainWindow.setVacanciesPanelListeners(actionListener, mouseListener);
+	}
+	
+	public void setVacancyPanelListener(ActionListener actionListener) {
+		mainWindow.setVacancyPanelListener(actionListener);
 	}
 	
 	public static void main(String[] args) {
@@ -81,6 +102,4 @@ public class ClientView {
 			}
 		});
 	}
-
-
 }

@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -185,13 +186,38 @@ public class MainWindow extends JFrame {
 		repaint();
 	}
 	
+	public File showFileChooser(DialogTypes messageType) {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		return panel.showFileChooser(messageType);
+	}
+	
+	public boolean showDialog(DialogTypes dialogType) {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		return panel.showDialog(dialogType);
+	}
+	
+	public void showErrorDialog(ErrorMessages errorMessage) {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		panel.showErrorDialog(errorMessage);
+	}
+	
 	public Vacancy getSelectedVacancy() {
 		VacanciesPanel vPanel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
 		return vPanel.getSelectedVacancy();
+	}
+
+	public Vacancy getDisplayedVacancy() {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		return panel.getDisplayedVacancy();
 	}
 	
 	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
 		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
 		panel.setVacanciesPanelListeners(actionListener, mouseListener);
+	}
+
+	public void setVacancyPanelListener(ActionListener actionListener) {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		panel.setVacancyPanelListener(actionListener);
 	}
 }

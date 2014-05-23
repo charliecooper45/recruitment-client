@@ -103,4 +103,28 @@ public class ClientModel implements ServerInterface {
 			return null;
 		}
 	}
+
+	@Override
+	public boolean addVacancyProfile(Vacancy vacancy, RemoteInputStream profileData, String oldFileName) {
+		try {
+			return SERVER.addVacancyProfile(vacancy, profileData, oldFileName);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeVacancyProfile(Vacancy vacancy) {
+		try {
+			return SERVER.removeVacancyProfile(vacancy);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

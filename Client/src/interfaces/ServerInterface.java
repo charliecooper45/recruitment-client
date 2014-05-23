@@ -22,4 +22,6 @@ public interface ServerInterface extends Remote{
 	public UserType getUserType(String userId) throws RemoteException;
 	public Vacancy getVacancy(int vacancyId) throws RemoteException;
 	public RemoteInputStream getVacancyProfile(String fileName) throws RemoteException;
+	public boolean addVacancyProfile(Vacancy vacancy, RemoteInputStream profileData, String oldFileName) throws RemoteException;
+	public boolean removeVacancyProfile(Vacancy vacancy) throws RemoteException;
 }

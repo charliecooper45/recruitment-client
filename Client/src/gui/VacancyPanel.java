@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,13 +17,17 @@ import java.nio.file.Path;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
@@ -32,6 +38,7 @@ import org.apache.poi.hwpf.extractor.WordExtractor;
 
 import database.beans.Vacancy;
 
+//TODO NEXT: set max width so doesn`t resize
 public class VacancyPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -48,12 +55,17 @@ public class VacancyPanel extends JPanel {
 
 	// components = leftBottomPanel
 	private JPanel leftBottomPanel;
+	private JButton addVacancyProfileBtn;
+	private JButton removeVacancyProfileBtn;
 
 	// components - rightPanel
 	private JPanel rightPanel;
 	private JTabbedPane tabbedPane;
 	private JPanel vacancyProfilePanel;
 	private JTextArea documentArea;
+
+	// the displayed vacancy
+	private Vacancy vacancy;
 
 	public VacancyPanel() {
 		init();
@@ -130,6 +142,14 @@ public class VacancyPanel extends JPanel {
 		Utils.setGBC(leftBottomPanelGbc, 1, 1, 2, 1, GridBagConstraints.NONE);
 		leftBottomPanel.add(new JLabel("Vacancy Options:"), leftBottomPanelGbc);
 
+		JPanel firstRowPnl = new JPanel(new GridLayout(1, 2));
+		addVacancyProfileBtn = new JButton("Add profile");
+		firstRowPnl.add(addVacancyProfileBtn);
+		removeVacancyProfileBtn = new JButton("Remove profile");
+		firstRowPnl.add(removeVacancyProfileBtn);
+		Utils.setGBC(leftBottomPanelGbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
+		leftBottomPanel.add(firstRowPnl, leftBottomPanelGbc);
+
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		add(leftBottomPanel, gbc);
 	}
@@ -163,6 +183,8 @@ public class VacancyPanel extends JPanel {
 	}
 
 	public void setDisplayedVacancy(Vacancy updatedVacancy, Path tempFile) {
+		this.vacancy = updatedVacancy;
+
 		if (updatedVacancy.getStatus()) {
 			vacancyNameLbl.setForeground(Color.GREEN);
 		} else {
@@ -183,12 +205,17 @@ public class VacancyPanel extends JPanel {
 
 		readVacancyProfile(tempFile);
 	}
-	
+
+	public Vacancy getDisplayedVacancy() {
+		return vacancy;
+	}
+
 	private void readVacancyProfile(Path path) {
+		documentArea.setText("");
 		WordExtractor extractor = null;
+
 		try {
 			if (path != null) {
-				System.err.println(path.toString());
 				if (path.toString().endsWith(".docx") || path.toString().endsWith(".doc")) {
 					// handle doc and dox file types
 					File file = null;
@@ -207,12 +234,13 @@ public class VacancyPanel extends JPanel {
 				} else if (path.toString().endsWith(".txt")) {
 					// handle .txt file types
 					List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
-					for(String line: lines) {
+					for (String line : lines) {
 						documentArea.append(line);
 					}
 				} else if (path.toString().endsWith(".pdf")) {
 					PDFParser parser = null;
-					String parsedText = null;;
+					String parsedText = null;
+					;
 					PDFTextStripper pdfStripper = null;
 					PDDocument pdDoc = null;
 					COSDocument cosDoc = null;
@@ -248,7 +276,7 @@ public class VacancyPanel extends JPanel {
 			e.printStackTrace();
 			documentArea.setText("Vacancy profile not found.");
 		} finally {
-			if(extractor != null)
+			if (extractor != null)
 				try {
 					extractor.close();
 				} catch (IOException e) {
@@ -256,5 +284,61 @@ public class VacancyPanel extends JPanel {
 					documentArea.setText("Vacancy profile not found.");
 				}
 		}
+	}
+
+	public File showFileChooser(DialogTypes dialogType) {
+		switch (dialogType) {
+		case VACANCYADDPROFILE:
+			JFileChooser fc = new JFileChooser();
+			fc.setMultiSelectionEnabled(false);
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fc.addChoosableFileFilter(new FileFilter() {
+				@Override
+				public boolean accept(File f) {
+					if (f.getName().endsWith(".doc")) {
+						return true;
+					} else if (f.getName().endsWith(".docx")) {
+						return true;
+					} else if (f.getName().endsWith(".pdf")) {
+						return true;
+					} else if (f.getName().endsWith(".txt")) {
+						return true;
+					}
+					return false;
+				}
+
+				@Override
+				public String getDescription() {
+					return "Text/Office/PDF files";
+				}
+			});
+			fc.setDialogTitle("Select profile to add.");
+			int returnVal = fc.showOpenDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				return fc.getSelectedFile();
+			}
+		default:
+			return null;
+		}
+	}
+
+	public boolean showDialog(DialogTypes dialogType) {
+		switch (dialogType) {
+		case VACANCYREMOVEPROFILE:
+			int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to remove this profile?", "Confirm remove profile.", JOptionPane.YES_NO_OPTION);
+			if(response == 0) 
+				return true;
+		default:
+			return false;
+		}
+	}
+
+	public void showErrorDialog(ErrorMessages errorMessage) {
+		JOptionPane.showMessageDialog(this, errorMessage.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void setVacancyPanelListener(ActionListener actionListener) {
+		addVacancyProfileBtn.addActionListener(actionListener);
+		removeVacancyProfileBtn.addActionListener(actionListener);
 	}
 }
