@@ -42,7 +42,7 @@ public class Vacancy implements Serializable {
 		return "Vacancy [vacancyId=" + vacancyId + ", status=" + status + ", name=" + name + ", vacancyDate=" + vacancyDate + ", text=" + text + ", profile=" + profile + ", organisationId=" + organisationId + ", organisationName=" + organisationName + ", userId=" + userId + ", contactId=" + contactId + ", contactName=" + contactName + "]";
 	}
 	
-	public Object getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -80,5 +80,9 @@ public class Vacancy implements Serializable {
 
 	public void setProfile(String profile) {
 		this.profile = profile;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 }

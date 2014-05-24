@@ -60,16 +60,20 @@ public class ClientView {
 		mainWindow.showVacancyPanel(updatedVacancy, tempFile);
 	}
 	
-	public File showFileChooser(DialogTypes messageType) {
+	public File showFileChooser(DialogType messageType) {
 		return mainWindow.showFileChooser(messageType);
 	}
 	
-	public boolean showDialog(DialogTypes dialogType) {
+	public boolean showDialog(DialogType dialogType) {
 		return mainWindow.showDialog(dialogType);
 	}
 	
-	public void showErrorDialog(ErrorMessages errorMessage) {
+	public void showErrorDialog(ErrorDialogType errorMessage) {
 		mainWindow.showErrorDialog(errorMessage);
+	}
+	
+	public Object showMenuDialog(MenuDialogType menuDialog) {
+		return mainWindow.showMenuDialog(menuDialog);
 	}
 	
 	public Vacancy getSelectedVacancy() {
@@ -90,6 +94,14 @@ public class ClientView {
 	
 	public void setVacancyPanelListener(ActionListener actionListener) {
 		mainWindow.setVacancyPanelListener(actionListener);
+	}
+	
+	public void setMenuListener(ActionListener actionListener) {
+		mainWindow.setMenuListener(actionListener);
+	}
+	
+	public void setVacancyMenuDialogListener(ActionListener listener) {
+		mainWindow.setVacancyMenuDialogListener(listener);
 	}
 	
 	public static void main(String[] args) {

@@ -1,8 +1,9 @@
 package controller;
 
 import gui.ClientView;
-import gui.DialogTypes;
-import gui.ErrorMessages;
+import gui.DialogType;
+import gui.ErrorDialogType;
+import gui.MenuDialogType;
 import interfaces.UserType;
 
 import java.awt.event.ActionEvent;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 
 import model.ClientModel;
@@ -47,6 +49,11 @@ public class ClientController {
 		this.view = view;
 		this.model = model;
 		this.view.setController(this);
+		
+		setListenersAndShowGUI();
+	}
+
+	private void setListenersAndShowGUI() {
 
 		// shows the GUI to the user and sets the login listener for the login screen
 		view.showGUI(new ActionListener() {
@@ -66,6 +73,20 @@ public class ClientController {
 					ClientController.this.view.displayMainWindow(UserType.STANDARD, vacancies, users);
 				} else {
 					ClientController.this.view.showLoginErrorMessage(message);
+				}
+			}
+		});
+
+		// sets the menu listener
+		view.setMenuListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JMenuItem item = (JMenuItem) event.getSource();
+				String action = item.getText();
+				switch (action) {
+				case "Add Vacancy":
+					ClientController.this.view.showMenuDialog(MenuDialogType.ADD_VACANCY);
+					break;
 				}
 			}
 		});
@@ -122,7 +143,6 @@ public class ClientController {
 							InputStream fileData = RemoteInputStreamClient.wrap(remoteFileData);
 							tempFile = storeFile(fileData, vacancyProfile);
 						}
-						//TODO NEXT: output this file to the GUI
 					} catch (IOException e1) {
 						// TODO NEXT B: Possible display an error message here
 						e1.printStackTrace();
@@ -138,7 +158,7 @@ public class ClientController {
 				if (source instanceof JButton) {
 					JButton button = (JButton) source;
 					if (button.getText().equals("Add profile")) {
-						File file = ClientController.this.view.showFileChooser(DialogTypes.VACANCYADDPROFILE);
+						File file = ClientController.this.view.showFileChooser(DialogType.VACANCY_ADD_PROFILE);
 						if (file != null) {
 							InputStream inputStream = null;
 							try {
@@ -151,8 +171,8 @@ public class ClientController {
 
 								if (profileAdded) {
 									String vacancyProfile = vacancy.getProfile();
-									RemoteInputStream remoteVacacnyProfileData = ClientController.this.model.getVacancyProfile(vacancyProfile);
-									InputStream fileData = RemoteInputStreamClient.wrap(remoteVacacnyProfileData);
+									RemoteInputStream remoteVacancyProfileData = ClientController.this.model.getVacancyProfile(vacancyProfile);
+									InputStream fileData = RemoteInputStreamClient.wrap(remoteVacancyProfileData);
 									Path tempFile = storeFile(fileData, vacancyProfile);
 									ClientController.this.view.showVacancyPanel(vacancy, tempFile);
 								}
@@ -165,7 +185,7 @@ public class ClientController {
 							}
 						}
 					} else if (button.getText().equals("Remove profile")) {
-						boolean confirm = ClientController.this.view.showDialog(DialogTypes.VACANCYREMOVEPROFILE);
+						boolean confirm = ClientController.this.view.showDialog(DialogType.VACANCY_REMOVE_PROFILE);
 						if (confirm) {
 							Vacancy vacancy = ClientController.this.view.getDisplayedVacancy();
 							if (vacancy.getProfile() != null) {
@@ -174,10 +194,38 @@ public class ClientController {
 									ClientController.this.view.showVacancyPanel(vacancy, null);
 								}
 							} else {
-								ClientController.this.view.showErrorDialog(ErrorMessages.VACANCYNOPROFILE);
+								ClientController.this.view.showErrorDialog(ErrorDialogType.VACANCY_NO_PROFILE);
 							}
 						}
 					}
+				} else if (source instanceof JComboBox<?>) {
+					Vacancy displayedVacancy = ClientController.this.view.getDisplayedVacancy();
+					JComboBox<?> comboBox = (JComboBox<?>) source;
+					boolean status = displayedVacancy.getStatus();
+
+					String comboBoxValue = (String) comboBox.getSelectedItem();
+					if (status == true && comboBoxValue.equals("Closed")) {
+						if (ClientController.this.view.showDialog(DialogType.VACANCY_CHANGE_STATUS_CLOSE)) {
+							// close the vacancy
+							ClientController.this.model.changeVacancyStatus(displayedVacancy);
+						}
+					} else if (status == false && comboBoxValue.equals("Open")) {
+						if (ClientController.this.view.showDialog(DialogType.VACANCY_CHANGE_STATUS_OPEN)) {
+							// open the vacancy
+							ClientController.this.model.changeVacancyStatus(displayedVacancy);
+						}
+					}
+				}
+			}
+		});
+		view.setVacancyMenuDialogListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object source = e.getSource();
+				
+				if(source instanceof JButton) {
+					//TODO NEXT: Implement this
 				}
 			}
 		});

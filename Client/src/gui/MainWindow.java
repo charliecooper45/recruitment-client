@@ -1,5 +1,7 @@
 package gui;
 
+import gui.dialogs.AddVacancyDialog;
+import gui.dialogs.RecruitmentDialog;
 import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.ChangePanelListener;
 import gui.listeners.OrganisationDisplayedListener;
@@ -45,8 +47,14 @@ public class MainWindow extends JFrame {
 	private TopMenuPanel topMenuPanel;
 	private JPanel taskListPanel;
 	
+	// the menu items displayed in the menu
+	private JMenuItem[] menuItems;
+	
 	// JPanels that fill the centre of the GUI
 	private Map<PanelTypes, JPanel> centrePanels;
+	
+	// Dialog windows 
+	private Map<MenuDialogType, RecruitmentDialog> dialogs;
 	
 	public MainWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,19 +88,17 @@ public class MainWindow extends JFrame {
 		centrePanels.put(PanelTypes.VACANCY, new VacancyPanel());
 		centrePanels.put(PanelTypes.CANDIDATE, new CandidatePanel());
 		centrePanels.put(PanelTypes.ORGANISATION, new OrganisationPanel());
-	}
-
-	private void init(UserType userType) {
+		
 		// create the menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Database Editor");
 		JMenu addMenu = new JMenu("Add");
 		JMenu removeMenu = new JMenu("Remove");
-		String[] itemNames = {"Add Candidate", "Add Vacancy", "Add Organisation", "Remove Candidate", "Remove Vacancy", "Remove Organisation"};			
-		JMenuItem[] menuItems = new JMenuItem[6];
+		String[] itemNames = {"Add Candidate", "Add Vacancy", "Add Organisation", "Add Contact", "Remove Candidate", "Remove Vacancy", "Remove Organisation", "Remove Contact"};			
+		menuItems = new JMenuItem[8];
 		for(int i = 0; i < menuItems.length; i++) {
 			menuItems[i] = new JMenuItem(itemNames[i]);
-			if(i < 3) {
+			if(i < 4) {
 				addMenu.add(menuItems[i]);
 			} else {
 				removeMenu.add(menuItems[i]);
@@ -103,6 +109,12 @@ public class MainWindow extends JFrame {
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
 		
+		// create the dialogs
+		dialogs = new EnumMap<>(MenuDialogType.class);
+		dialogs.put(MenuDialogType.ADD_VACANCY, new AddVacancyDialog(this));
+	}
+
+	private void init(UserType userType) {
 		borderLayout = new BorderLayout();
 		setLayout(borderLayout);
 		
@@ -186,19 +198,29 @@ public class MainWindow extends JFrame {
 		repaint();
 	}
 	
-	public File showFileChooser(DialogTypes messageType) {
+	public File showFileChooser(DialogType messageType) {
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
 		return panel.showFileChooser(messageType);
 	}
 	
-	public boolean showDialog(DialogTypes dialogType) {
+	public boolean showDialog(DialogType dialogType) {
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
 		return panel.showDialog(dialogType);
 	}
 	
-	public void showErrorDialog(ErrorMessages errorMessage) {
+	public void showErrorDialog(ErrorDialogType errorMessage) {
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
 		panel.showErrorDialog(errorMessage);
+	}
+	
+	public Object showMenuDialog(MenuDialogType menuDialog) {
+		switch(menuDialog) {
+		case ADD_VACANCY:
+			dialogs.get(MenuDialogType.ADD_VACANCY).setVisible(true);
+			break;
+		}
+		
+		return null;
 	}
 	
 	public Vacancy getSelectedVacancy() {
@@ -219,5 +241,15 @@ public class MainWindow extends JFrame {
 	public void setVacancyPanelListener(ActionListener actionListener) {
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
 		panel.setVacancyPanelListener(actionListener);
+	}
+	
+	public void setMenuListener(ActionListener actionListener) {
+		for(JMenuItem menuItem: menuItems) {
+			menuItem.addActionListener(actionListener);
+		}
+	}
+
+	public void setVacancyMenuDialogListener(ActionListener listener) {
+		dialogs.get(MenuDialogType.ADD_VACANCY).setButtonListener(listener);
 	}
 }

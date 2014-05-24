@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -42,21 +43,23 @@ import database.beans.Vacancy;
 public class VacancyPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private GridBagConstraints gbc;
-
 	// components - leftTopPanel
 	private JPanel leftTopPanel;
 	private JLabel vacancyNameLbl;
+	private JLabel organisationNameLbl;
 	private JLabel createdByLbl;
 	private JComboBox<String> statusCmbBox;
 	private JTextField dateTxtFld;
 	private JTextField contactTxtFld;
 	private JTextField phoneNoTxtFld;
 
-	// components = leftBottomPanel
+	// components - leftBottomPanel
 	private JPanel leftBottomPanel;
 	private JButton addVacancyProfileBtn;
 	private JButton removeVacancyProfileBtn;
+	
+	// components - leftPanel
+	private JPanel leftPanel;
 
 	// components - rightPanel
 	private JPanel rightPanel;
@@ -72,13 +75,13 @@ public class VacancyPanel extends JPanel {
 	}
 
 	private void init() {
-		setLayout(new GridBagLayout());
-		gbc = new GridBagConstraints();
-		gbc.weightx = 1;
-		gbc.weighty = 1;
+		setLayout(new BorderLayout());
 
+		leftPanel = new JPanel(new GridLayout(2, 1));
+		leftPanel.setPreferredSize(new Dimension(350, 10));
 		initLeftTopPanel();
 		initLeftBottomPanel();
+		add(leftPanel, BorderLayout.WEST);
 		initRightPanel();
 	}
 
@@ -87,27 +90,32 @@ public class VacancyPanel extends JPanel {
 		leftTopPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		GridBagConstraints leftTopPnlGbc = new GridBagConstraints();
 		leftTopPnlGbc.weightx = 1;
-		leftTopPnlGbc.weighty = 1;
+		leftTopPnlGbc.weighty = 0.5;
 		leftTopPnlGbc.anchor = GridBagConstraints.CENTER;
 
-		vacancyNameLbl = new JLabel("Project Co-Ordinator @ Accenture");
+		vacancyNameLbl = new JLabel();
 		vacancyNameLbl.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		Utils.setGBC(leftTopPnlGbc, 1, 1, 2, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(vacancyNameLbl, leftTopPnlGbc);
-		createdByLbl = new JLabel("Created by: MC01");
+		organisationNameLbl = new JLabel();
+		organisationNameLbl.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		Utils.setGBC(leftTopPnlGbc, 1, 2, 2, 1, GridBagConstraints.NONE);
+		leftTopPanel.add(organisationNameLbl, leftTopPnlGbc);
+		createdByLbl = new JLabel("");
+		Utils.setGBC(leftTopPnlGbc, 1, 3, 2, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(createdByLbl, leftTopPnlGbc);
 
 		// labels
+		leftTopPnlGbc.weighty = 1;
 		leftTopPnlGbc.insets = new Insets(0, 15, 0, 0);
 		leftTopPnlGbc.anchor = GridBagConstraints.LINE_START;
-		Utils.setGBC(leftTopPnlGbc, 1, 3, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Job Status:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 4, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Added:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Job Status:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 5, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Contact:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Added:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 6, 1, 1, GridBagConstraints.NONE);
+		leftTopPanel.add(new JLabel("Contact:"), leftTopPnlGbc);
+		Utils.setGBC(leftTopPnlGbc, 1, 7, 1, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(new JLabel("Contact Phone Number:"), leftTopPnlGbc);
 
 		// fields
@@ -116,20 +124,19 @@ public class VacancyPanel extends JPanel {
 		statusCmbBox = new JComboBox<>();
 		statusCmbBox.addItem("Open");
 		statusCmbBox.addItem("Closed");
-		Utils.setGBC(leftTopPnlGbc, 2, 3, 1, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(leftTopPnlGbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(statusCmbBox, leftTopPnlGbc);
 		dateTxtFld = new JTextField();
-		Utils.setGBC(leftTopPnlGbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(leftTopPnlGbc, 2, 5, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(dateTxtFld, leftTopPnlGbc);
 		contactTxtFld = new JTextField();
-		Utils.setGBC(leftTopPnlGbc, 2, 5, 1, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(contactTxtFld, leftTopPnlGbc);
 		phoneNoTxtFld = new JTextField();
-		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(leftTopPnlGbc, 2, 7, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(phoneNoTxtFld, leftTopPnlGbc);
 
-		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
-		add(leftTopPanel, gbc);
+		leftPanel.add(leftTopPanel);
 	}
 
 	private void initLeftBottomPanel() {
@@ -150,12 +157,10 @@ public class VacancyPanel extends JPanel {
 		Utils.setGBC(leftBottomPanelGbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftBottomPanel.add(firstRowPnl, leftBottomPanelGbc);
 
-		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
-		add(leftBottomPanel, gbc);
+		leftPanel.add(leftBottomPanel);
 	}
 
 	private void initRightPanel() {
-		gbc.weightx = 4;
 		rightPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints rightPanelGbc = new GridBagConstraints();
 		rightPanelGbc.weightx = 1;
@@ -178,8 +183,7 @@ public class VacancyPanel extends JPanel {
 		Utils.setGBC(rightPanelGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		rightPanel.add(tabbedPane, rightPanelGbc);
 
-		Utils.setGBC(gbc, 2, 1, 1, 2, GridBagConstraints.BOTH);
-		add(rightPanel, gbc);
+		add(rightPanel, BorderLayout.CENTER);
 	}
 
 	public void setDisplayedVacancy(Vacancy updatedVacancy, Path tempFile) {
@@ -187,10 +191,13 @@ public class VacancyPanel extends JPanel {
 
 		if (updatedVacancy.getStatus()) {
 			vacancyNameLbl.setForeground(Color.GREEN);
+			organisationNameLbl.setForeground(Color.GREEN);
 		} else {
 			vacancyNameLbl.setForeground(Color.RED);
+			organisationNameLbl.setForeground(Color.RED);
 		}
-		vacancyNameLbl.setText(updatedVacancy.getName() + " @ " + updatedVacancy.getOrganisationName());
+		vacancyNameLbl.setText(updatedVacancy.getName());
+		organisationNameLbl.setText(updatedVacancy.getOrganisationName());
 		createdByLbl.setText(updatedVacancy.getUserId());
 		dateTxtFld.setText(updatedVacancy.getVacancyDate().toString());
 		contactTxtFld.setText(updatedVacancy.getContactName());
@@ -286,9 +293,9 @@ public class VacancyPanel extends JPanel {
 		}
 	}
 
-	public File showFileChooser(DialogTypes dialogType) {
+	public File showFileChooser(DialogType dialogType) {
 		switch (dialogType) {
-		case VACANCYADDPROFILE:
+		case VACANCY_ADD_PROFILE:
 			JFileChooser fc = new JFileChooser();
 			fc.setMultiSelectionEnabled(false);
 			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -322,23 +329,46 @@ public class VacancyPanel extends JPanel {
 		}
 	}
 
-	public boolean showDialog(DialogTypes dialogType) {
+	public boolean showDialog(DialogType dialogType) {
+		int response;
+		
 		switch (dialogType) {
-		case VACANCYREMOVEPROFILE:
-			int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to remove this profile?", "Confirm remove profile.", JOptionPane.YES_NO_OPTION);
+		case VACANCY_REMOVE_PROFILE:
+			response = JOptionPane.showConfirmDialog(this, DialogType.VACANCY_REMOVE_PROFILE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if(response == 0) 
 				return true;
+			break;
+		case VACANCY_CHANGE_STATUS_OPEN:
+			response = JOptionPane.showConfirmDialog(this, DialogType.VACANCY_CHANGE_STATUS_OPEN.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if(response == 0) {
+				vacancy.setStatus(true);
+				vacancyNameLbl.setForeground(Color.GREEN);
+				organisationNameLbl.setForeground(Color.GREEN);
+				return true;
+			}
+			break;
+		case VACANCY_CHANGE_STATUS_CLOSE:
+			response = JOptionPane.showConfirmDialog(this, DialogType.VACANCY_CHANGE_STATUS_CLOSE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if(response == 0) {
+				vacancy.setStatus(false);
+				vacancyNameLbl.setForeground(Color.RED);
+				organisationNameLbl.setForeground(Color.RED);
+				return true;
+			}
+			break;
 		default:
 			return false;
 		}
+		return false;
 	}
 
-	public void showErrorDialog(ErrorMessages errorMessage) {
+	public void showErrorDialog(ErrorDialogType errorMessage) {
 		JOptionPane.showMessageDialog(this, errorMessage.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public void setVacancyPanelListener(ActionListener actionListener) {
 		addVacancyProfileBtn.addActionListener(actionListener);
 		removeVacancyProfileBtn.addActionListener(actionListener);
+		statusCmbBox.addActionListener(actionListener);
 	}
 }
