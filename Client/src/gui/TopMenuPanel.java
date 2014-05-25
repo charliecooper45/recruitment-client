@@ -46,11 +46,11 @@ public class TopMenuPanel extends JPanel {
 		// menu options
 		menuPanelsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		menuOptions = new MenuPanel[5];
-		menuOptions[0] = new MenuPanel("Vacancies", PanelTypes.VACANCIES);
+		menuOptions[0] = new MenuPanel("Vacancies", PanelType.VACANCIES);
 		menuOptions[0].setSelected(true);
-		menuOptions[1] = new MenuPanel("My Candidate Pipeline", PanelTypes.PIPELINE);
-		menuOptions[2] = new MenuPanel("Organisations", PanelTypes.ORGANISATIONS);
-		menuOptions[3] = new MenuPanel("Search Candidates", PanelTypes.SEARCH);
+		menuOptions[1] = new MenuPanel("My Candidate Pipeline", PanelType.PIPELINE);
+		menuOptions[2] = new MenuPanel("Organisations", PanelType.ORGANISATIONS);
+		menuOptions[3] = new MenuPanel("Search Candidates", PanelType.SEARCH);
 		for (int i = 0; i < 4; i++) {
 			menuPanelsPanel.add(menuOptions[i]);
 		}
@@ -60,7 +60,7 @@ public class TopMenuPanel extends JPanel {
 		if (userType == UserType.ADMINISTRATOR) {
 			// admin option
 			adminPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-			menuOptions[4] = new MenuPanel("Admin", PanelTypes.ADMIN);
+			menuOptions[4] = new MenuPanel("Admin", PanelType.ADMIN);
 			adminPanel.add(menuOptions[4]);
 			Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.BOTH);
 			add(adminPanel, gbc);
@@ -78,12 +78,12 @@ public class TopMenuPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		private String name;
-		private PanelTypes panelType;
+		private PanelType panelType;
 
 		// components
 		private JLabel nameLbl;
 
-		public MenuPanel(String name, PanelTypes panelType) {
+		public MenuPanel(String name, PanelType panelType) {
 			this.panelType = panelType;
 			this.name = name;
 			setPreferredSize(new Dimension(150, 135));

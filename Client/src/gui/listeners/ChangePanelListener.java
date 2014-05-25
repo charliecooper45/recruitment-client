@@ -1,7 +1,7 @@
 package gui.listeners;
 
-import gui.PanelTypes;
+import gui.PanelType;
 
 public interface ChangePanelListener {
-	public void changePanel(PanelTypes panelType);
+	public void changePanel(PanelType panelType);
 }

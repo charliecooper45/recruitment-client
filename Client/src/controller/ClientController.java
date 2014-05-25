@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -34,6 +35,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
+import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -85,6 +87,10 @@ public class ClientController {
 				String action = item.getText();
 				switch (action) {
 				case "Add Vacancy":
+					// get the up to date organisations list from the server
+					List<Organisation> organisations = ClientController.this.model.getOrganisations();
+					Collections.sort(organisations);
+					ClientController.this.view.setDisplayedOrganisationsInDialog(MenuDialogType.ADD_VACANCY, organisations);
 					ClientController.this.view.showMenuDialog(MenuDialogType.ADD_VACANCY);
 					break;
 				}
@@ -158,7 +164,7 @@ public class ClientController {
 				if (source instanceof JButton) {
 					JButton button = (JButton) source;
 					if (button.getText().equals("Add profile")) {
-						File file = ClientController.this.view.showFileChooser(DialogType.VACANCY_ADD_PROFILE);
+						File file = ClientController.this.view.showFileChooser("Select profile to add.");
 						if (file != null) {
 							InputStream inputStream = null;
 							try {
@@ -218,14 +224,32 @@ public class ClientController {
 				}
 			}
 		});
-		view.setVacancyMenuDialogListener(new ActionListener() {
-			
+		view.setAddVacancyDialogListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object source = e.getSource();
 				
 				if(source instanceof JButton) {
+					JButton button = (JButton) source;
+					String text = button.getText();
+					
+					switch (text) {
+					case "Cancel":
+						ClientController.this.view.hideMenuDialog(MenuDialogType.ADD_VACANCY);
+						break;
+					case "..":
+						File file = ClientController.this.view.showFileChooser("Select profile to add.");
+						if(file != null) {
+							// update the view to show the new file
+							ClientController.this.view.displayFileInDialog(MenuDialogType.ADD_VACANCY, file);
+						}
+						break;
+					}
 					//TODO NEXT: Implement this
+					Vacancy vacancy = ClientController.this.view.getVacancyDialogVacancy();
+					if(vacancy != null) {
+						// the vacancy is valid and can be added
+					}
 				}
 			}
 		});

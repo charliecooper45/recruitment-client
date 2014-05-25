@@ -293,42 +293,6 @@ public class VacancyPanel extends JPanel {
 		}
 	}
 
-	public File showFileChooser(DialogType dialogType) {
-		switch (dialogType) {
-		case VACANCY_ADD_PROFILE:
-			JFileChooser fc = new JFileChooser();
-			fc.setMultiSelectionEnabled(false);
-			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fc.addChoosableFileFilter(new FileFilter() {
-				@Override
-				public boolean accept(File f) {
-					if (f.getName().endsWith(".doc")) {
-						return true;
-					} else if (f.getName().endsWith(".docx")) {
-						return true;
-					} else if (f.getName().endsWith(".pdf")) {
-						return true;
-					} else if (f.getName().endsWith(".txt")) {
-						return true;
-					}
-					return false;
-				}
-
-				@Override
-				public String getDescription() {
-					return "Text/Office/PDF files";
-				}
-			});
-			fc.setDialogTitle("Select profile to add.");
-			int returnVal = fc.showOpenDialog(this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				return fc.getSelectedFile();
-			}
-		default:
-			return null;
-		}
-	}
-
 	public boolean showDialog(DialogType dialogType) {
 		int response;
 		

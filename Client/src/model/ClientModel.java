@@ -13,6 +13,7 @@ import java.util.List;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 
 import database.beans.Candidate;
+import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -80,6 +81,7 @@ public class ClientModel implements ServerInterface {
 		throw new UnsupportedOperationException("Method is not implemented for the ClientModel class");
 	}
 
+	@Override
 	public Vacancy getVacancy(int vacancyId) {
 		try {
 			return SERVER.getVacancy(vacancyId);
@@ -139,4 +141,18 @@ public class ClientModel implements ServerInterface {
 		}
 		return false;
 	}
+
+	@Override
+	public List<Organisation> getOrganisations() {
+		try {
+			return SERVER.getOrganisations();
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	
 }

@@ -23,12 +23,15 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
 
+import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -46,16 +49,16 @@ public class MainWindow extends JFrame {
 	// JPanels that form the static elements of the GUI
 	private TopMenuPanel topMenuPanel;
 	private JPanel taskListPanel;
-	
+
 	// the menu items displayed in the menu
 	private JMenuItem[] menuItems;
-	
+
 	// JPanels that fill the centre of the GUI
-	private Map<PanelTypes, JPanel> centrePanels;
-	
+	private Map<PanelType, JPanel> centrePanels;
+
 	// Dialog windows 
 	private Map<MenuDialogType, RecruitmentDialog> dialogs;
-	
+
 	public MainWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -77,28 +80,28 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		
+
 		// first panel displayed is the vacancies panel
-		centrePanels = new EnumMap<>(PanelTypes.class);
-		centrePanels.put(PanelTypes.VACANCIES, new VacanciesPanel());
-		centrePanels.put(PanelTypes.PIPELINE, new CandidatePipelinePanel());
-		centrePanels.put(PanelTypes.ORGANISATIONS, new OrganisationsPanel());
-		centrePanels.put(PanelTypes.SEARCH, new SearchPanel());
-		centrePanels.put(PanelTypes.ADMIN, new AdminPanel());
-		centrePanels.put(PanelTypes.VACANCY, new VacancyPanel());
-		centrePanels.put(PanelTypes.CANDIDATE, new CandidatePanel());
-		centrePanels.put(PanelTypes.ORGANISATION, new OrganisationPanel());
-		
+		centrePanels = new EnumMap<>(PanelType.class);
+		centrePanels.put(PanelType.VACANCIES, new VacanciesPanel());
+		centrePanels.put(PanelType.PIPELINE, new CandidatePipelinePanel());
+		centrePanels.put(PanelType.ORGANISATIONS, new OrganisationsPanel());
+		centrePanels.put(PanelType.SEARCH, new SearchPanel());
+		centrePanels.put(PanelType.ADMIN, new AdminPanel());
+		centrePanels.put(PanelType.VACANCY, new VacancyPanel());
+		centrePanels.put(PanelType.CANDIDATE, new CandidatePanel());
+		centrePanels.put(PanelType.ORGANISATION, new OrganisationPanel());
+
 		// create the menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Database Editor");
 		JMenu addMenu = new JMenu("Add");
 		JMenu removeMenu = new JMenu("Remove");
-		String[] itemNames = {"Add Candidate", "Add Vacancy", "Add Organisation", "Add Contact", "Remove Candidate", "Remove Vacancy", "Remove Organisation", "Remove Contact"};			
+		String[] itemNames = { "Add Candidate", "Add Vacancy", "Add Organisation", "Add Contact", "Remove Candidate", "Remove Vacancy", "Remove Organisation", "Remove Contact" };
 		menuItems = new JMenuItem[8];
-		for(int i = 0; i < menuItems.length; i++) {
+		for (int i = 0; i < menuItems.length; i++) {
 			menuItems[i] = new JMenuItem(itemNames[i]);
-			if(i < 4) {
+			if (i < 4) {
 				addMenu.add(menuItems[i]);
 			} else {
 				removeMenu.add(menuItems[i]);
@@ -108,7 +111,7 @@ public class MainWindow extends JFrame {
 		menu.add(removeMenu);
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
-		
+
 		// create the dialogs
 		dialogs = new EnumMap<>(MenuDialogType.class);
 		dialogs.put(MenuDialogType.ADD_VACANCY, new AddVacancyDialog(this));
@@ -117,35 +120,35 @@ public class MainWindow extends JFrame {
 	private void init(UserType userType) {
 		borderLayout = new BorderLayout();
 		setLayout(borderLayout);
-		
+
 		topMenuPanel = new TopMenuPanel(userType);
 		topMenuPanel.setChangePanelListener(new ChangePanelListener() {
 			@Override
-			public void changePanel(PanelTypes panelType) {
+			public void changePanel(PanelType panelType) {
 				// changeDisplayedPanel(panelType);
 			}
 		});
 		add(topMenuPanel, BorderLayout.NORTH);
 		taskListPanel = new TaskListPanel();
 		add(taskListPanel, BorderLayout.EAST);
-		
+
 		// add listeners for switching GUI elements to the centre panels
-		VacanciesPanel vacanciesPanel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
-		CandidatePipelinePanel candidatePipelinePanel = (CandidatePipelinePanel) centrePanels.get(PanelTypes.PIPELINE);
+		VacanciesPanel vacanciesPanel = (VacanciesPanel) centrePanels.get(PanelType.VACANCIES);
+		CandidatePipelinePanel candidatePipelinePanel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
 		candidatePipelinePanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
 			@Override
 			public void candidateDisplayed() {
 				// changeDisplayedPanel(PanelTypes.CANDIDATE);
 			}
 		});
-		OrganisationsPanel organisationsPanel = (OrganisationsPanel) centrePanels.get(PanelTypes.ORGANISATIONS);
+		OrganisationsPanel organisationsPanel = (OrganisationsPanel) centrePanels.get(PanelType.ORGANISATIONS);
 		organisationsPanel.setOrganisationDisplayedListener(new OrganisationDisplayedListener() {
 			@Override
 			public void organisationDisplayed() {
 				// changeDisplayedPanel(PanelTypes.ORGANISATION);
 			}
 		});
-		SearchPanel searchPanel = (SearchPanel) centrePanels.get(PanelTypes.SEARCH);
+		SearchPanel searchPanel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
 		searchPanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
 			@Override
 			public void candidateDisplayed() {
@@ -153,103 +156,160 @@ public class MainWindow extends JFrame {
 			}
 		});
 	}
-	
+
 	private void removeCentreComponent() {
 		Component centreComponent = borderLayout.getLayoutComponent(BorderLayout.CENTER);
-		if(!(centreComponent == null)) 
+		if (!(centreComponent == null))
 			remove(centreComponent);
 	}
-	
+
 	public void setVisible(boolean b, UserType userType, List<Vacancy> vacancies, List<User> users) {
 		init(userType);
-		if(b) {
-		 	showVacanciesPanel(vacancies, users);
+		if (b) {
+			showVacanciesPanel(vacancies, users);
 		}
 		this.setVisible(b);
 	}
-	
+
+	// VacanciesPanel methods
 	public void showVacanciesPanel(List<Vacancy> vacancies, List<User> users) {
 		removeCentreComponent();
-		
+
 		// when the vacancies panel is displayed update the necessary fields from the server
-		JPanel panel = centrePanels.get(PanelTypes.VACANCIES);
+		JPanel panel = centrePanels.get(PanelType.VACANCIES);
 		VacanciesPanel vPanel = (VacanciesPanel) panel;
 		vPanel.updateDisplayedUsers(users);
 		vPanel.updateDisplayedVacancies(vacancies);
 		add(panel);
-		
+
 		revalidate();
 		repaint();
 	}
 
 	public void updateVacanciesPanel(List<Vacancy> vacancies) {
-		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
+		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelType.VACANCIES);
 		panel.updateDisplayedVacancies(vacancies);
 	}
 
+	public Vacancy getSelectedVacancy() {
+		VacanciesPanel vPanel = (VacanciesPanel) centrePanels.get(PanelType.VACANCIES);
+		return vPanel.getSelectedVacancy();
+	}
+	
+	// VacancyPanel methods
 	public void showVacancyPanel(Vacancy updatedVacancy, Path tempFile) {
 		removeCentreComponent();
-		
-		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
 		panel.setDisplayedVacancy(updatedVacancy, tempFile);
 		add(panel);
-		
+
 		revalidate();
 		repaint();
 	}
-	
-	public File showFileChooser(DialogType messageType) {
-		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
-		return panel.showFileChooser(messageType);
+
+	public Vacancy getDisplayedVacancy() {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
+		return panel.getDisplayedVacancy();
 	}
 	
+	// Generic methods (dialogs, file choosers)
+	public File showFileChooser(final String title) {
+		JFileChooser fc = new JFileChooser();
+		fc.setMultiSelectionEnabled(false);
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.addChoosableFileFilter(new FileFilter() {
+			@Override
+			public boolean accept(File f) {
+				if (f.getName().endsWith(".doc")) {
+					return true;
+				} else if (f.getName().endsWith(".docx")) {
+					return true;
+				} else if (f.getName().endsWith(".pdf")) {
+					return true;
+				} else if (f.getName().endsWith(".txt")) {
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			public String getDescription() {
+				return "Text/Office/PDF files";
+			}
+		});
+		fc.setDialogTitle(title);
+		int returnVal = fc.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			return fc.getSelectedFile();
+		}
+		return null;
+	}
+
 	public boolean showDialog(DialogType dialogType) {
-		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
 		return panel.showDialog(dialogType);
 	}
-	
+
 	public void showErrorDialog(ErrorDialogType errorMessage) {
-		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
 		panel.showErrorDialog(errorMessage);
 	}
-	
-	public Object showMenuDialog(MenuDialogType menuDialog) {
-		switch(menuDialog) {
+
+	public void showMenuDialog(MenuDialogType menuDialog) {
+		switch (menuDialog) {
 		case ADD_VACANCY:
 			dialogs.get(MenuDialogType.ADD_VACANCY).setVisible(true);
 			break;
 		}
-		
-		return null;
-	}
-	
-	public Vacancy getSelectedVacancy() {
-		VacanciesPanel vPanel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
-		return vPanel.getSelectedVacancy();
 	}
 
-	public Vacancy getDisplayedVacancy() {
-		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
-		return panel.getDisplayedVacancy();
+	public void hideMenuDialog(MenuDialogType menuDialog) {
+		switch (menuDialog) {
+		case ADD_VACANCY:
+			//TODO NEXT: remove data from all the fields when setvisible is called with the argument false
+			dialogs.get(MenuDialogType.ADD_VACANCY).setVisible(false);
+			break;
+		}
+	}
+
+	public void setDisplayedOrganisationsInDialog(MenuDialogType menuDialog, List<Organisation> organisations) {
+		switch (menuDialog) {
+		case ADD_VACANCY:
+			dialogs.get(MenuDialogType.ADD_VACANCY).setDisplayedOrganisations(organisations);
+			break;
+		}
+	}
+	
+	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
+		RecruitmentDialog dialog = dialogs.get(menuDialogType);
+		dialog.setDisplayedFile(file);
+	}
+	
+	public Vacancy getVacancyDialogVacancy() {
+		AddVacancyDialog dialog = (AddVacancyDialog) dialogs.get(MenuDialogType.ADD_VACANCY);
+		return dialog.getVacancy();
+	}
+
+	// methods to set listeners
+	public void setMenuListener(ActionListener actionListener) {
+		for (JMenuItem menuItem : menuItems) {
+			menuItem.addActionListener(actionListener);
+		}
 	}
 	
 	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
-		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelTypes.VACANCIES);
+		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelType.VACANCIES);
 		panel.setVacanciesPanelListeners(actionListener, mouseListener);
 	}
 
 	public void setVacancyPanelListener(ActionListener actionListener) {
-		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelTypes.VACANCY);
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
 		panel.setVacancyPanelListener(actionListener);
 	}
-	
-	public void setMenuListener(ActionListener actionListener) {
-		for(JMenuItem menuItem: menuItems) {
-			menuItem.addActionListener(actionListener);
-		}
+
+	public void setAddVacancyDialogListener(ActionListener actionListener) {
+		dialogs.get(MenuDialogType.ADD_VACANCY).setButtonListener(actionListener);
 	}
 
-	public void setVacancyMenuDialogListener(ActionListener listener) {
-		dialogs.get(MenuDialogType.ADD_VACANCY).setButtonListener(listener);
-	}
 }
