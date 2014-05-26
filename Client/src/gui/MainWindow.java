@@ -31,6 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import database.beans.Contact;
 import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
@@ -280,6 +281,14 @@ public class MainWindow extends JFrame {
 			break;
 		}
 	}
+
+	public void setDisplayedContactsInDialog(MenuDialogType menuDialog, List<Contact> contacts) {
+		switch (menuDialog) {
+		case ADD_VACANCY:
+			dialogs.get(MenuDialogType.ADD_VACANCY).setDisplayedContacts(contacts);
+			break;
+		}
+	}
 	
 	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
 		RecruitmentDialog dialog = dialogs.get(menuDialogType);
@@ -309,7 +318,6 @@ public class MainWindow extends JFrame {
 	}
 
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
-		dialogs.get(MenuDialogType.ADD_VACANCY).setButtonListener(actionListener);
+		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
 	}
-
 }

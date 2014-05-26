@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import database.beans.Contact;
 import database.beans.Organisation;
 
 public abstract class RecruitmentDialog extends JDialog{
@@ -37,6 +38,9 @@ public abstract class RecruitmentDialog extends JDialog{
 		// by default this does nothing, must be overriden in appropriate dialogs
 	}
 	
-	public abstract void setButtonListener(ActionListener buttonListener);
-
+	public void setDisplayedContacts(List<Contact> contacts) {
+		// by default this does nothing, must be overriden in appropriate dialogs
+	}
+	
+	public abstract void setActionListener(ActionListener actionListener);
 }

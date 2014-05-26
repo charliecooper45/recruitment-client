@@ -13,6 +13,7 @@ import java.util.List;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 
 import database.beans.Candidate;
+import database.beans.Contact;
 import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
@@ -146,6 +147,18 @@ public class ClientModel implements ServerInterface {
 	public List<Organisation> getOrganisations() {
 		try {
 			return SERVER.getOrganisations();
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Contact> getOrganisationsContacts(Organisation organisation) {
+		try {
+			return SERVER.getOrganisationsContacts(organisation);
 		} catch (RemoteException e) {
 			//TODO NEXT: Deal with this exception - possible propogate it?
 			//TODO NEXT: if null is returned handle this

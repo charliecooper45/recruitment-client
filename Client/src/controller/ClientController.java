@@ -35,6 +35,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
+import database.beans.Contact;
 import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
@@ -250,6 +251,11 @@ public class ClientController {
 					if(vacancy != null) {
 						// the vacancy is valid and can be added
 					}
+				} else if(source instanceof JComboBox<?>) {
+					JComboBox<?> organisationCmbBx = (JComboBox<?>) source;
+					Organisation selectedOrg = (Organisation) organisationCmbBx.getSelectedItem();
+					List<Contact> contacts = ClientController.this.model.getOrganisationsContacts(selectedOrg);
+					ClientController.this.view.setDisplayedOContactsInDialog(MenuDialogType.ADD_VACANCY, contacts);
 				}
 			}
 		});

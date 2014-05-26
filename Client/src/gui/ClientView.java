@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 import model.ClientModel;
 import model.LoginAttempt;
 import controller.ClientController;
+import database.beans.Contact;
 import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
@@ -95,6 +96,10 @@ public class ClientView {
 
 	public void setDisplayedOrganisationsInDialog(MenuDialogType menuDialog, List<Organisation> organisations) {
 		mainWindow.setDisplayedOrganisationsInDialog(menuDialog, organisations);
+	}
+	
+	public void setDisplayedOContactsInDialog(MenuDialogType menuDialog, List<Contact> contacts) {
+		mainWindow.setDisplayedContactsInDialog(menuDialog, contacts);
 	}
 	
 	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {

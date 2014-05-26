@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
+import database.beans.Contact;
 import database.beans.Organisation;
 import database.beans.Vacancy;
 
@@ -31,7 +32,7 @@ public class AddVacancyDialog extends RecruitmentDialog {
 	private JComboBox<String> vacancyStatusCmbBx;
 	private JTextField vacancyNameTxtField;
 	private JComboBox<Organisation> orgCmbBox;
-	private JTextField contactTxtField;
+	private JComboBox<Contact> contactCmbBox;
 	private JLabel profileFileLabel;
 	private JButton browseProfileButton;
 	private JDateChooser dateChooser;
@@ -39,7 +40,7 @@ public class AddVacancyDialog extends RecruitmentDialog {
 	private JScrollPane notesScrlPane;
 	private JButton confirmButton;
 	private JButton cancelButton;
-	
+
 	// holds the displayed File object
 	private File displayedFile = null;
 
@@ -53,7 +54,7 @@ public class AddVacancyDialog extends RecruitmentDialog {
 		gbc.weighty = 1;
 
 		// add the labels
-		gbc.insets = new Insets(10, 0, 0, 10);
+		gbc.insets = new Insets(10, 10, 0, 10);
 		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.NONE);
 		panel.add(new JLabel("Status: "), gbc);
@@ -72,7 +73,7 @@ public class AddVacancyDialog extends RecruitmentDialog {
 
 		// components
 		gbc.insets = new Insets(10, 0, 0, 20);
-		gbc.weightx = 5;
+		gbc.weightx = 15;
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		vacancyStatusCmbBx = new JComboBox<String>();
 		vacancyStatusCmbBx.addItem("Open");
@@ -85,9 +86,9 @@ public class AddVacancyDialog extends RecruitmentDialog {
 		orgCmbBox = new JComboBox<Organisation>();
 		Utils.setGBC(gbc, 2, 3, 2, 1, GridBagConstraints.HORIZONTAL);
 		panel.add(orgCmbBox, gbc);
-		contactTxtField = new JTextField();
+		contactCmbBox = new JComboBox<Contact>();
 		Utils.setGBC(gbc, 2, 4, 2, 1, GridBagConstraints.HORIZONTAL);
-		panel.add(contactTxtField, gbc);
+		panel.add(contactCmbBox, gbc);
 		profileFileLabel = new JLabel("");
 		profileFileLabel.setFont(profileFileLabel.getFont().deriveFont(Font.ITALIC));
 		Utils.setGBC(gbc, 2, 5, 1, 1, GridBagConstraints.HORIZONTAL);
@@ -125,28 +126,42 @@ public class AddVacancyDialog extends RecruitmentDialog {
 	public Vacancy getVacancy() {
 		// check that all fields are correct
 		String vacancyName = vacancyNameTxtField.getText().trim();
-		
-		
 		return null;
 	}
 
 	@Override
 	public void setDisplayedOrganisations(List<Organisation> organisations) {
-		for(Organisation org : organisations) {
+		for (Organisation org : organisations) {
 			orgCmbBox.addItem(org);
 		}
 	}
-	
+
+	@Override
+	public void setDisplayedContacts(List<Contact> contacts) {
+		contactCmbBox.removeAllItems();
+		
+		if (contacts.size() == 0) {
+			contactCmbBox.setFont(contactCmbBox.getFont().deriveFont(Font.ITALIC));
+			contactCmbBox.addItem(new Contact(-1, "Please create a contact for this", "organisation.", null, null, null, null, null, -1, null));
+		} else {
+			contactCmbBox.setFont(contactCmbBox.getFont().deriveFont(Font.PLAIN));
+			for (Contact contact : contacts) {
+				contactCmbBox.addItem(contact);
+			}
+		}
+	}
+
 	@Override
 	public void setDisplayedFile(File file) {
 		profileFileLabel.setText(file.getName());
 		displayedFile = file;
 	}
-	
+
 	@Override
-	public void setButtonListener(ActionListener buttonListener) {
-		browseProfileButton.addActionListener(buttonListener);
-		confirmButton.addActionListener(buttonListener);
-		cancelButton.addActionListener(buttonListener);
+	public void setActionListener(ActionListener actionListener) {
+		browseProfileButton.addActionListener(actionListener);
+		confirmButton.addActionListener(actionListener);
+		cancelButton.addActionListener(actionListener);
+		orgCmbBox.addActionListener(actionListener);
 	}
 }

@@ -29,6 +29,10 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 		this.userId = userId;
 	}
 	
+	public int getId() {
+		return organisationId;
+	}
+	
 	@Override
 	public String toString() {
 		return organisationName;
