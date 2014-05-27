@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 
 import controller.ClientController;
 import database.beans.Organisation;
+import database.beans.Vacancy;
 
 /**
  * Listener for events on the menu in the main window.
@@ -34,7 +35,10 @@ public class MenuListener extends ClientListener implements ActionListener {
 			controller.getView().showMenuDialog(MenuDialogType.ADD_VACANCY);
 			break;
 		case "Remove Vacancy":
-			System.err.println("Remove vacancy");
+			List<Vacancy> vacancies = controller.getModel().getVacancies(false, null);
+			Collections.sort(vacancies);
+			controller.getView().setDisplayedVacanciesInDialog(MenuDialogType.REMOVE_VACANCY, vacancies);
+			controller.getView().showMenuDialog(MenuDialogType.REMOVE_VACANCY);
 			break;
 		}
 	}

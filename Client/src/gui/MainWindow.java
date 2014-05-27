@@ -2,13 +2,16 @@ package gui;
 
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
+import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.ChangePanelListener;
 import gui.listeners.OrganisationDisplayedListener;
+import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -120,6 +123,7 @@ public class MainWindow extends JFrame {
 		// create the dialogs
 		dialogs = new EnumMap<>(MenuDialogType.class);
 		dialogs.put(MenuDialogType.ADD_VACANCY, new AddVacancyDialog(this));
+		dialogs.put(MenuDialogType.REMOVE_VACANCY, new RemoveVacancyDialog(this));
 	}
 
 	private void init(UserType userType) {
@@ -264,8 +268,44 @@ public class MainWindow extends JFrame {
 	}
 
 	public boolean showDialog(DialogType dialogType) {
-		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-		return panel.showDialog(dialogType);
+		JPanel panel = null;
+		VacancyPanel vacancyPanel = null;
+		int response;
+		
+		switch (dialogType) {
+		case VACANCY_REMOVE_PROFILE:
+			vacancyPanel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
+			response = JOptionPane.showConfirmDialog(vacancyPanel, DialogType.VACANCY_REMOVE_PROFILE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if(response == 0)
+				return true;
+			break;
+		case VACANCY_ADD_PROFILE:
+			break;
+		case VACANCY_CHANGE_STATUS_OPEN:
+			vacancyPanel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
+			response = JOptionPane.showConfirmDialog(vacancyPanel, DialogType.VACANCY_CHANGE_STATUS_OPEN.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if(response == 0) {
+				vacancyPanel.setVacancyStatus(true);
+				return true;
+			}
+			break;
+		case VACANCY_CHANGE_STATUS_CLOSE:
+			vacancyPanel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
+			response = JOptionPane.showConfirmDialog(vacancyPanel, DialogType.VACANCY_CHANGE_STATUS_CLOSE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if(response == 0) {
+				vacancyPanel.setVacancyStatus(false);
+				return true;
+			}
+			break;
+		case REMOVE_VACANCY:
+			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
+			response = JOptionPane.showConfirmDialog(panel, DialogType.REMOVE_VACANCY.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if(response == 0) {
+				return true;
+			}
+			break;
+		}
+		return false;
 	}
 
 	public void showErrorDialog(ErrorDialogType errorDialog) {
@@ -281,6 +321,9 @@ public class MainWindow extends JFrame {
 		case ADD_VACANCY:
 			dialogs.get(MenuDialogType.ADD_VACANCY).setVisible(true);
 			break;
+		case REMOVE_VACANCY:
+			dialogs.get(MenuDialogType.REMOVE_VACANCY).setVisible(true);
+			break;
 		}
 	}
 
@@ -289,6 +332,9 @@ public class MainWindow extends JFrame {
 		case ADD_VACANCY:
 			//TODO NEXT: remove data from all the fields when setvisible is called with the argument false
 			dialogs.get(MenuDialogType.ADD_VACANCY).setVisible(false);
+			break;
+		case REMOVE_VACANCY:
+			dialogs.get(MenuDialogType.REMOVE_VACANCY).setVisible(false);
 			break;
 		}
 	}
@@ -309,14 +355,28 @@ public class MainWindow extends JFrame {
 		}
 	}
 	
+	public void setDisplayedVacanciesInDialog(MenuDialogType menuDialog, List<Vacancy> vacancies) {
+		switch (menuDialog) {
+		case REMOVE_VACANCY:
+			dialogs.get(MenuDialogType.REMOVE_VACANCY).setDisplayedVacancies(vacancies);
+			break;
+		}
+			
+	}
 	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
 		RecruitmentDialog dialog = dialogs.get(menuDialogType);
 		dialog.setDisplayedFile(file);
 	}
 	
-	public Vacancy getVacancyDialogVacancy() {
-		AddVacancyDialog dialog = (AddVacancyDialog) dialogs.get(MenuDialogType.ADD_VACANCY);
-		return dialog.getVacancy();
+	public Vacancy getVacancyDialogVacancy(MenuDialogType menuDialog) {
+		if(menuDialog == MenuDialogType.ADD_VACANCY) {
+			AddVacancyDialog dialog = (AddVacancyDialog) dialogs.get(MenuDialogType.ADD_VACANCY);
+			return dialog.getVacancy();
+		} else if (menuDialog == MenuDialogType.REMOVE_VACANCY) {
+			RemoveVacancyDialog dialog = (RemoveVacancyDialog) dialogs.get(MenuDialogType.REMOVE_VACANCY);
+			return dialog.getVacancy();
+		}
+		return null;
 	}
 
 	// methods to set listeners
@@ -338,5 +398,9 @@ public class MainWindow extends JFrame {
 
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
+	}
+
+	public void setRemoveVacancyDialogListener(RemoveVacancyDialogListener removeVacancyDialogListener) {
+		dialogs.get(MenuDialogType.REMOVE_VACANCY).setActionListener(removeVacancyDialogListener);
 	}
 }

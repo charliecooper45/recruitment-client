@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import database.beans.Contact;
 import database.beans.Organisation;
+import database.beans.Vacancy;
 
 public abstract class RecruitmentDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
@@ -21,6 +22,7 @@ public abstract class RecruitmentDialog extends JDialog{
 	
 	public RecruitmentDialog(JFrame frame, String title) {
 		super(frame, title);
+
 		setSize(400, 500);
 		setLocationRelativeTo(frame);
 		setModal(true);
@@ -31,15 +33,19 @@ public abstract class RecruitmentDialog extends JDialog{
 	}
 	
 	public void setDisplayedFile(File file) {
-		// by default this does nothing, must be overriden in appropriate dialogs
+		// by default this does nothing, can be overriden in appropriate dialogs
 	}
 
 	public void setDisplayedOrganisations(List<Organisation> organisations) {
-		// by default this does nothing, must be overriden in appropriate dialogs
+		// by default this does nothing, can be overriden in appropriate dialogs
 	}
 	
 	public void setDisplayedContacts(List<Contact> contacts) {
-		// by default this does nothing, must be overriden in appropriate dialogs
+		// by default this does nothing, can be overriden in appropriate dialogs
+	}
+	
+	public void setDisplayedVacancies(List<Vacancy> vacancies) {
+		// by default this does nothing, can be overriden in appropriate dialogs
 	}
 	
 	public abstract void setActionListener(ActionListener actionListener);

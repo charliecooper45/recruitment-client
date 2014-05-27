@@ -20,15 +20,12 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileFilter;
 
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
@@ -57,7 +54,7 @@ public class VacancyPanel extends JPanel {
 	private JPanel leftBottomPanel;
 	private JButton addVacancyProfileBtn;
 	private JButton removeVacancyProfileBtn;
-	
+
 	// components - leftPanel
 	private JPanel leftPanel;
 
@@ -217,6 +214,18 @@ public class VacancyPanel extends JPanel {
 		return vacancy;
 	}
 
+	public void setVacancyStatus(boolean status) {
+		vacancy.setStatus(status);
+
+		if (status) {
+			vacancyNameLbl.setForeground(Color.GREEN);
+			organisationNameLbl.setForeground(Color.GREEN);
+		} else {
+			vacancyNameLbl.setForeground(Color.RED);
+			organisationNameLbl.setForeground(Color.RED);
+		}
+	}
+
 	private void readVacancyProfile(Path path) {
 		documentArea.setText("");
 		WordExtractor extractor = null;
@@ -291,39 +300,6 @@ public class VacancyPanel extends JPanel {
 					documentArea.setText("Vacancy profile not found.");
 				}
 		}
-	}
-
-	public boolean showDialog(DialogType dialogType) {
-		int response;
-		
-		switch (dialogType) {
-		case VACANCY_REMOVE_PROFILE:
-			response = JOptionPane.showConfirmDialog(this, DialogType.VACANCY_REMOVE_PROFILE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
-			if(response == 0) 
-				return true;
-			break;
-		case VACANCY_CHANGE_STATUS_OPEN:
-			response = JOptionPane.showConfirmDialog(this, DialogType.VACANCY_CHANGE_STATUS_OPEN.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
-			if(response == 0) {
-				vacancy.setStatus(true);
-				vacancyNameLbl.setForeground(Color.GREEN);
-				organisationNameLbl.setForeground(Color.GREEN);
-				return true;
-			}
-			break;
-		case VACANCY_CHANGE_STATUS_CLOSE:
-			response = JOptionPane.showConfirmDialog(this, DialogType.VACANCY_CHANGE_STATUS_CLOSE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
-			if(response == 0) {
-				vacancy.setStatus(false);
-				vacancyNameLbl.setForeground(Color.RED);
-				organisationNameLbl.setForeground(Color.RED);
-				return true;
-			}
-			break;
-		default:
-			return false;
-		}
-		return false;
 	}
 
 	public void setVacancyPanelListener(ActionListener actionListener) {

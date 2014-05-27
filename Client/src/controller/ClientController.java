@@ -4,6 +4,7 @@ import gui.ClientView;
 import gui.listeners.AddVacancyDialogListener;
 import gui.listeners.LoginListener;
 import gui.listeners.MenuListener;
+import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.VacanciesPanelListener;
 import gui.listeners.VacancyPanelListener;
 
@@ -26,10 +27,13 @@ public class ClientController {
 
 	// listeners
 	private LoginListener loginListener;
-	private MenuListener menuListener;
 	private VacanciesPanelListener vacanciesPanelListener;
 	private VacancyPanelListener vacancyPanelListener;
+	
+	// menu listeners
+	private MenuListener menuListener;
 	private AddVacancyDialogListener addVacancyDialogListener;
+	private RemoveVacancyDialogListener removeVacancyDialogListener;
 	
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
@@ -42,6 +46,7 @@ public class ClientController {
 		menuListener = new MenuListener(this);
 		vacancyPanelListener = new VacancyPanelListener(this);
 		addVacancyDialogListener = new AddVacancyDialogListener(this);
+		removeVacancyDialogListener = new RemoveVacancyDialogListener(this);
 
 		setListenersAndShowGUI();
 	}
@@ -57,6 +62,7 @@ public class ClientController {
 		view.setVacanciesPanelListeners(vacanciesPanelListener);
 		view.setVacancyPanelListener(vacancyPanelListener);
 		view.setAddVacancyDialogListener(addVacancyDialogListener);
+		view.setRemoveVacancyDialogListener(removeVacancyDialogListener);
 	}
 
 	public Path storeFile(InputStream inStream, String name) {

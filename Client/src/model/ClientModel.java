@@ -178,4 +178,15 @@ public class ClientModel implements ServerInterface {
 		}
 		return false;
 	}
+
+	public boolean removeVacancy(Vacancy vacancy) {
+		try {
+			return SERVER.removeVacancy(vacancy);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

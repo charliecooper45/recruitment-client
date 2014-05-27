@@ -1,5 +1,5 @@
 package gui;
 
 public enum MenuDialogType {
-	ADD_VACANCY;
+	ADD_VACANCY, REMOVE_VACANCY;
 }

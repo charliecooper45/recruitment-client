@@ -7,7 +7,7 @@ import java.util.Date;
  * Bean that represents an instance of the entity Vacancy in the recruitment database. 
  * @author Charlie
  */
-public class Vacancy implements Serializable {
+public class Vacancy implements Serializable, Comparable<Vacancy> {
 	private static final long serialVersionUID = -2963989512119626414L;
 	private int vacancyId;
 	private boolean status;
@@ -37,11 +37,6 @@ public class Vacancy implements Serializable {
 		this.contactPhoneNumber = contactPhoneNumber;
 	}
 
-	@Override
-	public String toString() {
-		return "Vacancy [vacancyId=" + vacancyId + ", status=" + status + ", name=" + name + ", vacancyDate=" + vacancyDate + ", text=" + text + ", profile=" + profile + ", organisationId=" + organisationId + ", organisationName=" + organisationName + ", userId=" + userId + ", contactId=" + contactId + ", contactName=" + contactName + "]";
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -73,7 +68,7 @@ public class Vacancy implements Serializable {
 	public String getContactPhoneNumber() {
 		return contactPhoneNumber;
 	}
-	
+
 	public String getProfile() {
 		return profile;
 	}
@@ -85,15 +80,35 @@ public class Vacancy implements Serializable {
 	public int getOrganisationId() {
 		return organisationId;
 	}
-
+	
 	public int getContactId() {
 		return contactId;
 	}
+
 	public void setProfile(String profile) {
 		this.profile = profile;
 	}
-
+	
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+	
+	@Override
+	public String toString() {
+		String statusString = "open";
+		if(!status) {
+			statusString = "closed";
+		}
+		return name + " @ " + organisationName + " (" + statusString + ")";
+	}
+	
+	@Override
+	public int compareTo(Vacancy vacancy) {
+		int compare = this.organisationName.compareTo(vacancy.organisationName);
+		
+		if(compare == 0) {
+			compare = this.name.compareTo(vacancy.name);
+		}
+		return compare;
 	}
 }

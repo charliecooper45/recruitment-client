@@ -1,5 +1,6 @@
 package gui;
 
+import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
 
@@ -110,13 +111,16 @@ public class ClientView {
 	public void setDisplayedOContactsInDialog(MenuDialogType menuDialog, List<Contact> contacts) {
 		mainWindow.setDisplayedContactsInDialog(menuDialog, contacts);
 	}
-	
+
+	public void setDisplayedVacanciesInDialog(MenuDialogType menuDialog, List<Vacancy> vacancies) {
+		mainWindow.setDisplayedVacanciesInDialog(menuDialog, vacancies);
+	}
 	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
 		mainWindow.displayFileInDialog(menuDialogType, file);
 	}
 
-	public Vacancy getVacancyDialogVacancy() {
-		return mainWindow.getVacancyDialogVacancy();
+	public Vacancy getVacancyDialogVacancy(MenuDialogType menuDialog) {
+		return mainWindow.getVacancyDialogVacancy(menuDialog);
 	}
 	
 	// methods to set listeners and controller
@@ -138,6 +142,10 @@ public class ClientView {
 
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		mainWindow.setAddVacancyDialogListener(actionListener);
+	}
+	
+	public void setRemoveVacancyDialogListener(RemoveVacancyDialogListener removeVacancyDialogListener) {
+		mainWindow.setRemoveVacancyDialogListener(removeVacancyDialogListener);
 	}
 
 	// main method

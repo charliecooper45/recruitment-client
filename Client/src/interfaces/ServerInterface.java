@@ -30,4 +30,5 @@ public interface ServerInterface extends Remote{
 	public List<Organisation> getOrganisations() throws RemoteException;
 	public List<Contact> getOrganisationsContacts(Organisation organisation) throws RemoteException;
 	public boolean addVacancy(Vacancy vacancy, RemoteInputStream profileData) throws RemoteException;
+	public boolean removeVacancy(Vacancy vacancy) throws RemoteException;
 }

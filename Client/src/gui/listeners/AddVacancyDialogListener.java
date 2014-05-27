@@ -46,7 +46,7 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 				InputStream inputStream;
 				RemoteInputStreamServer profileData = null;
 				//TODO NEXT: Implement this
-				Vacancy vacancy = controller.getView().getVacancyDialogVacancy();
+				Vacancy vacancy = controller.getView().getVacancyDialogVacancy(MenuDialogType.ADD_VACANCY);
 				if (vacancy != null) {
 					// the vacancy is valid and can be added
 					try {
@@ -78,7 +78,7 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 					}
 				}
 				break;
-			case "Cancel":
+			case "Cancel ":
 				controller.getView().hideMenuDialog(MenuDialogType.ADD_VACANCY);
 				break;
 			case "..":

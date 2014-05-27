@@ -11,7 +11,6 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-import javax.net.ssl.SSLEngineResult.Status;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -24,12 +23,14 @@ import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
-import controller.ClientController;
-
 import database.beans.Contact;
 import database.beans.Organisation;
 import database.beans.Vacancy;
 
+/**
+ * Dialog that allows the user to add a vacancy.
+ * @author Charlie
+ */
 public class AddVacancyDialog extends RecruitmentDialog {
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +59,7 @@ public class AddVacancyDialog extends RecruitmentDialog {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 
-		// add the labels
+		// labels
 		gbc.insets = new Insets(10, 10, 0, 10);
 		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.NONE);
@@ -119,7 +120,7 @@ public class AddVacancyDialog extends RecruitmentDialog {
 		JPanel buttonsPanel = new JPanel();
 		confirmButton = new JButton("Confirm");
 		buttonsPanel.add(confirmButton);
-		cancelButton = new JButton("Cancel");
+		cancelButton = new JButton("Cancel ");
 		buttonsPanel.add(cancelButton);
 		gbc.anchor = GridBagConstraints.CENTER;
 		Utils.setGBC(gbc, 1, 9, 3, 1, GridBagConstraints.HORIZONTAL);
