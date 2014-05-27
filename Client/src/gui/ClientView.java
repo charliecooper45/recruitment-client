@@ -1,9 +1,9 @@
 package gui;
 
+import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
 
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
@@ -47,10 +47,15 @@ public class ClientView {
 	}
 
 	public void displayMainWindow(UserType userType, List<Vacancy> vacancies, List<User> users) {
-		mainWindow.setVisible(true, userType, vacancies, users);
+		mainWindow.setVisible(loginWindow.getUserId(), true, userType, vacancies, users);
 		loginWindow.dispose();
 	}
 
+	// PanelType methods
+	public PanelType getDisplayedPanel() {
+		return mainWindow.getDisplayedPanel();
+	}
+	
 	// VacanciesPanel methods
 	public void showVacanciesPanel(List<Vacancy> vacancies, List<User> users) {
 		mainWindow.showVacanciesPanel(vacancies, users);
@@ -82,10 +87,14 @@ public class ClientView {
 		return mainWindow.showDialog(dialogType);
 	}
 
-	public void showErrorDialog(ErrorDialogType errorMessage) {
-		mainWindow.showErrorDialog(errorMessage);
+	public void showErrorDialog(ErrorDialogType errorDialog) {
+		mainWindow.showErrorDialog(errorDialog);
 	}
 
+	public void showConfirmDialog(ConfirmDialogType confirmDialog) {
+		mainWindow.showConfirmDialog(confirmDialog);		
+	}
+	
 	public void showMenuDialog(MenuDialogType menuDialog) {
 		mainWindow.showMenuDialog(menuDialog);
 	}
@@ -119,8 +128,8 @@ public class ClientView {
 		mainWindow.setMenuListener(actionListener);
 	}
 	
-	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
-		mainWindow.setVacanciesPanelListeners(actionListener, mouseListener);
+	public void setVacanciesPanelListeners(VacanciesPanelListener vacanciesPanelListener) {
+		mainWindow.setVacanciesPanelListeners(vacanciesPanelListener);
 	}
 
 	public void setVacancyPanelListener(ActionListener actionListener) {

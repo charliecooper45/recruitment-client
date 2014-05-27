@@ -1,12 +1,12 @@
 package gui;
 
+import gui.listeners.VacanciesPanelListener;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -191,10 +191,10 @@ public class VacanciesPanel extends JPanel {
 		return vacancies.get(vacanciesTbl.getSelectedRow());
 	}
 	
-	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
-		openVacanciesRdBtn.addActionListener(actionListener);
-		allVacanciesRdBtn.addActionListener(actionListener);
-		userCombo.addActionListener(actionListener);
-		vacanciesTbl.addMouseListener(mouseListener);
+	public void setVacanciesPanelListeners(VacanciesPanelListener vacanciesPanelListener) {
+		openVacanciesRdBtn.addActionListener(vacanciesPanelListener);
+		allVacanciesRdBtn.addActionListener(vacanciesPanelListener);
+		userCombo.addActionListener(vacanciesPanelListener);
+		vacanciesTbl.addMouseListener(vacanciesPanelListener);
 	}
 }

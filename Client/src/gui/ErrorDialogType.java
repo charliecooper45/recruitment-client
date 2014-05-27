@@ -1,7 +1,7 @@
 package gui;
 
 public enum ErrorDialogType {
-	VACANCY_NO_PROFILE("No profile currently stored for this vacancy");
+	VACANCY_NO_PROFILE("No profile currently stored for this vacancy"), ADD_VACANCY_FAIL("Unable to add the vacancy");
 	
 	private String errorMessage;
 	

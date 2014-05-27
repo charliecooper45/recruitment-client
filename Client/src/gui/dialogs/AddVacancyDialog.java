@@ -1,5 +1,6 @@
 package gui.dialogs;
 
+import gui.MainWindow;
 import gui.Utils;
 
 import java.awt.Font;
@@ -10,16 +11,20 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import javax.net.ssl.SSLEngineResult.Status;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
+
+import controller.ClientController;
 
 import database.beans.Contact;
 import database.beans.Organisation;
@@ -124,13 +129,48 @@ public class AddVacancyDialog extends RecruitmentDialog {
 	}
 
 	public Vacancy getVacancy() {
-		// check that all fields are correct
+		StringBuilder errorMessage = new StringBuilder("");;
+		// check that all fields are correct and returns null if they are not
+		String status = (String) vacancyStatusCmbBx.getSelectedItem();
+		boolean statusBoolean = false;
+		if(status == "Open") {
+			statusBoolean = true;
+		}
 		String vacancyName = vacancyNameTxtField.getText().trim();
-		return null;
+		Organisation organisation = (Organisation) orgCmbBox.getSelectedItem();
+		Contact contact = (Contact) contactCmbBox.getSelectedItem();
+		File profile = displayedFile;
+		String profilePath = null;
+		if(profile != null) {
+			profilePath = profile.getAbsolutePath();
+		}
+		Date date = dateChooser.getDate();
+		String notes = notesTxtArea.getText();
+		
+		if(vacancyName.isEmpty()) { 
+			errorMessage.append("Vacancy name is empty.\n");
+		} 
+		if(contact.getId() == -1) {
+			errorMessage.append("Contact is empty.\n");
+		}
+		if(date == null) {
+			errorMessage.append("Date is empty.\n");
+		}
+		
+		if(errorMessage.toString().trim().equals("")) {
+			return new Vacancy(-1, statusBoolean, vacancyName, date, notes, profilePath, organisation.getId(), organisation.getOrganisationName(), 
+					MainWindow.USER_ID, contact.getId(), contact.toString(), contact.getPhoneNumber());
+		} else {
+			// display an error message to the user
+			JOptionPane.showMessageDialog(this, errorMessage.toString(), "Cannot add vacancy", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
 	}
 
 	@Override
 	public void setDisplayedOrganisations(List<Organisation> organisations) {
+		orgCmbBox.removeAllItems();
+		
 		for (Organisation org : organisations) {
 			orgCmbBox.addItem(org);
 		}
@@ -157,6 +197,17 @@ public class AddVacancyDialog extends RecruitmentDialog {
 		displayedFile = file;
 	}
 
+	@Override
+	public void setVisible(boolean b) {
+		// reset all fields
+		vacancyNameTxtField.setText("");
+		orgCmbBox.setSelectedIndex(0);
+		profileFileLabel.setText("");
+		dateChooser.setDate(new Date());
+		notesTxtArea.setText("");
+		super.setVisible(b);
+	}
+	
 	@Override
 	public void setActionListener(ActionListener actionListener) {
 		browseProfileButton.addActionListener(actionListener);

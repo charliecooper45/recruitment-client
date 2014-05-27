@@ -1,15 +1,16 @@
 package controller;
 
 import gui.ClientView;
+import gui.ConfirmDialogType;
 import gui.DialogType;
 import gui.ErrorDialogType;
 import gui.MenuDialogType;
+import gui.PanelType;
+import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +26,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButton;
 
 import model.ClientModel;
 import model.LoginAttempt;
@@ -48,16 +48,21 @@ public class ClientController {
 	private final ClientView view;
 	private final ClientModel model;
 
+	// listeners
+	private VacanciesPanelListener vacanciesPanelListener;
+
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
 		this.model = model;
 		this.view.setController(this);
-		
+
+		// create the listeners
+		vacanciesPanelListener = new VacanciesPanelListener(this);
+
 		setListenersAndShowGUI();
 	}
 
 	private void setListenersAndShowGUI() {
-
 		// shows the GUI to the user and sets the login listener for the login screen
 		view.showGUI(new ActionListener() {
 			@Override
@@ -99,65 +104,7 @@ public class ClientController {
 		});
 
 		// sets the listeners for the GUI
-		view.setVacanciesPanelListeners(new ActionListener() {
-			private boolean openVacancies = true;
-			private User selectedUser = null;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Object source = e.getSource();
-
-				if (source instanceof JRadioButton) {
-					// deal with changes to the type of vacancies to be shown
-					JRadioButton button = (JRadioButton) source;
-					if (button.getText().equals("All Vacancies")) {
-						openVacancies = false;
-						List<Vacancy> vacancies = ClientController.this.model.getVacancies(openVacancies, selectedUser);
-						ClientController.this.view.updateVacanciesPanel(vacancies);
-					} else {
-						openVacancies = true;
-						List<Vacancy> vacancies = ClientController.this.model.getVacancies(openVacancies, selectedUser);
-						ClientController.this.view.updateVacanciesPanel(vacancies);
-					}
-				} else if (source instanceof JComboBox<?>) {
-					// change whose vacancies are shown 
-					JComboBox<?> usersCombo = (JComboBox<?>) source;
-					selectedUser = (User) usersCombo.getSelectedItem();
-
-					if (selectedUser.getUserId() == null) {
-						// this means we need to get all user`s vacancies
-						selectedUser = null;
-					}
-
-					List<Vacancy> vacancies = ClientController.this.model.getVacancies(openVacancies, selectedUser);
-					ClientController.this.view.updateVacanciesPanel(vacancies);
-				}
-			}
-		}, new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
-					// retrieve the selected vacancy so it`s values can be updated from the server before the user sees it
-					Vacancy selectedVacancy = ClientController.this.view.getSelectedVacancy();
-					Vacancy updatedVacancy = ClientController.this.model.getVacancy(selectedVacancy.getVacancyId());
-					Path tempFile = null;
-
-					// get the vacancy profile
-					try {
-						String vacancyProfile = selectedVacancy.getProfile();
-						if (vacancyProfile != null) {
-							RemoteInputStream remoteFileData = ClientController.this.model.getVacancyProfile(vacancyProfile);
-							InputStream fileData = RemoteInputStreamClient.wrap(remoteFileData);
-							tempFile = storeFile(fileData, vacancyProfile);
-						}
-					} catch (IOException e1) {
-						// TODO NEXT B: Possible display an error message here
-						e1.printStackTrace();
-					}
-					ClientController.this.view.showVacancyPanel(updatedVacancy, tempFile);
-				}
-			}
-		});
+		view.setVacanciesPanelListeners(vacanciesPanelListener);
 		view.setVacancyPanelListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -229,39 +176,72 @@ public class ClientController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object source = e.getSource();
-				
-				if(source instanceof JButton) {
+
+				if (source instanceof JButton) {
 					JButton button = (JButton) source;
 					String text = button.getText();
-					
+
 					switch (text) {
+					case "Confirm":
+						InputStream inputStream;
+						RemoteInputStreamServer profileData = null;
+						//TODO NEXT: Implement this
+						Vacancy vacancy = ClientController.this.view.getVacancyDialogVacancy();
+						if (vacancy != null) {
+							// the vacancy is valid and can be added
+							try {
+								if(vacancy.getProfile() != null) {
+									File file = new File(vacancy.getProfile());
+									inputStream = new FileInputStream(file);
+									profileData = new SimpleRemoteInputStream(inputStream);
+									vacancy.setProfile(file.getName());
+								}
+								//TODO NEXT: return a message to the user to say if the profile was added
+								boolean profileAdded = ClientController.this.model.addVacancy(vacancy, profileData);
+								
+								if(profileAdded) {
+									ClientController.this.view.hideMenuDialog(MenuDialogType.ADD_VACANCY);
+									ClientController.this.view.showConfirmDialog(ConfirmDialogType.VACANCY_ADDED);
+									// check if the vacancies panel is displayed and then update if necessary
+									PanelType shownPanel = ClientController.this.view.getDisplayedPanel();
+									if(shownPanel == PanelType.VACANCIES) {
+										VacanciesPanelListener listener = ClientController.this.vacanciesPanelListener;
+										List<Vacancy> vacancies = ClientController.this.model.getVacancies(listener.getDisplayOpenVacancies(), listener.getSelectedUser());
+										ClientController.this.view.updateVacanciesPanel(vacancies);
+									}
+								} else {
+									ClientController.this.view.showErrorDialog(ErrorDialogType.ADD_VACANCY_FAIL);
+								}
+							} catch (FileNotFoundException e1) {
+								// TODO NEXT B: handle exception
+								e1.printStackTrace();
+							}
+						}
+						break;
 					case "Cancel":
 						ClientController.this.view.hideMenuDialog(MenuDialogType.ADD_VACANCY);
 						break;
 					case "..":
 						File file = ClientController.this.view.showFileChooser("Select profile to add.");
-						if(file != null) {
+						if (file != null) {
 							// update the view to show the new file
 							ClientController.this.view.displayFileInDialog(MenuDialogType.ADD_VACANCY, file);
 						}
 						break;
 					}
-					//TODO NEXT: Implement this
-					Vacancy vacancy = ClientController.this.view.getVacancyDialogVacancy();
-					if(vacancy != null) {
-						// the vacancy is valid and can be added
-					}
-				} else if(source instanceof JComboBox<?>) {
+				} else if (source instanceof JComboBox<?>) {
 					JComboBox<?> organisationCmbBx = (JComboBox<?>) source;
 					Organisation selectedOrg = (Organisation) organisationCmbBx.getSelectedItem();
-					List<Contact> contacts = ClientController.this.model.getOrganisationsContacts(selectedOrg);
-					ClientController.this.view.setDisplayedOContactsInDialog(MenuDialogType.ADD_VACANCY, contacts);
+					if (selectedOrg != null) {
+						List<Contact> contacts = ClientController.this.model.getOrganisationsContacts(selectedOrg);
+						ClientController.this.view.setDisplayedOContactsInDialog(MenuDialogType.ADD_VACANCY, contacts);
+					}
 				}
 			}
 		});
 	}
 
-	private Path storeFile(InputStream inStream, String name) {
+	public Path storeFile(InputStream inStream, String name) {
 		// write the file to a temp file
 		try {
 			String suffix = name.substring(name.lastIndexOf("."));
@@ -286,5 +266,13 @@ public class ClientController {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public ClientModel getModel() {
+		return model;
+	}
+
+	public ClientView getView() {
+		return view;
 	}
 }

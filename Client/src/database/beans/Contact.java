@@ -32,6 +32,22 @@ public class Contact implements Serializable {
 		this.userId = userId;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
 	@Override
 	public String toString() {
 		return firstName + " " + surname;

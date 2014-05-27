@@ -167,5 +167,15 @@ public class ClientModel implements ServerInterface {
 		return null;
 	}
 
-	
+	@Override
+	public boolean addVacancy(Vacancy vacancy, RemoteInputStream profileData) {
+		try {
+			return SERVER.addVacancy(vacancy, profileData);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

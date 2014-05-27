@@ -77,7 +77,18 @@ public class Vacancy implements Serializable {
 	public String getProfile() {
 		return profile;
 	}
+	
+	public String getText() {
+		return text;
+	}
+	
+	public int getOrganisationId() {
+		return organisationId;
+	}
 
+	public int getContactId() {
+		return contactId;
+	}
 	public void setProfile(String profile) {
 		this.profile = profile;
 	}

@@ -112,6 +112,10 @@ public class LoginWindow extends JFrame {
 		add(passwordLabel, gbc);
 	}
 
+	public String getUserId() {
+		return userIdTxtField.getText();
+	}
+	
 	public LoginAttempt getLoginAttempt() {
 		String userId = userIdTxtField.getText();
 		char[] password = passwordTxtField.getPassword();

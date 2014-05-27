@@ -326,10 +326,6 @@ public class VacancyPanel extends JPanel {
 		return false;
 	}
 
-	public void showErrorDialog(ErrorDialogType errorMessage) {
-		JOptionPane.showMessageDialog(this, errorMessage.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-	}
-	
 	public void setVacancyPanelListener(ActionListener actionListener) {
 		addVacancyProfileBtn.addActionListener(actionListener);
 		removeVacancyProfileBtn.addActionListener(actionListener);

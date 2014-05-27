@@ -5,13 +5,13 @@ import gui.dialogs.RecruitmentDialog;
 import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.ChangePanelListener;
 import gui.listeners.OrganisationDisplayedListener;
+import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
@@ -28,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
@@ -59,6 +60,9 @@ public class MainWindow extends JFrame {
 
 	// Dialog windows 
 	private Map<MenuDialogType, RecruitmentDialog> dialogs;
+
+	// Holds the userId of the user of the client
+	public static String USER_ID;
 
 	public MainWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -164,14 +168,26 @@ public class MainWindow extends JFrame {
 			remove(centreComponent);
 	}
 
-	public void setVisible(boolean b, UserType userType, List<Vacancy> vacancies, List<User> users) {
+	public void setVisible(String userId, boolean visible, UserType userType, List<Vacancy> vacancies, List<User> users) {
+		USER_ID = userId;
 		init(userType);
-		if (b) {
+		if (visible) {
 			showVacanciesPanel(vacancies, users);
 		}
-		this.setVisible(b);
+		super.setVisible(visible);
 	}
-
+	
+	// PanelType methods
+	public PanelType getDisplayedPanel() {
+		for (Map.Entry<PanelType, JPanel> e : centrePanels.entrySet()) {
+		    Object value = e.getValue();
+		    if(value == borderLayout.getLayoutComponent(BorderLayout.CENTER)) {
+		    	return e.getKey();
+		    }
+		}
+		return null;
+	}
+	
 	// VacanciesPanel methods
 	public void showVacanciesPanel(List<Vacancy> vacancies, List<User> users) {
 		removeCentreComponent();
@@ -252,11 +268,14 @@ public class MainWindow extends JFrame {
 		return panel.showDialog(dialogType);
 	}
 
-	public void showErrorDialog(ErrorDialogType errorMessage) {
-		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-		panel.showErrorDialog(errorMessage);
+	public void showErrorDialog(ErrorDialogType errorDialog) {
+		JOptionPane.showMessageDialog(borderLayout.getLayoutComponent(BorderLayout.CENTER), errorDialog.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
+	public void showConfirmDialog(ConfirmDialogType confirmDialog) {
+		JOptionPane.showMessageDialog(borderLayout.getLayoutComponent(BorderLayout.CENTER), confirmDialog.getMessage(), "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
 	public void showMenuDialog(MenuDialogType menuDialog) {
 		switch (menuDialog) {
 		case ADD_VACANCY:
@@ -307,9 +326,9 @@ public class MainWindow extends JFrame {
 		}
 	}
 	
-	public void setVacanciesPanelListeners(ActionListener actionListener, MouseListener mouseListener) {
+	public void setVacanciesPanelListeners(VacanciesPanelListener vacanciesPanelListener) {
 		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelType.VACANCIES);
-		panel.setVacanciesPanelListeners(actionListener, mouseListener);
+		panel.setVacanciesPanelListeners(vacanciesPanelListener);
 	}
 
 	public void setVacancyPanelListener(ActionListener actionListener) {
