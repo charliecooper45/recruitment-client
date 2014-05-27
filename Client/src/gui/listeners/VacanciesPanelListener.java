@@ -2,7 +2,6 @@ package gui.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,13 +18,16 @@ import controller.ClientController;
 import database.beans.User;
 import database.beans.Vacancy;
 
-public class VacanciesPanelListener extends MouseAdapter implements ActionListener {
-	private final ClientController controller;
+/**
+ * Listener for events on the vacancies panel.
+ * @author Charlie
+ */
+public class VacanciesPanelListener extends ClientListener implements ActionListener {
 	private boolean openVacancies = true;
 	private User selectedUser = null;
-
+	
 	public VacanciesPanelListener(ClientController controller) {
-		this.controller = controller;
+		super(controller);
 	}
 
 	@Override
