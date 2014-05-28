@@ -169,6 +169,10 @@ public class VacanciesPanel extends JPanel {
 		add(mainPanel, BorderLayout.CENTER);
 	}
 
+	public void setDefaultOptions() {
+		openVacanciesRdBtn.setSelected(true);
+	}
+	
 	public void updateDisplayedVacancies(List<Vacancy> vacancies) {
 		this.vacancies = vacancies;
 		DefaultTableModel model = (DefaultTableModel) vacanciesTbl.getModel();
@@ -177,6 +181,7 @@ public class VacanciesPanel extends JPanel {
 
 	public void updateDisplayedUsers(List<User> users) {
 		this.users = users;
+		userCombo.removeAllItems();
 		
 		// add the default all users option
 		userCombo.addItem(new User(null, null, "All", "Users", null, null, false, null));
@@ -197,4 +202,6 @@ public class VacanciesPanel extends JPanel {
 		userCombo.addActionListener(vacanciesPanelListener);
 		vacanciesTbl.addMouseListener(vacanciesPanelListener);
 	}
+
+
 }

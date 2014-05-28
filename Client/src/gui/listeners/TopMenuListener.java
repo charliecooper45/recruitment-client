@@ -1,0 +1,52 @@
+package gui.listeners;
+
+import gui.PanelType;
+import gui.TopMenuPanel.MenuPanel;
+
+import java.awt.event.MouseEvent;
+import java.util.List;
+
+import controller.ClientController;
+import database.beans.User;
+import database.beans.Vacancy;
+
+public class TopMenuListener extends ClientListener {
+
+	public TopMenuListener(ClientController controller) {
+		super(controller);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object source = e.getSource();
+		
+		if(source instanceof MenuPanel) {
+			MenuPanel panel = (MenuPanel) source;
+			
+			// set the selected menu panel
+			controller.getView().setSelectedTopMenuPanel(panel);
+			
+			// update and show the correct centre panel
+			PanelType type = panel.getPanelType();
+			
+			switch (type) {
+			case ADMIN:
+				break;
+			case ORGANISATIONS:
+				break;
+			case PIPELINE:
+				break;
+			case SEARCH:
+				break;
+			case VACANCIES:
+				// get the selected options and update the vacancies panel
+				List<Vacancy> vacancies = controller.getModel().getVacancies(true, null);
+				List<User> users = controller.getModel().getUsers(null, true);
+				controller.getView().showVacanciesPanel(vacancies, users);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}

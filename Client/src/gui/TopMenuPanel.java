@@ -1,6 +1,7 @@
 package gui;
 
-import gui.listeners.ChangePanelListener;
+import gui.TopMenuPanel.MenuPanel;
+import gui.listeners.TopMenuListener;
 import interfaces.UserType;
 
 import java.awt.Color;
@@ -8,8 +9,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -28,14 +27,12 @@ public class TopMenuPanel extends JPanel {
 	private JPanel menuPanelsPanel;
 	private JPanel adminPanel;
 
-	// listener that alerts the MainWindow to changes in the displayed panel
-	private ChangePanelListener changePanelListener;
+	private TopMenuListener topMenuListener;
 
-	public TopMenuPanel(UserType userType) {
+	public TopMenuPanel() {
 		setLayout(new GridBagLayout());
 		setPreferredSize(new Dimension(500, 150));
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		init(userType);
 	}
 
 	private void init(UserType userType) {
@@ -65,16 +62,32 @@ public class TopMenuPanel extends JPanel {
 			Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.BOTH);
 			add(adminPanel, gbc);
 		}
+		
+		for(MenuPanel menuPanel : menuOptions) {
+			menuPanel.addMouseListener(topMenuListener);
+		}
 	}
 
-	public void setChangePanelListener(ChangePanelListener changePanelListener) {
-		this.changePanelListener = changePanelListener;
+	public void setUserType(UserType userType) {
+		init(userType);
+	}
+	
+	public void setSelectedPanel(MenuPanel panel) {
+		for (MenuPanel menuPanel : TopMenuPanel.this.menuOptions) {
+			menuPanel.setSelected(false);
+		}
+		
+		panel.setSelected(true);
+	}
+	
+	public void setTopMenuListener(TopMenuListener topMenuListener) {
+		this.topMenuListener = topMenuListener;
 	}
 
 	/**
 	 * A panel that holds each menu option in the TopMenuPanel 
 	 */
-	private class MenuPanel extends JPanel {
+	public class MenuPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		private String name;
@@ -95,16 +108,6 @@ public class TopMenuPanel extends JPanel {
 		private void init() {
 			nameLbl = new JLabel(name);
 			add(nameLbl);
-			addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					for (MenuPanel panel : TopMenuPanel.this.menuOptions) {
-						panel.setSelected(false);
-					}
-					setSelected(true);
-					changePanelListener.changePanel(panelType);
-				}
-			});
 		}
 
 		private void setSelected(boolean selected) {
@@ -115,6 +118,10 @@ public class TopMenuPanel extends JPanel {
 				setBorder(BorderFactory.createRaisedBevelBorder());
 				nameLbl.setForeground(Color.BLACK);
 			}
+		}
+
+		public PanelType getPanelType() {
+			return panelType;
 		}
 	}
 }

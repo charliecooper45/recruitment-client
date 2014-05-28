@@ -45,6 +45,7 @@ public class VacancyPanel extends JPanel {
 	private JLabel vacancyNameLbl;
 	private JLabel organisationNameLbl;
 	private JLabel createdByLbl;
+	private JLabel vacancyIdLbl;
 	private JComboBox<String> statusCmbBox;
 	private JTextField dateTxtFld;
 	private JTextField contactTxtFld;
@@ -99,8 +100,11 @@ public class VacancyPanel extends JPanel {
 		Utils.setGBC(leftTopPnlGbc, 1, 2, 2, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(organisationNameLbl, leftTopPnlGbc);
 		createdByLbl = new JLabel("");
-		Utils.setGBC(leftTopPnlGbc, 1, 3, 2, 1, GridBagConstraints.NONE);
+		Utils.setGBC(leftTopPnlGbc, 1, 3, 1, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(createdByLbl, leftTopPnlGbc);
+		vacancyIdLbl = new JLabel("");
+		Utils.setGBC(leftTopPnlGbc, 2, 3, 1, 1, GridBagConstraints.NONE);
+		leftTopPanel.add(vacancyIdLbl, leftTopPnlGbc);
 
 		// labels
 		leftTopPnlGbc.weighty = 1;
@@ -196,6 +200,7 @@ public class VacancyPanel extends JPanel {
 		vacancyNameLbl.setText(updatedVacancy.getName());
 		organisationNameLbl.setText(updatedVacancy.getOrganisationName());
 		createdByLbl.setText(updatedVacancy.getUserId());
+		vacancyIdLbl.setText(String.valueOf(updatedVacancy.getVacancyId()));
 		dateTxtFld.setText(updatedVacancy.getVacancyDate().toString());
 		contactTxtFld.setText(updatedVacancy.getContactName());
 		phoneNoTxtFld.setText(updatedVacancy.getContactPhoneNumber());

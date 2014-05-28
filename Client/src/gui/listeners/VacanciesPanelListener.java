@@ -25,7 +25,7 @@ import database.beans.Vacancy;
 public class VacanciesPanelListener extends ClientListener implements ActionListener {
 	private boolean openVacancies = true;
 	private User selectedUser = null;
-	
+
 	public VacanciesPanelListener(ClientController controller) {
 		super(controller);
 	}
@@ -51,13 +51,14 @@ public class VacanciesPanelListener extends ClientListener implements ActionList
 			JComboBox<?> usersCombo = (JComboBox<?>) source;
 			selectedUser = (User) usersCombo.getSelectedItem();
 
-			if (selectedUser.getUserId() == null) {
-				// this means we need to get all user`s vacancies
-				selectedUser = null;
+			if (selectedUser != null) {
+				if (selectedUser.getUserId() == null) {
+					// this means we need to get all user`s vacancies
+					selectedUser = null;
+				}
+				List<Vacancy> vacancies = controller.getModel().getVacancies(openVacancies, selectedUser);
+				controller.getView().updateVacanciesPanel(vacancies);
 			}
-
-			List<Vacancy> vacancies = controller.getModel().getVacancies(openVacancies, selectedUser);
-			controller.getView().updateVacanciesPanel(vacancies);
 		}
 	}
 

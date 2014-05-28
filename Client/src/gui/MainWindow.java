@@ -1,17 +1,17 @@
 package gui;
 
+import gui.TopMenuPanel.MenuPanel;
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.CandidateDisplayedListener;
-import gui.listeners.ChangePanelListener;
 import gui.listeners.OrganisationDisplayedListener;
 import gui.listeners.RemoveVacancyDialogListener;
+import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -119,6 +119,9 @@ public class MainWindow extends JFrame {
 		menu.add(removeMenu);
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
+		
+		// create the top menu panel
+		topMenuPanel = new TopMenuPanel();
 
 		// create the dialogs
 		dialogs = new EnumMap<>(MenuDialogType.class);
@@ -130,13 +133,8 @@ public class MainWindow extends JFrame {
 		borderLayout = new BorderLayout();
 		setLayout(borderLayout);
 
-		topMenuPanel = new TopMenuPanel(userType);
-		topMenuPanel.setChangePanelListener(new ChangePanelListener() {
-			@Override
-			public void changePanel(PanelType panelType) {
-				// changeDisplayedPanel(panelType);
-			}
-		});
+		// initialize the TopMenuPanel according to the user type
+		topMenuPanel.setUserType(userType);
 		add(topMenuPanel, BorderLayout.NORTH);
 		taskListPanel = new TaskListPanel();
 		add(taskListPanel, BorderLayout.EAST);
@@ -199,8 +197,10 @@ public class MainWindow extends JFrame {
 		// when the vacancies panel is displayed update the necessary fields from the server
 		JPanel panel = centrePanels.get(PanelType.VACANCIES);
 		VacanciesPanel vPanel = (VacanciesPanel) panel;
+		vPanel.setDefaultOptions();
 		vPanel.updateDisplayedUsers(users);
 		vPanel.updateDisplayedVacancies(vacancies);
+		
 		add(panel);
 
 		revalidate();
@@ -267,6 +267,10 @@ public class MainWindow extends JFrame {
 		return null;
 	}
 
+	public void setSelectedTopMenuPanel(MenuPanel panel) {
+		topMenuPanel.setSelectedPanel(panel);
+	}
+	
 	public boolean showDialog(DialogType dialogType) {
 		JPanel panel = null;
 		VacancyPanel vacancyPanel = null;
@@ -363,6 +367,7 @@ public class MainWindow extends JFrame {
 		}
 			
 	}
+	
 	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
 		RecruitmentDialog dialog = dialogs.get(menuDialogType);
 		dialog.setDisplayedFile(file);
@@ -386,6 +391,10 @@ public class MainWindow extends JFrame {
 		}
 	}
 	
+	public void setTopMenuListener(TopMenuListener topMenuListener) {
+		topMenuPanel.setTopMenuListener(topMenuListener);
+	}
+	
 	public void setVacanciesPanelListeners(VacanciesPanelListener vacanciesPanelListener) {
 		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelType.VACANCIES);
 		panel.setVacanciesPanelListeners(vacanciesPanelListener);
@@ -403,4 +412,6 @@ public class MainWindow extends JFrame {
 	public void setRemoveVacancyDialogListener(RemoveVacancyDialogListener removeVacancyDialogListener) {
 		dialogs.get(MenuDialogType.REMOVE_VACANCY).setActionListener(removeVacancyDialogListener);
 	}
+
+
 }

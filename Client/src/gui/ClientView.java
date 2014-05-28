@@ -1,6 +1,8 @@
 package gui;
 
+import gui.TopMenuPanel.MenuPanel;
 import gui.listeners.RemoveVacancyDialogListener;
+import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
 
@@ -84,6 +86,10 @@ public class ClientView {
 		return mainWindow.showFileChooser(title);
 	}
 
+	public void setSelectedTopMenuPanel(MenuPanel panel) {
+		mainWindow.setSelectedTopMenuPanel(panel);
+	}
+	
 	public boolean showDialog(DialogType dialogType) {
 		return mainWindow.showDialog(dialogType);
 	}
@@ -115,6 +121,7 @@ public class ClientView {
 	public void setDisplayedVacanciesInDialog(MenuDialogType menuDialog, List<Vacancy> vacancies) {
 		mainWindow.setDisplayedVacanciesInDialog(menuDialog, vacancies);
 	}
+	
 	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
 		mainWindow.displayFileInDialog(menuDialogType, file);
 	}
@@ -130,6 +137,10 @@ public class ClientView {
 	
 	public void setMenuListener(ActionListener actionListener) {
 		mainWindow.setMenuListener(actionListener);
+	}
+	
+	public void setTopMenuListener(TopMenuListener topMenuListener) {
+		mainWindow.setTopMenuListener(topMenuListener);
 	}
 	
 	public void setVacanciesPanelListeners(VacanciesPanelListener vacanciesPanelListener) {

@@ -5,6 +5,7 @@ import gui.listeners.AddVacancyDialogListener;
 import gui.listeners.LoginListener;
 import gui.listeners.MenuListener;
 import gui.listeners.RemoveVacancyDialogListener;
+import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
 import gui.listeners.VacancyPanelListener;
 
@@ -30,6 +31,9 @@ public class ClientController {
 	private VacanciesPanelListener vacanciesPanelListener;
 	private VacancyPanelListener vacancyPanelListener;
 	
+	// top panel listener
+	private TopMenuListener topMenuListener;
+	
 	// menu listeners
 	private MenuListener menuListener;
 	private AddVacancyDialogListener addVacancyDialogListener;
@@ -44,6 +48,7 @@ public class ClientController {
 		vacanciesPanelListener = new VacanciesPanelListener(this);
 		loginListener = new LoginListener(this);
 		menuListener = new MenuListener(this);
+		topMenuListener = new TopMenuListener(this);
 		vacancyPanelListener = new VacancyPanelListener(this);
 		addVacancyDialogListener = new AddVacancyDialogListener(this);
 		removeVacancyDialogListener = new RemoveVacancyDialogListener(this);
@@ -57,6 +62,9 @@ public class ClientController {
 
 		// sets the menu listener
 		view.setMenuListener(menuListener);
+		
+		// set the top panel button listener
+		view.setTopMenuListener(topMenuListener);
 
 		// sets the listeners for the GUI
 		view.setVacanciesPanelListeners(vacanciesPanelListener);
