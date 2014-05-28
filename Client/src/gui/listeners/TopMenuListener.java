@@ -4,9 +4,11 @@ import gui.PanelType;
 import gui.TopMenuPanel.MenuPanel;
 
 import java.awt.event.MouseEvent;
+import java.util.Collections;
 import java.util.List;
 
 import controller.ClientController;
+import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -33,13 +35,15 @@ public class TopMenuListener extends ClientListener {
 			case ADMIN:
 				break;
 			case ORGANISATIONS:
+				List<Organisation> organisations = controller.getModel().getOrganisations();
+				controller.getView().showOrganisationsPanel(organisations);
 				break;
 			case PIPELINE:
 				break;
 			case SEARCH:
 				break;
 			case VACANCIES:
-				// get the selected options and update the vacancies panel
+				// update the vacancies panel and then show it
 				List<Vacancy> vacancies = controller.getModel().getVacancies(true, null);
 				List<User> users = controller.getModel().getUsers(null, true);
 				controller.getView().showVacanciesPanel(vacancies, users);

@@ -7,6 +7,7 @@ import java.io.Serializable;
  * @author Charlie
  */
 public class Organisation implements Serializable, Comparable<Organisation> {
+	private static final long serialVersionUID = 7679658919820411341L;
 	private int organisationId;
 	private String organisationName;
 	private String phoneNumber;
@@ -15,9 +16,10 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 	private String address;
 	private String termsOfBusiness;
 	private String notes;
-	private int userId;
+	private String userId;
+	private int noOpenVacancies;
 	
-	public Organisation(int organisationId, String organisationName, String phoneNumber, String emailAddress, String website, String address, String termsOfBusiness, String notes, int userId) {
+	public Organisation(int organisationId, String organisationName, String phoneNumber, String emailAddress, String website, String address, String termsOfBusiness, String notes, String userId, int noOpenVacancies) {
 		this.organisationId = organisationId;
 		this.organisationName = organisationName;
 		this.phoneNumber = phoneNumber;
@@ -27,6 +29,7 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 		this.termsOfBusiness = termsOfBusiness;
 		this.notes = notes;
 		this.userId = userId;
+		this.noOpenVacancies = noOpenVacancies;
 	}
 	
 	public String getOrganisationName() {
@@ -35,6 +38,22 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 
 	public int getId() {
 		return organisationId;
+	}
+	
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+	
+	public String getUserId() {
+		return userId;
+	}
+	
+	public int getNoOpenVacancies() {
+		return noOpenVacancies;
 	}
 	
 	@Override

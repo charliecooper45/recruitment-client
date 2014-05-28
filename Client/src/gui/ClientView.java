@@ -1,6 +1,7 @@
 package gui;
 
 import gui.TopMenuPanel.MenuPanel;
+import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
@@ -81,6 +82,23 @@ public class ClientView {
 		return mainWindow.getDisplayedVacancy();
 	}
 	
+	// OrganisationsPanel methods
+	public void showOrganisationsPanel(List<Organisation> organisations) {
+		mainWindow.showOrganisationsPanel(organisations);
+	}
+	
+	public void updateOrganisationsPanel(List<Organisation> organisations) {
+		mainWindow.updateOrganisationsPanel(organisations);
+	}
+	
+	public String getOrganisationSearchTerm() {
+		return mainWindow.getOrganisationSearchTerm();
+	}
+	
+	public void removeOrganisationSearchTerm() {
+		mainWindow.removeOrganisationSearchTerm();
+	}
+	
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(String title) {
 		return mainWindow.showFileChooser(title);
@@ -151,6 +169,10 @@ public class ClientView {
 		mainWindow.setVacancyPanelListener(actionListener);
 	}
 
+	public void setOrganisationsPanelListener(OrganisationsPanelListener organisationsPanelListener) {
+		mainWindow.setOrganisationsPanelListener(organisationsPanelListener);
+	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		mainWindow.setAddVacancyDialogListener(actionListener);
 	}

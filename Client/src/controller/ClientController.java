@@ -4,6 +4,7 @@ import gui.ClientView;
 import gui.listeners.AddVacancyDialogListener;
 import gui.listeners.LoginListener;
 import gui.listeners.MenuListener;
+import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
@@ -30,6 +31,7 @@ public class ClientController {
 	private LoginListener loginListener;
 	private VacanciesPanelListener vacanciesPanelListener;
 	private VacancyPanelListener vacancyPanelListener;
+	private OrganisationsPanelListener organisationsPanelListener;
 	
 	// top panel listener
 	private TopMenuListener topMenuListener;
@@ -45,9 +47,10 @@ public class ClientController {
 		this.view.setController(this);
 
 		// create the listeners
-		vacanciesPanelListener = new VacanciesPanelListener(this);
 		loginListener = new LoginListener(this);
 		menuListener = new MenuListener(this);
+		vacanciesPanelListener = new VacanciesPanelListener(this);
+		organisationsPanelListener = new OrganisationsPanelListener(this);
 		topMenuListener = new TopMenuListener(this);
 		vacancyPanelListener = new VacancyPanelListener(this);
 		addVacancyDialogListener = new AddVacancyDialogListener(this);
@@ -69,6 +72,7 @@ public class ClientController {
 		// sets the listeners for the GUI
 		view.setVacanciesPanelListeners(vacanciesPanelListener);
 		view.setVacancyPanelListener(vacancyPanelListener);
+		view.setOrganisationsPanelListener(organisationsPanelListener);
 		view.setAddVacancyDialogListener(addVacancyDialogListener);
 		view.setRemoveVacancyDialogListener(removeVacancyDialogListener);
 	}

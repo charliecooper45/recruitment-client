@@ -5,7 +5,7 @@ import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.CandidateDisplayedListener;
-import gui.listeners.OrganisationDisplayedListener;
+import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
@@ -148,13 +148,6 @@ public class MainWindow extends JFrame {
 				// changeDisplayedPanel(PanelTypes.CANDIDATE);
 			}
 		});
-		OrganisationsPanel organisationsPanel = (OrganisationsPanel) centrePanels.get(PanelType.ORGANISATIONS);
-		organisationsPanel.setOrganisationDisplayedListener(new OrganisationDisplayedListener() {
-			@Override
-			public void organisationDisplayed() {
-				// changeDisplayedPanel(PanelTypes.ORGANISATION);
-			}
-		});
 		SearchPanel searchPanel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
 		searchPanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
 			@Override
@@ -234,6 +227,39 @@ public class MainWindow extends JFrame {
 		return panel.getDisplayedVacancy();
 	}
 	
+	// OrganisationsPanel methods
+	public void showOrganisationsPanel(List<Organisation> organisations) {
+		removeCentreComponent();
+
+		// when the vacancies panel is displayed update the necessary fields from the server
+		JPanel panel = centrePanels.get(PanelType.ORGANISATIONS);
+		OrganisationsPanel oPanel = (OrganisationsPanel) panel;
+		oPanel.setDefaultOptions();
+		oPanel.updateDisplayedOrganisations(organisations);
+		
+		add(panel);
+
+		revalidate();
+		repaint();
+	}
+	
+	public void updateOrganisationsPanel(List<Organisation> organisations) {
+		JPanel panel = centrePanels.get(PanelType.ORGANISATIONS);
+		OrganisationsPanel oPanel = (OrganisationsPanel) panel;
+		oPanel.updateDisplayedOrganisations(organisations);
+	}
+	
+	public String getOrganisationSearchTerm() {
+		JPanel panel = centrePanels.get(PanelType.ORGANISATIONS);
+		OrganisationsPanel oPanel = (OrganisationsPanel) panel;
+		return oPanel.getSearchTerm();
+	}
+	
+	public void removeOrganisationSearchTerm() {
+		JPanel panel = centrePanels.get(PanelType.ORGANISATIONS);
+		OrganisationsPanel oPanel = (OrganisationsPanel) panel;
+		oPanel.removeSearchTerm();
+	}
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(final String title) {
 		JFileChooser fc = new JFileChooser();
@@ -405,6 +431,11 @@ public class MainWindow extends JFrame {
 		panel.setVacancyPanelListener(actionListener);
 	}
 
+	public void setOrganisationsPanelListener(OrganisationsPanelListener organisationsPanelListener) {
+		OrganisationsPanel panel = (OrganisationsPanel) centrePanels.get(PanelType.ORGANISATIONS);
+		panel.setOrganisationsPanelListener(organisationsPanelListener);
+	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
 	}
@@ -412,6 +443,5 @@ public class MainWindow extends JFrame {
 	public void setRemoveVacancyDialogListener(RemoveVacancyDialogListener removeVacancyDialogListener) {
 		dialogs.get(MenuDialogType.REMOVE_VACANCY).setActionListener(removeVacancyDialogListener);
 	}
-
 
 }

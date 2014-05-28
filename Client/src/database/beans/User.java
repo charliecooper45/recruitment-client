@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Bean that represents an instance of the entity User in the recruitment database. 
  * @author Charlie
  */
-public class User implements Serializable {
+public class User implements Serializable, Comparable<User> {
 	private String userId;
 	private String password;
 	private String firstName;
@@ -37,5 +37,15 @@ public class User implements Serializable {
 			return firstName + " " + surname;
 		}
 		return userId + ": " + firstName + " " + surname;
+	}
+	
+	@Override
+	public int compareTo(User user) {
+		int compare = this.firstName.compareTo(user.firstName);
+		
+		if(compare == 0) {
+			compare = this.surname.compareTo(user.surname);
+		}
+		return compare;
 	}
 }

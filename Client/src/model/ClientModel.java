@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Collections;
 import java.util.List;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
@@ -58,7 +59,9 @@ public class ClientModel implements ServerInterface {
 	@Override
 	public List<Vacancy> getVacancies(boolean open, User user) {
 		try {
-			return SERVER.getVacancies(open, user);
+			List<Vacancy> vacancies = SERVER.getVacancies(open, user);
+			Collections.sort(vacancies);
+			return vacancies;
 		} catch (RemoteException e) {
 			//TODO NEXT: Deal with this exception - possible propogate it?
 			e.printStackTrace();
@@ -69,7 +72,9 @@ public class ClientModel implements ServerInterface {
 	@Override
 	public List<User> getUsers(UserType userType, boolean status) {
 		try {
-			return SERVER.getUsers(userType, status);
+			List<User> users = SERVER.getUsers(userType, status);
+			Collections.sort(users);
+			return users;
 		} catch (RemoteException e) {
 			//TODO NEXT: Deal with this exception - possible propogate it?
 			e.printStackTrace();
@@ -146,7 +151,9 @@ public class ClientModel implements ServerInterface {
 	@Override
 	public List<Organisation> getOrganisations() {
 		try {
-			return SERVER.getOrganisations();
+			List<Organisation> organisations = SERVER.getOrganisations();
+			Collections.sort(organisations);
+			return organisations;
 		} catch (RemoteException e) {
 			//TODO NEXT: Deal with this exception - possible propogate it?
 			//TODO NEXT: if null is returned handle this

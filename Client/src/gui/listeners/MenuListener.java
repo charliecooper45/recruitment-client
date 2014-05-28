@@ -30,13 +30,11 @@ public class MenuListener extends ClientListener implements ActionListener {
 		case "Add Vacancy":
 			// get the up to date organisations list from the server
 			List<Organisation> organisations = controller.getModel().getOrganisations();
-			Collections.sort(organisations);
 			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.ADD_VACANCY, organisations);
 			controller.getView().showMenuDialog(MenuDialogType.ADD_VACANCY);
 			break;
 		case "Remove Vacancy":
 			List<Vacancy> vacancies = controller.getModel().getVacancies(false, null);
-			Collections.sort(vacancies);
 			controller.getView().setDisplayedVacanciesInDialog(MenuDialogType.REMOVE_VACANCY, vacancies);
 			controller.getView().showMenuDialog(MenuDialogType.REMOVE_VACANCY);
 			break;
