@@ -1,9 +1,11 @@
 package gui;
 
 import gui.TopMenuPanel.MenuPanel;
+import gui.dialogs.AddOrganisationDialog;
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveVacancyDialog;
+import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
@@ -128,6 +130,7 @@ public class MainWindow extends JFrame {
 		dialogs = new EnumMap<>(MenuDialogType.class);
 		dialogs.put(MenuDialogType.ADD_VACANCY, new AddVacancyDialog(this));
 		dialogs.put(MenuDialogType.REMOVE_VACANCY, new RemoveVacancyDialog(this));
+		dialogs.put(MenuDialogType.ADD_ORGANISATION, new AddOrganisationDialog(this));
 	}
 
 	private void init(UserType userType) {
@@ -386,6 +389,9 @@ public class MainWindow extends JFrame {
 		case REMOVE_VACANCY:
 			dialogs.get(MenuDialogType.REMOVE_VACANCY).setVisible(true);
 			break;
+		case ADD_ORGANISATION:
+			dialogs.get(MenuDialogType.ADD_ORGANISATION).setVisible(true);
+			break;
 		}
 	}
 
@@ -397,6 +403,9 @@ public class MainWindow extends JFrame {
 			break;
 		case REMOVE_VACANCY:
 			dialogs.get(MenuDialogType.REMOVE_VACANCY).setVisible(false);
+			break;
+		case ADD_ORGANISATION:
+			dialogs.get(MenuDialogType.ADD_ORGANISATION).setVisible(false);
 			break;
 		}
 	}
@@ -442,6 +451,11 @@ public class MainWindow extends JFrame {
 		return null;
 	}
 
+	public Organisation getOrganisationDialogVacancy(MenuDialogType menuDialog) {
+		AddOrganisationDialog dialog = (AddOrganisationDialog) dialogs.get(MenuDialogType.ADD_ORGANISATION);
+		return dialog.getOrganisation();
+	}
+	
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -472,6 +486,7 @@ public class MainWindow extends JFrame {
 		OrganisationPanel panel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
 		panel.setOrganisationPanelListener(organisationPanelListener);
 	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
 	}
@@ -480,5 +495,8 @@ public class MainWindow extends JFrame {
 		dialogs.get(MenuDialogType.REMOVE_VACANCY).setActionListener(removeVacancyDialogListener);
 	}
 
+	public void setAddOrganisationDialogListener(AddOrganisationDialogListener addOrganisationDialogListener) {
+		dialogs.get(MenuDialogType.ADD_ORGANISATION).setActionListener(addOrganisationDialogListener);
+	}
 
 }

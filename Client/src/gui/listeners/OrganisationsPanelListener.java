@@ -24,6 +24,8 @@ import database.beans.Organisation;
  * @author Charlie
  */
 public class OrganisationsPanelListener extends ClientListener implements ActionListener {
+	private boolean activeSearch = false;
+	
 	public OrganisationsPanelListener(ClientController controller) {
 		super(controller);
 	}
@@ -39,6 +41,7 @@ public class OrganisationsPanelListener extends ClientListener implements Action
 
 			switch (text) {
 			case "Search":
+				activeSearch = true;
 				List<Organisation> matchingOrganisations = new ArrayList<>();
 
 				// do a search
@@ -58,7 +61,7 @@ public class OrganisationsPanelListener extends ClientListener implements Action
 				controller.getView().updateOrganisationsPanel(matchingOrganisations);
 				break;
 			case "Show All":
-				System.err.println("here");
+				activeSearch = false;
 				organisations = controller.getModel().getOrganisations();
 				controller.getView().updateOrganisationsPanel(organisations);
 				controller.getView().removeOrganisationSearchTerm();
@@ -90,5 +93,9 @@ public class OrganisationsPanelListener extends ClientListener implements Action
 
 			controller.getView().showOrganisationPanel(updatedOrganisation, tempFile);
 		}
+	}
+	
+	public boolean hasActiveSearch() {
+		return activeSearch;
 	}
 }

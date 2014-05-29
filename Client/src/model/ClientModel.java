@@ -244,4 +244,16 @@ public class ClientModel implements ServerInterface {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean addOrganisation(Organisation organisation, RemoteInputStream tobData) {
+		try {
+			return SERVER.addOrganisation(organisation, tobData);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

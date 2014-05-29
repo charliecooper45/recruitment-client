@@ -1,6 +1,7 @@
 package gui;
 
 import gui.TopMenuPanel.MenuPanel;
+import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveVacancyDialogListener;
@@ -162,6 +163,10 @@ public class ClientView {
 		return mainWindow.getVacancyDialogVacancy(menuDialog);
 	}
 	
+	public Organisation getOrganisationDialogVacancy(MenuDialogType menuDialog) {
+		return mainWindow.getOrganisationDialogVacancy(menuDialog);
+	}
+	
 	// methods to set listeners and controller
 	public void setController(ClientController controller) {
 		this.controller = controller;
@@ -190,12 +195,17 @@ public class ClientView {
 	public void setOrganisationPanelListener(OrganisationPanelListener organisationPanelListener) {
 		mainWindow.setOrganisationPanelListener(organisationPanelListener);
 	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		mainWindow.setAddVacancyDialogListener(actionListener);
 	}
 	
 	public void setRemoveVacancyDialogListener(RemoveVacancyDialogListener removeVacancyDialogListener) {
 		mainWindow.setRemoveVacancyDialogListener(removeVacancyDialogListener);
+	}
+	
+	public void setAddOrganisationDialogListener(AddOrganisationDialogListener addOrganisationDialogListener) {
+		mainWindow.setAddOrganisationDialogListener(addOrganisationDialogListener);
 	}
 
 	// main method
@@ -209,5 +219,4 @@ public class ClientView {
 			}
 		});
 	}
-
 }

@@ -72,6 +72,10 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 		return termsOfBusiness;
 	}
 	
+	public String getNotes() {
+		return notes;
+	}
+	
 	public void setTermsOfBusiness(String termsOfBusiness) {
 		this.termsOfBusiness = termsOfBusiness;
 	}

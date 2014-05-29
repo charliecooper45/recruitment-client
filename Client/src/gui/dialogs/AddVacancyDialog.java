@@ -131,6 +131,7 @@ public class AddVacancyDialog extends RecruitmentDialog {
 
 	public Vacancy getVacancy() {
 		StringBuilder errorMessage = new StringBuilder("");;
+		
 		// check that all fields are correct and returns null if they are not
 		String status = (String) vacancyStatusCmbBx.getSelectedItem();
 		boolean statusBoolean = false;

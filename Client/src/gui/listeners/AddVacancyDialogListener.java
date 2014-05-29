@@ -45,7 +45,6 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 			case "Confirm":
 				InputStream inputStream;
 				RemoteInputStreamServer profileData = null;
-				//TODO NEXT: Implement this
 				Vacancy vacancy = controller.getView().getVacancyDialogVacancy(MenuDialogType.ADD_VACANCY);
 				if (vacancy != null) {
 					// the vacancy is valid and can be added

@@ -4,7 +4,6 @@ import gui.PanelType;
 import gui.TopMenuPanel.MenuPanel;
 
 import java.awt.event.MouseEvent;
-import java.util.Collections;
 import java.util.List;
 
 import controller.ClientController;

@@ -22,6 +22,10 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import controller.ClientController;
 import database.beans.Organisation;
 
+/**
+ * Listener for events on the organisation panel.
+ * @author Charlie
+ */
 public class OrganisationPanelListener extends ClientListener implements ActionListener{
 
 	public OrganisationPanelListener(ClientController controller) {

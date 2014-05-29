@@ -4,7 +4,6 @@ import gui.MenuDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JMenuItem;
@@ -24,12 +23,13 @@ public class MenuListener extends ClientListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		List<Organisation> organisations = null;
 		JMenuItem item = (JMenuItem) event.getSource();
 		String action = item.getText();
 		switch (action) {
 		case "Add Vacancy":
 			// get the up to date organisations list from the server
-			List<Organisation> organisations = controller.getModel().getOrganisations();
+			organisations = controller.getModel().getOrganisations();
 			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.ADD_VACANCY, organisations);
 			controller.getView().showMenuDialog(MenuDialogType.ADD_VACANCY);
 			break;
@@ -37,6 +37,12 @@ public class MenuListener extends ClientListener implements ActionListener {
 			List<Vacancy> vacancies = controller.getModel().getVacancies(false, null);
 			controller.getView().setDisplayedVacanciesInDialog(MenuDialogType.REMOVE_VACANCY, vacancies);
 			controller.getView().showMenuDialog(MenuDialogType.REMOVE_VACANCY);
+			break;
+		case "Add Organisation":
+			// get the up to date organisations list from the server
+			controller.getView().showMenuDialog(MenuDialogType.ADD_ORGANISATION);
+			break;
+		case "Remove Organisation":
 			break;
 		}
 	}
