@@ -72,11 +72,11 @@ public class VacanciesPanelListener extends ClientListener implements ActionList
 
 			// get the vacancy profile
 			try {
-				String vacancyProfile = selectedVacancy.getProfile();
+				String vacancyProfile = updatedVacancy.getProfile();
 				if (vacancyProfile != null) {
 					RemoteInputStream remoteFileData = controller.getModel().getVacancyProfile(vacancyProfile);
 					InputStream fileData = RemoteInputStreamClient.wrap(remoteFileData);
-					tempFile = controller.storeFile(fileData, vacancyProfile);
+					tempFile = controller.storeTempFile(fileData, vacancyProfile);
 				}
 			} catch (IOException e1) {
 				// TODO NEXT B: Possible display an error message here

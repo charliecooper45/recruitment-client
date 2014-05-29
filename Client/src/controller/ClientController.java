@@ -4,6 +4,7 @@ import gui.ClientView;
 import gui.listeners.AddVacancyDialogListener;
 import gui.listeners.LoginListener;
 import gui.listeners.MenuListener;
+import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
@@ -32,6 +33,7 @@ public class ClientController {
 	private VacanciesPanelListener vacanciesPanelListener;
 	private VacancyPanelListener vacancyPanelListener;
 	private OrganisationsPanelListener organisationsPanelListener;
+	private OrganisationPanelListener organisationPanelListener;
 	
 	// top panel listener
 	private TopMenuListener topMenuListener;
@@ -49,10 +51,11 @@ public class ClientController {
 		// create the listeners
 		loginListener = new LoginListener(this);
 		menuListener = new MenuListener(this);
-		vacanciesPanelListener = new VacanciesPanelListener(this);
-		organisationsPanelListener = new OrganisationsPanelListener(this);
 		topMenuListener = new TopMenuListener(this);
+		vacanciesPanelListener = new VacanciesPanelListener(this);
 		vacancyPanelListener = new VacancyPanelListener(this);
+		organisationsPanelListener = new OrganisationsPanelListener(this);
+		organisationPanelListener = new OrganisationPanelListener(this);
 		addVacancyDialogListener = new AddVacancyDialogListener(this);
 		removeVacancyDialogListener = new RemoveVacancyDialogListener(this);
 
@@ -73,11 +76,12 @@ public class ClientController {
 		view.setVacanciesPanelListeners(vacanciesPanelListener);
 		view.setVacancyPanelListener(vacancyPanelListener);
 		view.setOrganisationsPanelListener(organisationsPanelListener);
+		view.setOrganisationPanelListener(organisationPanelListener);
 		view.setAddVacancyDialogListener(addVacancyDialogListener);
 		view.setRemoveVacancyDialogListener(removeVacancyDialogListener);
 	}
 
-	public Path storeFile(InputStream inStream, String name) {
+	public Path storeTempFile(InputStream inStream, String name) {
 		// write the file to a temp file
 		try {
 			String suffix = name.substring(name.lastIndexOf("."));

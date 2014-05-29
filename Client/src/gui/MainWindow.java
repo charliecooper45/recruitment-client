@@ -5,6 +5,7 @@ import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.CandidateDisplayedListener;
+import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
@@ -260,6 +261,30 @@ public class MainWindow extends JFrame {
 		OrganisationsPanel oPanel = (OrganisationsPanel) panel;
 		oPanel.removeSearchTerm();
 	}
+	
+	public Organisation getSelectedOrganisation() {
+		JPanel panel = centrePanels.get(PanelType.ORGANISATIONS);
+		OrganisationsPanel oPanel = (OrganisationsPanel) panel;
+		return oPanel.getSelectedOrganisation();
+	}
+	
+	// OrganisationPanel method
+	public void showOrganisationPanel(Organisation updatedOrganisation, Path tempFile) {
+		removeCentreComponent();
+
+		OrganisationPanel panel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
+		panel.setDisplayedOrganisation(updatedOrganisation, tempFile);
+		add(panel);
+
+		revalidate();
+		repaint();
+	}
+	
+	public Organisation getDisplayedOrganisation() {
+		OrganisationPanel panel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
+		return panel.getDisplayedOrganisation();
+	}
+	
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(final String title) {
 		JFileChooser fc = new JFileChooser();
@@ -300,6 +325,7 @@ public class MainWindow extends JFrame {
 	public boolean showDialog(DialogType dialogType) {
 		JPanel panel = null;
 		VacancyPanel vacancyPanel = null;
+		OrganisationPanel organisationPanel = null;
 		int response;
 		
 		switch (dialogType) {
@@ -333,6 +359,12 @@ public class MainWindow extends JFrame {
 			if(response == 0) {
 				return true;
 			}
+			break;
+		case ORGANISATION_REMOVE_TOB:
+			organisationPanel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
+			response = JOptionPane.showConfirmDialog(organisationPanel, DialogType.ORGANISATION_REMOVE_TOB.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if(response == 0)
+				return true;
 			break;
 		}
 		return false;
@@ -436,6 +468,10 @@ public class MainWindow extends JFrame {
 		panel.setOrganisationsPanelListener(organisationsPanelListener);
 	}
 	
+	public void setOrganisationPanelListener(OrganisationPanelListener organisationPanelListener) {
+		OrganisationPanel panel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
+		panel.setOrganisationPanelListener(organisationPanelListener);
+	}
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
 	}
@@ -443,5 +479,6 @@ public class MainWindow extends JFrame {
 	public void setRemoveVacancyDialogListener(RemoveVacancyDialogListener removeVacancyDialogListener) {
 		dialogs.get(MenuDialogType.REMOVE_VACANCY).setActionListener(removeVacancyDialogListener);
 	}
+
 
 }

@@ -54,7 +54,7 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 							String vacancyProfile = vacancy.getProfile();
 							RemoteInputStream remoteVacancyProfileData = controller.getModel().getVacancyProfile(vacancyProfile);
 							InputStream fileData = RemoteInputStreamClient.wrap(remoteVacancyProfileData);
-							Path tempFile = controller.storeFile(fileData, vacancyProfile);
+							Path tempFile = controller.storeTempFile(fileData, vacancyProfile);
 							controller.getView().showVacancyPanel(vacancy, tempFile);
 						}
 					} catch (FileNotFoundException e) {

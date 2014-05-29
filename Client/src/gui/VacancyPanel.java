@@ -37,6 +37,10 @@ import org.apache.poi.hwpf.extractor.WordExtractor;
 import database.beans.Vacancy;
 
 //TODO NEXT: set max width so doesn`t resize
+/**
+ * Displays a vacancy to the user.
+ * @author Charlie
+ */
 public class VacancyPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -167,8 +171,6 @@ public class VacancyPanel extends JPanel {
 		rightPanelGbc.weightx = 1;
 		rightPanelGbc.weighty = 1;
 
-		tabbedPane = new JTabbedPane();
-
 		vacancyProfilePanel = new JPanel(new BorderLayout());
 		documentArea = new JTextArea();
 		documentArea.setEditable(false);
@@ -177,6 +179,7 @@ public class VacancyPanel extends JPanel {
 		vacancyScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		vacancyProfilePanel.add(vacancyScrlPane, BorderLayout.CENTER);
 
+		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("Vacancy Profile", vacancyProfilePanel);
 		tabbedPane.addTab("Shortlist", new JPanel());
 		tabbedPane.addTab("Progress Report", new JPanel());

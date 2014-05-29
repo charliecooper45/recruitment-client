@@ -32,6 +32,10 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 		this.noOpenVacancies = noOpenVacancies;
 	}
 	
+	public int getOrganisationId() {
+		return organisationId;
+	}
+	
 	public String getOrganisationName() {
 		return organisationName;
 	}
@@ -54,6 +58,22 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 	
 	public int getNoOpenVacancies() {
 		return noOpenVacancies;
+	}
+	
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+	
+	public String getWebsite() {
+		return website;
+	}
+	
+	public String getTermsOfBusiness() {
+		return termsOfBusiness;
+	}
+	
+	public void setTermsOfBusiness(String termsOfBusiness) {
+		this.termsOfBusiness = termsOfBusiness;
 	}
 	
 	@Override

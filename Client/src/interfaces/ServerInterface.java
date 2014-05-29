@@ -31,4 +31,8 @@ public interface ServerInterface extends Remote{
 	public List<Contact> getOrganisationsContacts(Organisation organisation) throws RemoteException;
 	public boolean addVacancy(Vacancy vacancy, RemoteInputStream profileData) throws RemoteException;
 	public boolean removeVacancy(Vacancy vacancy) throws RemoteException;
+	public Organisation getOrganisation(int organisationId) throws RemoteException;
+	public RemoteInputStream getOrganisationTob(String fileName) throws RemoteException;
+	public boolean addOrganisationTob(Organisation organisation, RemoteInputStream tobData, String oldFileName) throws RemoteException;
+	public boolean removeOrganisationTob(Organisation organisation) throws RemoteException;
 }

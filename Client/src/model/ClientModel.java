@@ -196,4 +196,52 @@ public class ClientModel implements ServerInterface {
 		}
 		return false;
 	}
+
+	@Override
+	public Organisation getOrganisation(int organisationId) {
+		try {
+			return SERVER.getOrganisation(organisationId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public RemoteInputStream getOrganisationTob(String fileName) {
+		try {
+			return SERVER.getOrganisationTob(fileName);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean addOrganisationTob(Organisation organisation, RemoteInputStream tobData, String oldFileName) {
+		try {
+			return SERVER.addOrganisationTob(organisation, tobData, oldFileName);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeOrganisationTob(Organisation organisation) {
+		try {
+			return SERVER.removeOrganisationTob(organisation);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

@@ -163,10 +163,13 @@ public class OrganisationsPanel extends JPanel {
 		searchTxt.setText("");
 	}
 	
+	public Organisation getSelectedOrganisation() {
+		return organisations.get(organisationsTbl.getSelectedRow());
+	}
+	
 	public void setOrganisationsPanelListener(OrganisationsPanelListener organisationsPanelListener) {
 		searchBtn.addActionListener(organisationsPanelListener);
 		showAllBtn.addActionListener(organisationsPanelListener);
 		organisationsTbl.addMouseListener(organisationsPanelListener);
 	}
-
 }
