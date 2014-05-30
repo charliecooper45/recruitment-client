@@ -4,6 +4,7 @@ import gui.TopMenuPanel.MenuPanel;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
+import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
@@ -208,6 +209,10 @@ public class ClientView {
 		mainWindow.setAddOrganisationDialogListener(addOrganisationDialogListener);
 	}
 
+	public void setRemoveOrganisationDialogListener(RemoveOrganisationDialogListener removeOrganisationDialogListener) {
+		mainWindow.setRemoveOrganisationDialogListener(removeOrganisationDialogListener);
+	}
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -219,4 +224,5 @@ public class ClientView {
 			}
 		});
 	}
+
 }

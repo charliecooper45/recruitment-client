@@ -28,7 +28,6 @@ public class MenuListener extends ClientListener implements ActionListener {
 		String action = item.getText();
 		switch (action) {
 		case "Add Vacancy":
-			// get the up to date organisations list from the server
 			organisations = controller.getModel().getOrganisations();
 			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.ADD_VACANCY, organisations);
 			controller.getView().showMenuDialog(MenuDialogType.ADD_VACANCY);
@@ -39,10 +38,12 @@ public class MenuListener extends ClientListener implements ActionListener {
 			controller.getView().showMenuDialog(MenuDialogType.REMOVE_VACANCY);
 			break;
 		case "Add Organisation":
-			// get the up to date organisations list from the server
 			controller.getView().showMenuDialog(MenuDialogType.ADD_ORGANISATION);
 			break;
 		case "Remove Organisation":
+			organisations = controller.getModel().getOrganisations();
+			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.REMOVE_ORGANISATION, organisations);
+			controller.getView().showMenuDialog(MenuDialogType.REMOVE_ORGANISATION);
 			break;
 		}
 	}
