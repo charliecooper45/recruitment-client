@@ -1,11 +1,13 @@
 package gui;
 
 import gui.TopMenuPanel.MenuPanel;
+import gui.dialogs.AddCandidateDialog;
 import gui.dialogs.AddOrganisationDialog;
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveOrganisationDialog;
 import gui.dialogs.RemoveVacancyDialog;
+import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.OrganisationPanelListener;
@@ -134,6 +136,7 @@ public class MainWindow extends JFrame {
 		dialogs.put(MenuDialogType.REMOVE_VACANCY, new RemoveVacancyDialog(this));
 		dialogs.put(MenuDialogType.ADD_ORGANISATION, new AddOrganisationDialog(this));
 		dialogs.put(MenuDialogType.REMOVE_ORGANISATION, new RemoveOrganisationDialog(this));
+		dialogs.put(MenuDialogType.ADD_CANDIDATE, new AddCandidateDialog(this));
 	}
 
 	private void init(UserType userType) {
@@ -147,7 +150,6 @@ public class MainWindow extends JFrame {
 		add(taskListPanel, BorderLayout.EAST);
 
 		// add listeners for switching GUI elements to the centre panels
-		VacanciesPanel vacanciesPanel = (VacanciesPanel) centrePanels.get(PanelType.VACANCIES);
 		CandidatePipelinePanel candidatePipelinePanel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
 		candidatePipelinePanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
 			@Override
@@ -274,7 +276,7 @@ public class MainWindow extends JFrame {
 		return oPanel.getSelectedOrganisation();
 	}
 
-	// OrganisationPanel method
+	// OrganisationPanel methods
 	public void showOrganisationPanel(Organisation updatedOrganisation, Path tempFile) {
 		removeCentreComponent();
 
@@ -290,7 +292,40 @@ public class MainWindow extends JFrame {
 		OrganisationPanel panel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
 		return panel.getDisplayedOrganisation();
 	}
+	
+	// SearchPanel methods
+	public void showSearchPanel() {
+		removeCentreComponent();
 
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		add(panel);
+
+		revalidate();
+		repaint();
+	}
+
+	// CandidatePipelinePanel methods
+	public void showCandidatePipeline() {
+		removeCentreComponent();
+
+		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
+		add(panel);
+
+		revalidate();
+		repaint();
+	}
+	
+	// AdminPanel methods
+	public void showAdminPanel() {
+		removeCentreComponent();
+
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		add(panel);
+
+		revalidate();
+		repaint();
+	}
+	
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(final String title) {
 		JFileChooser fc = new JFileChooser();
@@ -405,6 +440,9 @@ public class MainWindow extends JFrame {
 		case REMOVE_ORGANISATION:
 			dialogs.get(MenuDialogType.REMOVE_ORGANISATION).setVisible(true);
 			break;
+		case ADD_CANDIDATE:
+			dialogs.get(MenuDialogType.ADD_CANDIDATE).setVisible(true);
+			break;
 		}
 	}
 
@@ -422,6 +460,9 @@ public class MainWindow extends JFrame {
 			break;
 		case REMOVE_ORGANISATION:
 			dialogs.get(MenuDialogType.REMOVE_ORGANISATION).setVisible(false);
+			break;
+		case ADD_CANDIDATE:
+			dialogs.get(MenuDialogType.ADD_CANDIDATE).setVisible(false);
 			break;
 		}
 	}
@@ -529,4 +570,8 @@ public class MainWindow extends JFrame {
 		dialogs.get(MenuDialogType.REMOVE_ORGANISATION).setActionListener(removeOrganisationDialogListener);
 	}
 
+	
+	public void setAddCandidateDialogListener(AddCandidateDialogListener addCandidateDialogListener) {
+		dialogs.get(MenuDialogType.ADD_CANDIDATE).setActionListener(addCandidateDialogListener);
+	}
 }

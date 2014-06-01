@@ -14,6 +14,8 @@ import javax.swing.JButton;
 
 import controller.ClientController;
 import database.beans.Organisation;
+import database.beans.User;
+import database.beans.Vacancy;
 
 public class RemoveOrganisationDialogListener extends ClientListener implements ActionListener {
 	public RemoveOrganisationDialogListener(ClientController controller) {
@@ -40,12 +42,18 @@ public class RemoveOrganisationDialogListener extends ClientListener implements 
 						controller.getView().hideMenuDialog(MenuDialogType.REMOVE_ORGANISATION);
 						controller.getView().showConfirmDialog(ConfirmDialogType.ORGANISATION_REMOVED);
 						
-						// check if the organisations panel is displayed and then update if necessary
+						// check if the organisations or vacancies panel is displayed and then update if necessary
+						//TODO NEXT: update the contacts panel
+						//TODO NEXT: update the vacancies panel
 						PanelType shownPanel = controller.getView().getDisplayedPanel();
 						if (shownPanel == PanelType.ORGANISATIONS) {
-							OrganisationsPanelListener listener = controller.getOrganisationsPanelListener();
 							List<Organisation> organisations = controller.getModel().getOrganisations();
 							controller.getView().updateOrganisationsPanel(organisations);
+						} else if(shownPanel == PanelType.VACANCIES){
+							User user = controller.getVacanciesPanelListener().getSelectedUser();
+							boolean open = controller.getVacanciesPanelListener().getDisplayOpenVacancies();
+							List<Vacancy> vacancies = controller.getModel().getVacancies(open, user);
+							controller.getView().updateVacanciesPanel(vacancies);
 						}
 					} else {
 						controller.getView().showErrorDialog(ErrorDialogType.REMOVE_ORGANISATION_FAIL);

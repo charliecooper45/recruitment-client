@@ -1,6 +1,7 @@
 package controller;
 
 import gui.ClientView;
+import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddVacancyDialogListener;
 import gui.listeners.LoginListener;
@@ -46,6 +47,7 @@ public class ClientController {
 	private RemoveVacancyDialogListener removeVacancyDialogListener;
 	private AddOrganisationDialogListener addOrganisationDialogListener;
 	private RemoveOrganisationDialogListener removeOrganisationDialogListener;
+	private AddCandidateDialogListener addCandidateDialogListener;
 	
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
@@ -64,6 +66,7 @@ public class ClientController {
 		removeVacancyDialogListener = new RemoveVacancyDialogListener(this);
 		addOrganisationDialogListener = new AddOrganisationDialogListener(this);
 		removeOrganisationDialogListener = new RemoveOrganisationDialogListener(this);
+		addCandidateDialogListener = new AddCandidateDialogListener(this);
 
 		setListenersAndShowGUI();
 	}
@@ -83,10 +86,13 @@ public class ClientController {
 		view.setVacancyPanelListener(vacancyPanelListener);
 		view.setOrganisationsPanelListener(organisationsPanelListener);
 		view.setOrganisationPanelListener(organisationPanelListener);
+		
+		// dialog listeners
 		view.setAddVacancyDialogListener(addVacancyDialogListener);
 		view.setRemoveVacancyDialogListener(removeVacancyDialogListener);
 		view.setAddOrganisationDialogListener(addOrganisationDialogListener);
 		view.setRemoveOrganisationDialogListener(removeOrganisationDialogListener);
+		view.setAddCandidateDialogListener(addCandidateDialogListener);
 	}
 
 	public Path storeTempFile(InputStream inStream, String name) {

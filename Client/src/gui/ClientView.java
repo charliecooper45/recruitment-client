@@ -1,6 +1,7 @@
 package gui;
 
 import gui.TopMenuPanel.MenuPanel;
+import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
@@ -115,6 +116,21 @@ public class ClientView {
 		return mainWindow.getDisplayedOrganisation();
 	}
 	
+	// SearchPanel methods
+	public void showSearchPanel() {
+		mainWindow.showSearchPanel();
+	}
+	
+	// CandidatePipelinePanel methods
+	public void showCandidatePipeline() {
+		mainWindow.showCandidatePipeline();
+	}
+	
+	// AdminPanel methods
+	public void showAdminPanel() {
+		mainWindow.showAdminPanel();
+	}
+	
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(String title) {
 		return mainWindow.showFileChooser(title);
@@ -213,6 +229,10 @@ public class ClientView {
 		mainWindow.setRemoveOrganisationDialogListener(removeOrganisationDialogListener);
 	}
 	
+	public void setAddCandidateDialogListener(AddCandidateDialogListener addCandidateDialogListener) {
+		mainWindow.setAddCandidateDialogListener(addCandidateDialogListener);
+	}
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -224,5 +244,7 @@ public class ClientView {
 			}
 		});
 	}
+
+
 
 }

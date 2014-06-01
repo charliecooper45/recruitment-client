@@ -32,14 +32,17 @@ public class TopMenuListener extends ClientListener {
 			
 			switch (type) {
 			case ADMIN:
+				controller.getView().showAdminPanel();
 				break;
 			case ORGANISATIONS:
 				List<Organisation> organisations = controller.getModel().getOrganisations();
 				controller.getView().showOrganisationsPanel(organisations);
 				break;
 			case PIPELINE:
+				controller.getView().showCandidatePipeline(); 
 				break;
 			case SEARCH:
+				controller.getView().showSearchPanel();
 				break;
 			case VACANCIES:
 				// update the vacancies panel and then show it

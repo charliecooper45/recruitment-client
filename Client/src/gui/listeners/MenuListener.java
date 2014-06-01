@@ -45,6 +45,9 @@ public class MenuListener extends ClientListener implements ActionListener {
 			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.REMOVE_ORGANISATION, organisations);
 			controller.getView().showMenuDialog(MenuDialogType.REMOVE_ORGANISATION);
 			break;
+		case "Add Candidate":
+			controller.getView().showMenuDialog(MenuDialogType.ADD_CANDIDATE);
+			break;
 		}
 	}
 }
