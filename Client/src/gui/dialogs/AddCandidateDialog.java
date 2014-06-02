@@ -1,20 +1,24 @@
 package gui.dialogs;
 
+import gui.MainWindow;
 import gui.Utils;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import database.beans.Candidate;
 
 /**
  * Dialog that allows the user to add a candidate.
@@ -38,6 +42,9 @@ public class AddCandidateDialog extends RecruitmentDialog {
 	private JButton browseCVButton;
 	private JButton confirmButton;
 	private JButton cancelButton;
+	
+	// holds the displayed File object
+	private File displayedFile = null;
 	
 	public AddCandidateDialog(JFrame frame) {
 		super(frame, "Add Candidate");
@@ -124,6 +131,44 @@ public class AddCandidateDialog extends RecruitmentDialog {
 		panel.add(buttonsPanel, gbc);
 		
 		add(panel);
+	}
+
+	public Candidate getCandidate() {
+		StringBuilder errorMessage = new StringBuilder("");
+		
+		// checks that all fields are correct and returns null if they are not
+		String firstName = candidateFirstNameTxtField.getText().trim();
+		String surname = candidateSurnameTxtField.getText().trim();
+		String jobTitle = jobTitleTxtField.getText();
+		String phoneNo = phoneNoTxtField.getText();
+		String email = emailTxtField.getText();
+		String address = addressTxtField.getText();
+		String notes = notesTxtArea.getText();
+		String linkedInProfile = linkedInTxtField.getText();
+		String cvPath = null;
+		if(displayedFile != null) 
+			cvPath = displayedFile.getAbsolutePath();
+		
+		if(firstName.isEmpty()) {
+			errorMessage.append("First name is empty.\n");
+		}
+		if(surname.isEmpty()) {			
+			errorMessage.append("Surname is empty.\n");
+		}
+		
+		if(errorMessage.toString().trim().equals("")) {
+			return new Candidate(-1, firstName, surname, jobTitle, phoneNo, email, address, notes, linkedInProfile, cvPath, MainWindow.USER_ID);
+		} else {
+			// display an error message to the user
+			JOptionPane.showMessageDialog(this, errorMessage.toString(), "Cannot add candidate", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+	}
+	
+	@Override
+	public void setDisplayedFile(File file) {
+		cvFileLabel.setText(file.getName());
+		displayedFile = file;
 	}
 	
 	@Override

@@ -268,4 +268,28 @@ public class ClientModel implements ServerInterface {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean addCandidate(Candidate candidate, RemoteInputStream cvData) {
+		try {
+			return SERVER.addCandidate(candidate, cvData);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeCandidate(Candidate candidate) {
+		try {
+			return SERVER.removeCandidate(candidate);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

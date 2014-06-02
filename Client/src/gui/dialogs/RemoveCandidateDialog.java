@@ -13,21 +13,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import database.beans.Organisation;
+import database.beans.Candidate;
 
 /**
- * Dialog that allows the user to remove an organisation.
+ * Dialog that allows the user to remove a candidate.
  * @author Charlie
  */
-public class RemoveOrganisationDialog extends RecruitmentDialog {
+public class RemoveCandidateDialog extends RecruitmentDialog {
 	private static final long serialVersionUID = 1L;
 
-	private JComboBox<Organisation> organisationCmbBox;
+	private JComboBox<Candidate> candidateCmbBox;
 	private JButton confirmButton;
 	private JButton cancelButton;
 	
-	public RemoveOrganisationDialog(JFrame frame) {
-		super(frame, "Remove Organisation");
+	public RemoveCandidateDialog(JFrame frame) {
+		super(frame, "Remove Candidate");
 		setSize(400, 200);
 		init();
 	}
@@ -39,12 +39,12 @@ public class RemoveOrganisationDialog extends RecruitmentDialog {
 		// labels
 		gbc.insets = new Insets(0, 10, 0, 10);
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
-		panel.add(new JLabel("Please select the organisation to remove below:"), gbc);
+		panel.add(new JLabel("Please select the candidate to remove below:"), gbc);
 		
 		// components
-		organisationCmbBox = new JComboBox<Organisation>();
+		candidateCmbBox = new JComboBox<Candidate>();
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
-		panel.add(organisationCmbBox, gbc);
+		panel.add(candidateCmbBox, gbc);
 		
 		// buttons
 		JPanel buttonsPanel = new JPanel();
@@ -59,16 +59,16 @@ public class RemoveOrganisationDialog extends RecruitmentDialog {
 		add(panel);
 	}
 	
-	public Organisation getOrganisation() {
-		return (Organisation) organisationCmbBox.getSelectedItem();
+	public Candidate getCandidate() {
+		return (Candidate) candidateCmbBox.getSelectedItem();
 	}
 	
 	@Override
-	public void setDisplayedOrganisations(List<Organisation> organisations) {
-		organisationCmbBox.removeAllItems();
+	public void setDisplayedCandidates(List<Candidate> candidates) {
+		candidateCmbBox.removeAllItems();
 		
-		for (Organisation organisation : organisations) {
-			organisationCmbBox.addItem(organisation);
+		for(Candidate candidate : candidates) {
+			candidateCmbBox.addItem(candidate);
 		}
 	}
 	

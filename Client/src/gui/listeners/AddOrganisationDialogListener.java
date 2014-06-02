@@ -43,7 +43,7 @@ public class AddOrganisationDialogListener extends ClientListener implements Act
 			case "Confirm":
 				InputStream inputStream;
 				RemoteInputStreamServer tobData = null;
-				Organisation organisation = controller.getView().getOrganisationDialogVacancy(MenuDialogType.ADD_ORGANISATION);
+				Organisation organisation = controller.getView().getOrganisationDialogOrganisation(MenuDialogType.ADD_ORGANISATION);
 				
 				if(organisation != null) {
 					// the organisation is valid and can be added

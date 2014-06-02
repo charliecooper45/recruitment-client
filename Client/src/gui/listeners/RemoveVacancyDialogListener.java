@@ -15,6 +15,10 @@ import javax.swing.JButton;
 import controller.ClientController;
 import database.beans.Vacancy;
 
+/**
+ * Listens for events on the remove vacancy dialog. 
+ * @author Charlie
+ */
 public class RemoveVacancyDialogListener extends ClientListener implements ActionListener {
 	public RemoveVacancyDialogListener(ClientController controller) {
 		super(controller);

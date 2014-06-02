@@ -17,6 +17,10 @@ import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
 
+/**
+ * Listens for events on the remove organisation dialog. 
+ * @author Charlie
+ */
 public class RemoveOrganisationDialogListener extends ClientListener implements ActionListener {
 	public RemoveOrganisationDialogListener(ClientController controller) {
 		super(controller);
@@ -35,7 +39,7 @@ public class RemoveOrganisationDialogListener extends ClientListener implements 
 				boolean confirmed = controller.getView().showDialog(DialogType.REMOVE_ORGANISATION);
 				
 				if(confirmed) {
-					Organisation organisation = controller.getView().getOrganisationDialogVacancy(MenuDialogType.REMOVE_ORGANISATION);
+					Organisation organisation = controller.getView().getOrganisationDialogOrganisation(MenuDialogType.REMOVE_ORGANISATION);
 					boolean deleted = controller.getModel().removeOrganisation(organisation);
 					
 					if (deleted) {

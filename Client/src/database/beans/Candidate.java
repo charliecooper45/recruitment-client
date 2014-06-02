@@ -32,9 +32,57 @@ public class Candidate implements Serializable {
 		CV = cV;
 		this.userId = userId;
 	}
+	
+	public int getId() {
+		return id;
+	}
 
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public String getLinkedInProfile() {
+		return linkedInProfile;
+	}
+
+	public String getCV() {
+		return CV;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setCV(String CV) {
+		this.CV = CV;
+	}
+	
 	@Override
 	public String toString() {
-		return "Candidate [id=" + id + ", firstName=" + firstName + ", surname=" + surname + ", jobTitle=" + jobTitle + ", phoneNumber=" + phoneNumber + ", emailAddress=" + emailAddress + ", address=" + address + ", notes=" + notes + ", linkedInProfile=" + linkedInProfile + ", CV=" + CV + ", userId=" + userId + "]";
+		return id + ": " + firstName + " " + surname;
 	}
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JMenuItem;
 
 import controller.ClientController;
+import database.beans.Candidate;
 import database.beans.Organisation;
 import database.beans.Vacancy;
 
@@ -48,6 +49,10 @@ public class MenuListener extends ClientListener implements ActionListener {
 		case "Add Candidate":
 			controller.getView().showMenuDialog(MenuDialogType.ADD_CANDIDATE);
 			break;
+		case "Remove Candidate":
+			List<Candidate> candidates = controller.getModel().getCandidates();
+			controller.getView().setDisplayedCandidatesInDialog(MenuDialogType.REMOVE_CANDIDATE, candidates);
+			controller.getView().showMenuDialog(MenuDialogType.REMOVE_CANDIDATE);
 		}
 	}
 }

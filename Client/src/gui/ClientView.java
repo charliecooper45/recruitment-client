@@ -5,6 +5,7 @@ import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
+import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
@@ -21,6 +22,7 @@ import javax.swing.SwingUtilities;
 import model.ClientModel;
 import model.LoginAttempt;
 import controller.ClientController;
+import database.beans.Candidate;
 import database.beans.Contact;
 import database.beans.Organisation;
 import database.beans.User;
@@ -172,6 +174,10 @@ public class ClientView {
 		mainWindow.setDisplayedVacanciesInDialog(menuDialog, vacancies);
 	}
 	
+	public void setDisplayedCandidatesInDialog(MenuDialogType menuDialog, List<Candidate> candidates) {
+		mainWindow.setDisplayedCandidatesInDialog(menuDialog, candidates);
+	}
+	
 	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
 		mainWindow.displayFileInDialog(menuDialogType, file);
 	}
@@ -180,8 +186,12 @@ public class ClientView {
 		return mainWindow.getVacancyDialogVacancy(menuDialog);
 	}
 	
-	public Organisation getOrganisationDialogVacancy(MenuDialogType menuDialog) {
-		return mainWindow.getOrganisationDialogVacancy(menuDialog);
+	public Organisation getOrganisationDialogOrganisation(MenuDialogType menuDialog) {
+		return mainWindow.getOrganisationDialogOrganisation(menuDialog);
+	}
+	
+	public Candidate getCandidateDialogCandidate(MenuDialogType menuDialog) {
+		return mainWindow.getCandidateDialogCandidate(menuDialog);
 	}
 	
 	// methods to set listeners and controller
@@ -233,6 +243,10 @@ public class ClientView {
 		mainWindow.setAddCandidateDialogListener(addCandidateDialogListener);
 	}
 	
+	public void setRemoveCandidateDialogListener(RemoveCandidateDialogListener removeCandidateDialogListener) {
+		mainWindow.setRemoveCandidateDialogListener(removeCandidateDialogListener);
+	}
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -244,7 +258,4 @@ public class ClientView {
 			}
 		});
 	}
-
-
-
 }
