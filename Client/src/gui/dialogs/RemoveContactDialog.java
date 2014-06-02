@@ -13,22 +13,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import database.beans.Vacancy;
+import database.beans.Contact;
+import database.beans.Organisation;
 
 /**
- * Dialog that allows the user to remove a vacancy.
+ * Dialog that allows the user to remove a contact.
  * @author Charlie
  */
-public class RemoveVacancyDialog extends RecruitmentDialog {
+public class RemoveContactDialog extends RecruitmentDialog {
 	private static final long serialVersionUID = 1L;
 	
-	//TODO NEXT: if time, add a combo box showing the organisations here
-	private JComboBox<Vacancy> vacancyCmbBx;
+	private JComboBox<Organisation> orgCmbBox;
+	private JComboBox<Contact> contactCmbBox;
 	private JButton confirmButton;
 	private JButton cancelButton;
 	
-	public RemoveVacancyDialog(JFrame frame) {
-		super(frame, "Remove Vacancy");
+	public RemoveContactDialog(JFrame frame) {
+		super(frame, "Remove Contact");
 		setSize(400, 200);
 		init();
 	}
@@ -40,12 +41,15 @@ public class RemoveVacancyDialog extends RecruitmentDialog {
 		// labels
 		gbc.insets = new Insets(0, 10, 0, 10);
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
-		panel.add(new JLabel("Please select the vacancy to remove below:"), gbc);
+		panel.add(new JLabel("Please select the contact to remove below:"), gbc);
 		
 		// components
-		vacancyCmbBx = new JComboBox<Vacancy>();
+		orgCmbBox = new JComboBox<>();
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
-		panel.add(vacancyCmbBx, gbc);
+		panel.add(orgCmbBox, gbc);
+		contactCmbBox = new JComboBox<>();
+		Utils.setGBC(gbc, 1, 3, 1, 1, GridBagConstraints.HORIZONTAL);
+		panel.add(contactCmbBox, gbc);
 		
 		// buttons
 		JPanel buttonsPanel = new JPanel();
@@ -54,28 +58,38 @@ public class RemoveVacancyDialog extends RecruitmentDialog {
 		cancelButton = new JButton("Cancel ");
 		buttonsPanel.add(cancelButton);
 		gbc.anchor = GridBagConstraints.CENTER;
-		Utils.setGBC(gbc, 1, 3, 1, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(gbc, 1, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 		panel.add(buttonsPanel, gbc);
 		
 		add(panel);
 	}
 	
-	public Vacancy getVacancy() {
-		return (Vacancy) vacancyCmbBx.getSelectedItem();
+	public Contact getContact() {
+		return (Contact) contactCmbBox.getSelectedItem();
 	}
 	
 	@Override
-	public void setDisplayedVacancies(List<Vacancy> vacancies) {
-		vacancyCmbBx.removeAllItems();
+	public void setDisplayedOrganisations(List<Organisation> organisations) {
+		orgCmbBox.removeAllItems();
 		
-		for (Vacancy vacancy : vacancies) {
-			vacancyCmbBx.addItem(vacancy);
+		for (Organisation org : organisations) {
+			orgCmbBox.addItem(org);
 		}
 	}
+
+	@Override
+	public void setDisplayedContacts(java.util.List<Contact> contacts) {
+		contactCmbBox.removeAllItems();
+		
+		for (Contact contact : contacts) {
+			contactCmbBox.addItem(contact);
+		}
+	};
 	
 	@Override
 	public void setActionListener(ActionListener actionListener) {
 		confirmButton.addActionListener(actionListener);
 		cancelButton.addActionListener(actionListener);
+		orgCmbBox.addActionListener(actionListener);
 	}
 }

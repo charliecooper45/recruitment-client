@@ -47,6 +47,30 @@ public class Contact implements Serializable {
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
+	
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public int getOrganisationId() {
+		return organisationId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
 
 	@Override
 	public String toString() {

@@ -2,6 +2,7 @@ package controller;
 
 import gui.ClientView;
 import gui.listeners.AddCandidateDialogListener;
+import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddVacancyDialogListener;
 import gui.listeners.LoginListener;
@@ -9,6 +10,7 @@ import gui.listeners.MenuListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
+import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
@@ -50,6 +52,8 @@ public class ClientController {
 	private RemoveOrganisationDialogListener removeOrganisationDialogListener;
 	private AddCandidateDialogListener addCandidateDialogListener;
 	private RemoveCandidateDialogListener removeCandidateDialogListener;
+	private AddContactDialogListener addContactDialogListener;
+	private RemoveContactDialogListener removeContactDialogListener;
 	
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
@@ -70,6 +74,8 @@ public class ClientController {
 		removeOrganisationDialogListener = new RemoveOrganisationDialogListener(this);
 		addCandidateDialogListener = new AddCandidateDialogListener(this);
 		removeCandidateDialogListener = new RemoveCandidateDialogListener(this);
+		addContactDialogListener = new AddContactDialogListener(this);
+		removeContactDialogListener = new RemoveContactDialogListener(this);
 
 		setListenersAndShowGUI();
 	}
@@ -97,6 +103,8 @@ public class ClientController {
 		view.setRemoveOrganisationDialogListener(removeOrganisationDialogListener);
 		view.setAddCandidateDialogListener(addCandidateDialogListener);
 		view.setRemoveCandidateDialogListener(removeCandidateDialogListener);
+		view.setAddContactDialogListener(addContactDialogListener);
+		view.setRemoveContactDialogListener(removeContactDialogListener);
 	}
 
 	public Path storeTempFile(InputStream inStream, String name) {

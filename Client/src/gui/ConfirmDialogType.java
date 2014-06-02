@@ -2,7 +2,7 @@ package gui;
 
 public enum ConfirmDialogType {
 	VACANCY_ADDED("Vacancy added"), VACANCY_REMOVED("Vacancy removed"), ORGANISATION_ADDED("Organisation added"), ORGANISATION_REMOVED("Organisation removed"), 
-	CANDIDATE_ADDED("Candidate added"), REMOVE_CANDIDATE("Candidate removed");
+	CANDIDATE_ADDED("Candidate added"), REMOVE_CANDIDATE("Candidate removed"), CONTACT_ADDED("Contact added"), CONTACT_REMOVED("Contact removed");
 	
 	private String confirmMessage;
 	

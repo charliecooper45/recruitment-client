@@ -2,10 +2,12 @@ package gui;
 
 import gui.TopMenuPanel.MenuPanel;
 import gui.listeners.AddCandidateDialogListener;
+import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
+import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
@@ -166,7 +168,7 @@ public class ClientView {
 		mainWindow.setDisplayedOrganisationsInDialog(menuDialog, organisations);
 	}
 	
-	public void setDisplayedOContactsInDialog(MenuDialogType menuDialog, List<Contact> contacts) {
+	public void setDisplayedContactsInDialog(MenuDialogType menuDialog, List<Contact> contacts) {
 		mainWindow.setDisplayedContactsInDialog(menuDialog, contacts);
 	}
 
@@ -192,6 +194,10 @@ public class ClientView {
 	
 	public Candidate getCandidateDialogCandidate(MenuDialogType menuDialog) {
 		return mainWindow.getCandidateDialogCandidate(menuDialog);
+	}
+	
+	public Contact getContactDialogContact(MenuDialogType menuDialog) {
+		return mainWindow.getContactDialogContact(menuDialog);
 	}
 	
 	// methods to set listeners and controller
@@ -245,6 +251,14 @@ public class ClientView {
 	
 	public void setRemoveCandidateDialogListener(RemoveCandidateDialogListener removeCandidateDialogListener) {
 		mainWindow.setRemoveCandidateDialogListener(removeCandidateDialogListener);
+	}
+	
+	public void setAddContactDialogListener(AddContactDialogListener addContactDialogListener) {
+		mainWindow.setAddContactDialogListener(addContactDialogListener);
+	}
+	
+	public void setRemoveContactDialogListener(RemoveContactDialogListener removeContactDialogListener) {
+		mainWindow.setRemoveContactDialogListener(removeContactDialogListener);
 	}
 	
 	// main method

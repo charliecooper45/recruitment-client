@@ -14,22 +14,20 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
 import database.beans.Contact;
-import database.beans.Organisation;
 import database.beans.Vacancy;
 
 /**
- * Listener for events on the add vacancy dialog.
+ * Listener for events on the add contact dialog.
  * @author Charlie
  */
-public class AddVacancyDialogListener extends ClientListener implements ActionListener {
-	public AddVacancyDialogListener(ClientController controller) {
+public class AddContactDialogListener extends ClientListener implements ActionListener {
+	public AddContactDialogListener(ClientController controller) {
 		super(controller);
 	}
 
@@ -45,9 +43,31 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 			case "Confirm":
 				InputStream inputStream;
 				RemoteInputStreamServer profileData = null;
-				Vacancy vacancy = controller.getView().getVacancyDialogVacancy(MenuDialogType.ADD_VACANCY);
-				if (vacancy != null) {
-					// the vacancy is valid and can be added
+				Contact contact = controller.getView().getContactDialogContact(MenuDialogType.ADD_CONTACT);
+
+				if (contact != null) {
+					// the contact is valid and can be added
+					boolean contactAdded = controller.getModel().addContact(contact);
+
+					if (contactAdded) {
+						controller.getView().hideMenuDialog(MenuDialogType.ADD_CONTACT);
+						controller.getView().showConfirmDialog(ConfirmDialogType.CONTACT_ADDED);
+
+						//TODO NEXT: if the organisation`s contacts are displayed then update them
+						/*
+						// check if the vacancies panel is displayed and then update if necessary
+						PanelType shownPanel = controller.getView().getDisplayedPanel();
+						if (shownPanel == PanelType.VACANCIES) {
+							VacanciesPanelListener listener = controller.getVacanciesPanelListener();
+							List<Vacancy> vacancies = controller.getModel().getVacancies(listener.getDisplayOpenVacancies(), listener.getSelectedUser());
+							controller.getView().updateVacanciesPanel(vacancies);
+						}
+						*/
+					} else {
+						controller.getView().showErrorDialog(ErrorDialogType.ADD_CONTACT_FAIL);
+					}
+				}
+				/*
 					try {
 						if (vacancy.getProfile() != null) {
 							File file = new File(vacancy.getProfile());
@@ -75,26 +95,13 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 						// TODO NEXT B: handle exception
 						e1.printStackTrace();
 					}
-				}
+						*/
 				break;
 			case "Cancel ":
-				controller.getView().hideMenuDialog(MenuDialogType.ADD_VACANCY);
+				controller.getView().hideMenuDialog(MenuDialogType.ADD_CONTACT);
 				break;
-			case "..":
-				File file = controller.getView().showFileChooser("Select profile to add.");
-				if (file != null) {
-					// update the view to show the new file
-					controller.getView().displayFileInDialog(MenuDialogType.ADD_VACANCY, file);
-				}
-				break;
-			}
-		} else if (source instanceof JComboBox<?>) {
-			JComboBox<?> organisationCmbBx = (JComboBox<?>) source;
-			Organisation selectedOrg = (Organisation) organisationCmbBx.getSelectedItem();
-			if (selectedOrg != null) {
-				List<Contact> contacts = controller.getModel().getOrganisationsContacts(selectedOrg);
-				controller.getView().setDisplayedContactsInDialog(MenuDialogType.ADD_VACANCY, contacts);
 			}
 		}
 	}
+
 }

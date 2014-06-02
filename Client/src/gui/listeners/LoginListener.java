@@ -23,16 +23,19 @@ public class LoginListener extends ClientListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		List<Vacancy> vacancies = null;
+		List<User> users = null;
 		LoginAttempt attempt = controller.getView().getLoginAttempt();
 		String message = controller.getModel().login(attempt);
 
-		List<Vacancy> vacancies = controller.getModel().getVacancies(true, null);
-		List<User> users = controller.getModel().getUsers(null, true);
-
 		if (message.equals(UserType.ADMINISTRATOR.toString())) {
+			vacancies = controller.getModel().getVacancies(true, null);
+			users = controller.getModel().getUsers(null, true);
 			// the user is an administrator
 			controller.getView().displayMainWindow(UserType.ADMINISTRATOR, vacancies, users);
 		} else if (message.equals(UserType.STANDARD.toString())) {
+			vacancies = controller.getModel().getVacancies(true, null);
+			users = controller.getModel().getUsers(null, true);
 			// the user is a standard user
 			controller.getView().displayMainWindow(UserType.STANDARD, vacancies, users);
 		} else {

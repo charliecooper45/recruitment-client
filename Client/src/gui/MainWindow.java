@@ -2,18 +2,22 @@ package gui;
 
 import gui.TopMenuPanel.MenuPanel;
 import gui.dialogs.AddCandidateDialog;
+import gui.dialogs.AddContactDialog;
 import gui.dialogs.AddOrganisationDialog;
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveCandidateDialog;
+import gui.dialogs.RemoveContactDialog;
 import gui.dialogs.RemoveOrganisationDialog;
 import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.AddCandidateDialogListener;
+import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
+import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.TopMenuListener;
@@ -141,6 +145,8 @@ public class MainWindow extends JFrame {
 		dialogs.put(MenuDialogType.REMOVE_ORGANISATION, new RemoveOrganisationDialog(this));
 		dialogs.put(MenuDialogType.ADD_CANDIDATE, new AddCandidateDialog(this));
 		dialogs.put(MenuDialogType.REMOVE_CANDIDATE, new RemoveCandidateDialog(this));
+		dialogs.put(MenuDialogType.ADD_CONTACT, new AddContactDialog(this));
+		dialogs.put(MenuDialogType.REMOVE_CONTACT, new RemoveContactDialog(this));
 	}
 
 	private void init(UserType userType) {
@@ -425,6 +431,13 @@ public class MainWindow extends JFrame {
 				return true;
 			}
 			break;
+		case REMOVE_CONTACT:
+			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
+			response = JOptionPane.showConfirmDialog(panel, DialogType.REMOVE_CONTACT.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if (response == 0) {
+				return true;
+			}
+			break;
 		}
 
 		return false;
@@ -458,6 +471,12 @@ public class MainWindow extends JFrame {
 		case REMOVE_CANDIDATE:
 			dialogs.get(MenuDialogType.REMOVE_CANDIDATE).setVisible(true);
 			break;
+		case ADD_CONTACT:
+			dialogs.get(MenuDialogType.ADD_CONTACT).setVisible(true);
+			break;
+		case REMOVE_CONTACT:
+			dialogs.get(MenuDialogType.REMOVE_CONTACT).setVisible(true);
+			break;
 		}
 	}
 
@@ -482,6 +501,12 @@ public class MainWindow extends JFrame {
 		case REMOVE_CANDIDATE:
 			dialogs.get(MenuDialogType.REMOVE_CANDIDATE).setVisible(false);
 			break;
+		case ADD_CONTACT:
+			dialogs.get(MenuDialogType.ADD_CONTACT).setVisible(false);
+			break;
+		case REMOVE_CONTACT:
+			dialogs.get(MenuDialogType.REMOVE_CONTACT).setVisible(false);
+			break;
 		}
 	}
 
@@ -493,6 +518,12 @@ public class MainWindow extends JFrame {
 		case REMOVE_ORGANISATION:
 			dialogs.get(MenuDialogType.REMOVE_ORGANISATION).setDisplayedOrganisations(organisations);
 			break;
+		case ADD_CONTACT:
+			dialogs.get(MenuDialogType.ADD_CONTACT).setDisplayedOrganisations(organisations);
+			break;
+		case REMOVE_CONTACT:
+			dialogs.get(MenuDialogType.REMOVE_CONTACT).setDisplayedOrganisations(organisations);
+			break;
 		}
 	}
 
@@ -500,6 +531,9 @@ public class MainWindow extends JFrame {
 		switch (menuDialog) {
 		case ADD_VACANCY:
 			dialogs.get(MenuDialogType.ADD_VACANCY).setDisplayedContacts(contacts);
+			break;
+		case REMOVE_CONTACT:
+			dialogs.get(MenuDialogType.REMOVE_CONTACT).setDisplayedContacts(contacts);
 			break;
 		}
 	}
@@ -561,6 +595,18 @@ public class MainWindow extends JFrame {
 		return null;
 	}
 	
+	public Contact getContactDialogContact(MenuDialogType menuDialog) {
+		switch(menuDialog) {
+		case ADD_CONTACT:
+			AddContactDialog addContactDialog = (AddContactDialog) dialogs.get(MenuDialogType.ADD_CONTACT);
+			return addContactDialog.getContact();
+		case REMOVE_CONTACT:
+			RemoveContactDialog removeContactDialog = (RemoveContactDialog) dialogs.get(MenuDialogType.REMOVE_CONTACT);
+			return removeContactDialog.getContact();
+		}
+		return null;
+	}
+	
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -614,5 +660,13 @@ public class MainWindow extends JFrame {
 
 	public void setRemoveCandidateDialogListener(RemoveCandidateDialogListener removeCandidateDialogListener) {
 		dialogs.get(MenuDialogType.REMOVE_CANDIDATE).setActionListener(removeCandidateDialogListener);
+	}
+
+	public void setAddContactDialogListener(AddContactDialogListener addContactDialogListener) {
+		dialogs.get(MenuDialogType.ADD_CONTACT).setActionListener(addContactDialogListener);
+	}
+
+	public void setRemoveContactDialogListener(RemoveContactDialogListener removeContactDialogListener) {
+		dialogs.get(MenuDialogType.REMOVE_CONTACT).setActionListener(removeContactDialogListener);
 	}
 }

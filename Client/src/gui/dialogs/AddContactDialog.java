@@ -7,9 +7,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,39 +19,36 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import database.beans.Candidate;
+import database.beans.Contact;
+import database.beans.Organisation;
+import database.beans.Vacancy;
 
 /**
- * Dialog that allows the user to add a candidate.
+ * Dialog that allows the user to add a contact.
  * @author Charlie
  */
-public class AddCandidateDialog extends RecruitmentDialog {
+public class AddContactDialog extends RecruitmentDialog {
 	private static final long serialVersionUID = 1L;
 	
 	// components
-	private JTextField candidateFirstNameTxtField;
-	private JTextField candidateSurnameTxtField;
+	private JTextField contactFirstNameTxtField;
+	private JTextField contactSurnameTxtField;
 	private JTextField jobTitleTxtField;
 	private JTextField phoneNoTxtField;
 	private JTextField emailTxtField;
 	private JTextField addressTxtField;
+	private JComboBox<Organisation> orgsCmbBox;
 	private JTextArea notesTxtArea;
 	private JScrollPane notesScrlPane;
-	private JTextField linkedInTxtField;
-	private JLabel cvFileLabel;
-	private JButton browseCVButton;
 	private JButton confirmButton;
 	private JButton cancelButton;
-	
-	// holds the displayed File object
-	private File displayedFile = null;
-	
-	public AddCandidateDialog(JFrame frame) {
-		super(frame, "Add Candidate");
-		setSize(400, 600);
+
+	public AddContactDialog(JFrame frame) {
+		super(frame, "Add Contact");
+		
 		init();
 	}
-
+	
 	private void init() {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
@@ -71,22 +69,20 @@ public class AddCandidateDialog extends RecruitmentDialog {
 		Utils.setGBC(gbc, 1, 6, 1, 1, GridBagConstraints.NONE);
 		panel.add(new JLabel("Address: "), gbc);
 		Utils.setGBC(gbc, 1, 7, 1, 1, GridBagConstraints.NONE);
-		panel.add(new JLabel("LinkedIn profile: "), gbc);
+		panel.add(new JLabel("Organisation: "), gbc);
 		Utils.setGBC(gbc, 1, 8, 1, 1, GridBagConstraints.NONE);
-		panel.add(new JLabel("CV: "), gbc);
-		Utils.setGBC(gbc, 1, 9, 1, 1, GridBagConstraints.NONE);
 		panel.add(new JLabel("Notes: "), gbc);
 		
 		// components
 		gbc.insets = new Insets(10, 0, 0, 20);
 		gbc.weightx = 15;
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		candidateFirstNameTxtField = new JTextField();
+		contactFirstNameTxtField = new JTextField();
 		Utils.setGBC(gbc, 2, 1, 2, 1, GridBagConstraints.HORIZONTAL);
-		panel.add(candidateFirstNameTxtField, gbc);
-		candidateSurnameTxtField = new JTextField();
+		panel.add(contactFirstNameTxtField, gbc);
+		contactSurnameTxtField = new JTextField();
 		Utils.setGBC(gbc, 2, 2, 2, 1, GridBagConstraints.HORIZONTAL);
-		panel.add(candidateSurnameTxtField, gbc);
+		panel.add(contactSurnameTxtField, gbc);
 		jobTitleTxtField = new JTextField();
 		Utils.setGBC(gbc, 2, 3, 2, 1, GridBagConstraints.HORIZONTAL);
 		panel.add(jobTitleTxtField, gbc);
@@ -99,24 +95,16 @@ public class AddCandidateDialog extends RecruitmentDialog {
 		addressTxtField = new JTextField();
 		Utils.setGBC(gbc, 2, 6, 2, 1, GridBagConstraints.HORIZONTAL);
 		panel.add(addressTxtField, gbc);
-		linkedInTxtField = new JTextField();
+		orgsCmbBox = new JComboBox<>();
 		Utils.setGBC(gbc, 2, 7, 2, 1, GridBagConstraints.HORIZONTAL);
-		panel.add(linkedInTxtField, gbc);
-		cvFileLabel = new JLabel("");
-		cvFileLabel.setFont(cvFileLabel.getFont().deriveFont(Font.ITALIC));
-		Utils.setGBC(gbc, 2, 8, 1, 1, GridBagConstraints.HORIZONTAL);
-		panel.add(cvFileLabel, gbc);
-		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
-		browseCVButton = new JButton("..");
-		Utils.setGBC(gbc, 3, 8, 1, 1, GridBagConstraints.NONE);
-		panel.add(browseCVButton, gbc);
+		panel.add(orgsCmbBox, gbc);
 		notesTxtArea = new JTextArea();
 		notesTxtArea.setLineWrap(true);
 		notesTxtArea.setWrapStyleWord(true);
 		notesScrlPane = new JScrollPane(notesTxtArea);
 		notesScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		notesScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		Utils.setGBC(gbc, 2, 9, 2, 2, GridBagConstraints.BOTH);
+		Utils.setGBC(gbc, 2, 8, 2, 2, GridBagConstraints.BOTH);
 		panel.add(notesScrlPane, gbc);
 		
 		// buttons
@@ -126,70 +114,65 @@ public class AddCandidateDialog extends RecruitmentDialog {
 		cancelButton = new JButton("Cancel ");
 		buttonsPanel.add(cancelButton);
 		gbc.anchor = GridBagConstraints.CENTER;
-		Utils.setGBC(gbc, 1, 11, 3, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(gbc, 1, 10, 3, 1, GridBagConstraints.HORIZONTAL);
 		panel.add(buttonsPanel, gbc);
 		
 		add(panel);
 	}
-
-	public Candidate getCandidate() {
-		StringBuilder errorMessage = new StringBuilder("");
+	
+	public Contact getContact() {
+		StringBuilder errorMessage = new StringBuilder("");;
 		
-		// checks that all fields are correct and returns null if they are not
-		String firstName = candidateFirstNameTxtField.getText().trim();
-		String surname = candidateSurnameTxtField.getText().trim();
-		String jobTitle = jobTitleTxtField.getText();
-		String phoneNo = phoneNoTxtField.getText();
-		String email = emailTxtField.getText();
-		String address = addressTxtField.getText();
-		String notes = notesTxtArea.getText();
-		String linkedInProfile = linkedInTxtField.getText();
-		String cvPath = null;
-		if(displayedFile != null) 
-			cvPath = displayedFile.getAbsolutePath();
+		// check that all fields are correct and returns null if they are not
+		String contactFirstName = contactFirstNameTxtField.getText().trim();
+		String contactSurname = contactSurnameTxtField.getText().trim();
+		String jobTitle = jobTitleTxtField.getText().trim();
+		String phoneNumber = phoneNoTxtField.getText().trim();
+		String email = emailTxtField.getText().trim();
+		String address = addressTxtField.getText().trim();
+		Organisation organisation = (Organisation) orgsCmbBox.getSelectedItem();
+		String notes = notesTxtArea.getText().trim();
 		
-		if(firstName.isEmpty()) {
-			errorMessage.append("First name is empty.\n");
+		if(contactFirstName.isEmpty()) {
+			errorMessage.append("Contact first name is empty.\n");
 		}
-		if(surname.isEmpty()) {			
-			errorMessage.append("Surname is empty.\n");
+		if(contactSurname.isEmpty()) {
+			errorMessage.append("Contact surname is empty.\n");
 		}
 		
 		if(errorMessage.toString().trim().equals("")) {
-			return new Candidate(-1, firstName, surname, jobTitle, phoneNo, email, address, notes, linkedInProfile, cvPath, MainWindow.USER_ID);
+			return new Contact(-1, contactFirstName, contactSurname, jobTitle, phoneNumber, email, address, notes, organisation.getId(), MainWindow.USER_ID);
 		} else {
 			// display an error message to the user
-			JOptionPane.showMessageDialog(this, errorMessage.toString(), "Cannot add candidate", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, errorMessage.toString(), "Cannot add contact", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 	}
 	
 	@Override
-	public void setDisplayedFile(File file) {
-		cvFileLabel.setText(file.getName());
-		displayedFile = file;
+	public void setDisplayedOrganisations(List<Organisation> organisations) {
+		orgsCmbBox.removeAllItems();
+		
+		for(Organisation organisation : organisations) {
+			orgsCmbBox.addItem(organisation);
+		}
 	}
 	
 	@Override
 	public void setVisible(boolean b) {
-		// reset all fields
-		candidateFirstNameTxtField.setText("");
-		candidateSurnameTxtField.setText("");
+		contactFirstNameTxtField.setText("");
+		contactSurnameTxtField.setText("");
 		jobTitleTxtField.setText("");
 		phoneNoTxtField.setText("");
 		emailTxtField.setText("");
 		addressTxtField.setText("");
 		notesTxtArea.setText("");
-		linkedInTxtField.setText("");
-		cvFileLabel.setText("");
 		super.setVisible(b);
 	}
 	
 	@Override
 	public void setActionListener(ActionListener actionListener) {
-		browseCVButton.addActionListener(actionListener);
 		confirmButton.addActionListener(actionListener);
 		cancelButton.addActionListener(actionListener);
 	}
-
 }
