@@ -196,12 +196,10 @@ public class VacanciesPanel extends JPanel {
 		return vacancies.get(vacanciesTbl.getSelectedRow());
 	}
 	
-	public void setVacanciesPanelListeners(VacanciesPanelListener vacanciesPanelListener) {
+	public void setVacanciesPanelListener(VacanciesPanelListener vacanciesPanelListener) {
 		openVacanciesRdBtn.addActionListener(vacanciesPanelListener);
 		allVacanciesRdBtn.addActionListener(vacanciesPanelListener);
 		userCombo.addActionListener(vacanciesPanelListener);
 		vacanciesTbl.addMouseListener(vacanciesPanelListener);
 	}
-
-
 }

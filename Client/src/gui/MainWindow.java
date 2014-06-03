@@ -20,6 +20,7 @@ import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
+import gui.listeners.SearchPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
@@ -51,6 +52,8 @@ import javax.swing.filechooser.FileFilter;
 import database.beans.Candidate;
 import database.beans.Contact;
 import database.beans.Organisation;
+import database.beans.Search;
+import database.beans.Skill;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -304,16 +307,40 @@ public class MainWindow extends JFrame {
 	}
 	
 	// SearchPanel methods
-	public void showSearchPanel() {
+	public void showSearchPanel(List<Skill> skills, List<Vacancy> vacancies) {
 		removeCentreComponent();
 
+		// when the search panel is displayed then update the necessary fields from the server
 		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		panel.setDefaultOptions();
+		panel.updateDisplayedSkills(skills);
+		panel.updateDisplayedVacancies(vacancies);
 		add(panel);
 
 		revalidate();
 		repaint();
 	}
-
+	
+	public void addSkillToSearch() {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		panel.addSkillToSearch();
+	}
+	
+	public void removeSkillFromSearch() {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		panel.removeSkillFromSearch();
+	}
+	
+	public Search getSearchPanelSearch() {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		return panel.getSearch();
+	}
+	
+	public void updateSearchPanel(List<Candidate> candidates) {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		panel.updateDisplayedCandidates(candidates);
+	}
+	
 	// CandidatePipelinePanel methods
 	public void showCandidatePipeline() {
 		removeCentreComponent();
@@ -620,7 +647,7 @@ public class MainWindow extends JFrame {
 
 	public void setVacanciesPanelListeners(VacanciesPanelListener vacanciesPanelListener) {
 		VacanciesPanel panel = (VacanciesPanel) centrePanels.get(PanelType.VACANCIES);
-		panel.setVacanciesPanelListeners(vacanciesPanelListener);
+		panel.setVacanciesPanelListener(vacanciesPanelListener);
 	}
 
 	public void setVacancyPanelListener(ActionListener actionListener) {
@@ -638,6 +665,11 @@ public class MainWindow extends JFrame {
 		panel.setOrganisationPanelListener(organisationPanelListener);
 	}
 
+	public void setSearchPanelListener(SearchPanelListener searchPanelListener) {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		panel.setSearchPanelListener(searchPanelListener);
+	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
 	}

@@ -10,6 +10,7 @@ import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
+import gui.listeners.SearchPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
 import interfaces.UserType;
@@ -27,6 +28,8 @@ import controller.ClientController;
 import database.beans.Candidate;
 import database.beans.Contact;
 import database.beans.Organisation;
+import database.beans.Search;
+import database.beans.Skill;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -121,8 +124,24 @@ public class ClientView {
 	}
 	
 	// SearchPanel methods
-	public void showSearchPanel() {
-		mainWindow.showSearchPanel();
+	public void showSearchPanel(List<Skill> skills, List<Vacancy> vacancies) {
+		mainWindow.showSearchPanel(skills, vacancies);
+	}
+	
+	public void addSkillToSearch() {
+		mainWindow.addSkillToSearch();
+	}
+	
+	public void removeSkillFromSearch() {
+		mainWindow.removeSkillFromSearch();
+	}
+	
+	public Search getSearchPanelSearch() {
+		return mainWindow.getSearchPanelSearch();
+	}
+	
+	public void updateSearchPanel(List<Candidate> candidates) {
+		mainWindow.updateSearchPanel(candidates);
 	}
 	
 	// CandidatePipelinePanel methods
@@ -227,6 +246,10 @@ public class ClientView {
 
 	public void setOrganisationPanelListener(OrganisationPanelListener organisationPanelListener) {
 		mainWindow.setOrganisationPanelListener(organisationPanelListener);
+	}
+	
+	public void setSearchPanelListener(SearchPanelListener searchPanelListener) {
+		mainWindow.setSearchPanelListener(searchPanelListener);
 	}
 	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {

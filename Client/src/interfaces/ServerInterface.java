@@ -9,6 +9,8 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import database.beans.Candidate;
 import database.beans.Contact;
 import database.beans.Organisation;
+import database.beans.Search;
+import database.beans.Skill;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -41,4 +43,6 @@ public interface ServerInterface extends Remote{
 	public boolean removeCandidate(Candidate candidate) throws RemoteException;
 	public boolean addContact(Contact contact) throws RemoteException;
 	public boolean removeContact(Contact contact) throws RemoteException;
+	public List<Skill> getSkills() throws RemoteException;
+	public List<Candidate> searchCandidates(Search search) throws RemoteException;
 }

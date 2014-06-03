@@ -1,6 +1,7 @@
 package gui;
 
 import gui.listeners.CandidateDisplayedListener;
+import gui.listeners.SearchPanelListener;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,17 +10,25 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import database.beans.Candidate;
+import database.beans.Search;
+import database.beans.Skill;
+import database.beans.Vacancy;
 
 /**
  * Panel that allows the user to search for candidates 
@@ -32,7 +41,7 @@ public class SearchPanel extends JPanel {
 
 	// alerts the GUI when a candidate needs to be displayed to the user
 	private CandidateDisplayedListener candidateDisplayedListener;
-	
+
 	// components - leftPanel
 	private JPanel leftPanel;
 	private JPanel topPanel;
@@ -40,27 +49,30 @@ public class SearchPanel extends JPanel {
 	private JPanel bottomPanel;
 	private JTextField nameTxt;
 	private JTextField jobTxt;
-	private JComboBox<String> reqSkillsCmBx;
-	private JButton reqAddButton;
-	private JList<String> reqLst;
-	private JScrollPane reqScrlPane;
-	private JScrollPane prefScrlPane;
-	private JComboBox<String> prefSkillsCmBx;
-	private JButton prefAddButton;
-	private JList<String> prefLst;
+	private JComboBox<Skill> skillsCmbBx;
+	private JButton skillsAddButton;
+	private JButton skillsRemoveButton;
+	private JTextArea skillsTxtArea;
+	private JScrollPane skillsScrlPane;
 	private JButton searchButton;
 
 	// components - rightPanel
 	private JPanel rightPanel;
 	private JTable resultsTbl;
 	private JScrollPane resultsTblScrlPane;
-	private JComboBox<String> vacancyCmBx;
+	private JComboBox<Vacancy> vacancyCmBx;
 	private JButton shortlistBtn;
-	
+
 	// data for the results table
-	private Object[][] resultsArray = {{new Boolean(true), "Charlie"}};
+	private List<Candidate> candidates;
+	private List<Boolean> selected;
+
+	// holds the search 
+	private Search search;
 
 	public SearchPanel() {
+		candidates = new ArrayList<>();
+		selected = new ArrayList<>();
 		init();
 	}
 
@@ -95,7 +107,6 @@ public class SearchPanel extends JPanel {
 		jobTxt = new JTextField(20);
 		Utils.setGBC(topPanelGbc, 2, 2, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(jobTxt, topPanelGbc);
-
 		Utils.setGBC(leftGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		leftPanel.add(topPanel, leftGbc);
 
@@ -105,42 +116,41 @@ public class SearchPanel extends JPanel {
 		middlePanelGbc.weightx = 1;
 		middlePanelGbc.weighty = 1;
 		middlePanelGbc.anchor = GridBagConstraints.CENTER;
+		
 		Utils.setGBC(middlePanelGbc, 1, 1, 3, 1, GridBagConstraints.NONE);
 		middlePanel.add(new JLabel("Skills Search:"), middlePanelGbc);
+		
 		Utils.setGBC(middlePanelGbc, 1, 2, 1, 1, GridBagConstraints.NONE);
-		middlePanel.add(new JLabel("Required:"), middlePanelGbc);
-		reqSkillsCmBx = new JComboBox<String>();
-		reqSkillsCmBx.addItem("Test Item");
+		skillsCmbBx = new JComboBox<>();
+		middlePanel.add(skillsCmbBx, middlePanelGbc);
+		
 		Utils.setGBC(middlePanelGbc, 2, 2, 1, 1, GridBagConstraints.HORIZONTAL);
-		middlePanel.add(reqSkillsCmBx, middlePanelGbc);
-		reqAddButton = new JButton("Add");
+		skillsAddButton = new JButton("Add");
+		skillsAddButton.setName("AddSkillButton");
+		middlePanel.add(skillsAddButton, middlePanelGbc);
+		
 		Utils.setGBC(middlePanelGbc, 3, 2, 1, 1, GridBagConstraints.NONE);
-		middlePanel.add(reqAddButton, middlePanelGbc);
-		reqLst = new JList<>();
-		reqScrlPane = new JScrollPane(reqLst);
-		reqScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		reqScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		Utils.setGBC(middlePanelGbc, 1, 3, 3, 1, GridBagConstraints.NONE);
-		middlePanel.add(reqScrlPane, middlePanelGbc);
-		Utils.setGBC(middlePanelGbc, 1, 4, 1, 1, GridBagConstraints.NONE);
-		middlePanel.add(new JLabel("Preferred:"), middlePanelGbc);
-		prefSkillsCmBx = new JComboBox<>();
-		Utils.setGBC(middlePanelGbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
-		middlePanel.add(prefSkillsCmBx, middlePanelGbc);
-		prefAddButton = new JButton("Add");
-		Utils.setGBC(middlePanelGbc, 3, 4, 1, 1, GridBagConstraints.NONE);
-		middlePanel.add(prefAddButton, middlePanelGbc);
-		prefLst = new JList<>();
-		prefScrlPane = new JScrollPane(prefLst);
-		prefScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		prefScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		Utils.setGBC(middlePanelGbc, 1, 5, 3, 1, GridBagConstraints.NONE);
-		middlePanel.add(prefScrlPane, middlePanelGbc);
+		skillsRemoveButton = new JButton("Remove");
+		skillsRemoveButton.setName("RemoveSkillButton");
+		middlePanel.add(skillsRemoveButton, middlePanelGbc);
+
+		// add the scroll bars and text areas
+		Insets insets = new Insets(0, 10, 0, 10);
+		middlePanelGbc.insets = insets;
+		middlePanelGbc.weighty = 4;
+		skillsTxtArea = new JTextArea();
+		skillsTxtArea.setLineWrap(true);
+		skillsTxtArea.setFont(skillsTxtArea.getFont().deriveFont(Font.PLAIN, 15));
+		skillsScrlPane = new JScrollPane(skillsTxtArea);
+		skillsScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		skillsScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		Utils.setGBC(middlePanelGbc, 1, 3, 3, 1, GridBagConstraints.BOTH);
+		middlePanel.add(skillsScrlPane, middlePanelGbc);
 
 		Utils.setGBC(leftGbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		leftPanel.add(middlePanel, leftGbc);
 
-		// bottonPanel
+		// bottomPanel
 		bottomPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints bottomPanelGbc = new GridBagConstraints();
 		bottomPanelGbc.weightx = 1;
@@ -148,6 +158,7 @@ public class SearchPanel extends JPanel {
 		Insets buttonInsets = new Insets(0, 10, 0, 10);
 		bottomPanelGbc.insets = buttonInsets;
 		searchButton = new JButton("Search");
+		searchButton.setName("SearchButton");
 		searchButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 		Utils.setGBC(bottomPanelGbc, 1, 1, 1, 1, GridBagConstraints.HORIZONTAL);
 		bottomPanel.add(searchButton, bottomPanelGbc);
@@ -173,53 +184,68 @@ public class SearchPanel extends JPanel {
 		rightPanel.add(resultsLabel, rightPanelGbc);
 		resultsTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = { "", "Name", "Skills", "Job Title", "Company", "Phone Number", "Address", "User" };
+			//TODO NEXT: implement the candidate skills, these need to be shown to the user
+			private String[] columns = { "", "Name", "Skills", "Job Title", "Phone Number", "Address", "User" };
 
 			@Override
 			public Object getValueAt(int row, int column) {
-				if(column == 0) 
-					return resultsArray[0][0];
-				return "Test Data";
+				switch (column) {
+				case 0:
+					return selected.get(row);
+				case 1:
+					return candidates.get(row).getFirstName() + " " + candidates.get(row).getSurname();
+				case 2:
+					return "";
+				case 3:
+					return candidates.get(row).getJobTitle();
+				case 4:
+					return candidates.get(row).getPhoneNumber();
+				case 5:
+					return candidates.get(row).getAddress();
+				case 6:
+					return candidates.get(row).getUserId();
+				}
+				return "";
 			}
-			
+
 			@Override
 			public void setValueAt(Object aValue, int row, int column) {
-				if(column == 0)
-					resultsArray[0][0] = aValue;
+				if (column == 0)
+					selected.set(row, (Boolean) aValue);
 			}
 
 			@Override
 			public int getRowCount() {
-				return 1;
+				return candidates.size();
 			}
 
 			@Override
 			public int getColumnCount() {
-				return 8;
+				return 7;
 			}
 
 			@Override
 			public String getColumnName(int index) {
 				return columns[index];
 			}
-			
-		    @Override
-		    public Class<?> getColumnClass(int col) {
-		        if (col == 0) {
-		            return Boolean.class;
-		        }
-		        return super.getColumnClass(col);
-		    }
-			
-		    @Override
-		    public boolean isCellEditable(int row, int col) {
-		        return col == 0;
-		    }
+
+			@Override
+			public Class<?> getColumnClass(int col) {
+				if (col == 0) {
+					return Boolean.class;
+				}
+				return super.getColumnClass(col);
+			}
+
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				return col == 0;
+			}
 		});
 		resultsTbl.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1){
+				if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
 					candidateDisplayedListener.candidateDisplayed();
 				}
 			}
@@ -252,10 +278,89 @@ public class SearchPanel extends JPanel {
 		add(rightPanel, gbc);
 	}
 
-	/**
-	 * @param candidateDisplayedListener the candidateDisplayedListener to set
-	 */
+	public void setDefaultOptions() {
+		candidates = new ArrayList<>();
+		selected = new ArrayList<>();
+		search = new Search();
+		skillsTxtArea.removeAll();
+	}
+
+	public void updateDisplayedSkills(List<Skill> skills) {
+		skillsCmbBx.removeAllItems();
+
+		for (Skill skill : skills) {
+			skillsCmbBx.addItem(skill);
+		}
+	}
+
+	public void updateDisplayedVacancies(List<Vacancy> vacancies) {
+		vacancyCmBx.removeAllItems();
+
+		for (Vacancy vacancy : vacancies) {
+			vacancyCmBx.addItem(vacancy);
+		}
+	}
+
+	public void addSkillToSearch() {
+		Skill skill = (Skill) skillsCmbBx.getSelectedItem();
+
+		if (search.getSkills().size() < 5) {
+			if (!search.getSkills().contains(skill)) {
+				if (!search.getSkills().isEmpty())
+					skillsTxtArea.append("\n");
+
+				search.getSkills().add(skill);
+				skillsTxtArea.append(skill.toString());
+			}
+		}
+	}
+	
+	public void removeSkillFromSearch() {
+		Skill skill = (Skill) skillsCmbBx.getSelectedItem();
+		Set<Skill> skills = search.getSkills();
+		
+		if(skills.contains(skill)) {
+			skills.remove(skill);
+			
+			skillsTxtArea.setText("");
+			
+			for(Skill aSkill : skills) {
+				if(!skillsTxtArea.getText().trim().isEmpty()) {
+					skillsTxtArea.append("\n");
+				}
+				skillsTxtArea.append(aSkill.toString());
+			}
+		}
+	}
+
+	public Search getSearch() {
+		search.setName(nameTxt.getText());
+		search.setJobTitle(jobTxt.getText());
+		return search;
+	}
+
+	public void updateDisplayedCandidates(List<Candidate> candidates) {
+		this.candidates = new ArrayList<>();
+		this.selected = new ArrayList<>();
+
+		for (Candidate candidate : candidates) {
+			this.candidates.add(candidate);
+			this.selected.add(false);
+		}
+
+		DefaultTableModel model = (DefaultTableModel) resultsTbl.getModel();
+		model.fireTableDataChanged();
+	}
+
+	//TODO NEXT: remove this method and class, not necessary
 	public void setCandidateDisplayedListener(CandidateDisplayedListener candidateDisplayedListener) {
 		this.candidateDisplayedListener = candidateDisplayedListener;
 	}
+
+	public void setSearchPanelListener(SearchPanelListener searchPanelListener) {
+		searchButton.addActionListener(searchPanelListener);
+		skillsAddButton.addActionListener(searchPanelListener);
+		skillsRemoveButton.addActionListener(searchPanelListener);
+	}
+
 }

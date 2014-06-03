@@ -16,6 +16,8 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import database.beans.Candidate;
 import database.beans.Contact;
 import database.beans.Organisation;
+import database.beans.Search;
+import database.beans.Skill;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -315,5 +317,29 @@ public class ClientModel implements ServerInterface {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public List<Skill> getSkills() {
+		try {
+			return SERVER.getSkills();
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Candidate> searchCandidates(Search search) {
+		try {
+			return SERVER.searchCandidates(search);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
