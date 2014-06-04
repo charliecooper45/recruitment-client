@@ -170,13 +170,6 @@ public class MainWindow extends JFrame {
 				// changeDisplayedPanel(PanelTypes.CANDIDATE);
 			}
 		});
-		SearchPanel searchPanel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
-		searchPanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
-			@Override
-			public void candidateDisplayed() {
-				// changeDisplayedPanel(PanelTypes.CANDIDATE);
-			}
-		});
 	}
 
 	private void removeCentreComponent() {
@@ -305,42 +298,55 @@ public class MainWindow extends JFrame {
 		OrganisationPanel panel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
 		return panel.getDisplayedOrganisation();
 	}
-	
+
 	// SearchPanel methods
 	public void showSearchPanel(List<Skill> skills, List<Vacancy> vacancies) {
-		removeCentreComponent();
+		Component centreComponent = borderLayout.getLayoutComponent(BorderLayout.CENTER);
 
-		// when the search panel is displayed then update the necessary fields from the server
-		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
-		panel.setDefaultOptions();
-		panel.updateDisplayedSkills(skills);
-		panel.updateDisplayedVacancies(vacancies);
-		add(panel);
+		if (centreComponent != centrePanels.get(PanelType.SEARCH)) {
+			removeCentreComponent();
 
-		revalidate();
-		repaint();
+			// when the search panel is displayed then update the necessary fields from the server
+			SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+			panel.updateDisplayedSkills(skills);
+			panel.updateDisplayedVacancies(vacancies);
+			add(panel);
+
+			revalidate();
+			repaint();
+		}
 	}
-	
+
 	public void addSkillToSearch() {
 		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
 		panel.addSkillToSearch();
 	}
-	
+
 	public void removeSkillFromSearch() {
 		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
 		panel.removeSkillFromSearch();
 	}
-	
+
 	public Search getSearchPanelSearch() {
 		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
 		return panel.getSearch();
 	}
-	
+
 	public void updateSearchPanel(List<Candidate> candidates) {
 		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
 		panel.updateDisplayedCandidates(candidates);
 	}
-	
+
+	public void resetSearchPanel() {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		panel.setDefaultOptions();
+	}
+
+	public Candidate getSelectedCandidate() {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		return panel.getSelectedCandidate();
+	}
+
 	// CandidatePipelinePanel methods
 	public void showCandidatePipeline() {
 		removeCentreComponent();
@@ -351,7 +357,19 @@ public class MainWindow extends JFrame {
 		revalidate();
 		repaint();
 	}
-	
+
+	// CandidatePanel methods
+	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile) {
+		removeCentreComponent();
+
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		panel.setDisplayedCandidate(updatedCandidate, tempFile);
+		add(panel);
+
+		revalidate();
+		repaint();
+	}
+
 	// AdminPanel methods
 	public void showAdminPanel() {
 		removeCentreComponent();
@@ -362,7 +380,7 @@ public class MainWindow extends JFrame {
 		revalidate();
 		repaint();
 	}
-	
+
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(final String title) {
 		JFileChooser fc = new JFileChooser();
@@ -579,9 +597,9 @@ public class MainWindow extends JFrame {
 		case REMOVE_CANDIDATE:
 			dialogs.get(MenuDialogType.REMOVE_CANDIDATE).setDisplayedCandidates(candidates);
 			break;
-		}		
+		}
 	}
-	
+
 	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
 		RecruitmentDialog dialog = dialogs.get(menuDialogType);
 		dialog.setDisplayedFile(file);
@@ -599,7 +617,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public Organisation getOrganisationDialogOrganisation(MenuDialogType menuDialog) {
-		switch(menuDialog) {
+		switch (menuDialog) {
 		case ADD_ORGANISATION:
 			AddOrganisationDialog addOrgDialog = (AddOrganisationDialog) dialogs.get(MenuDialogType.ADD_ORGANISATION);
 			return addOrgDialog.getOrganisation();
@@ -611,7 +629,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public Candidate getCandidateDialogCandidate(MenuDialogType menuDialog) {
-		switch(menuDialog) {
+		switch (menuDialog) {
 		case ADD_CANDIDATE:
 			AddCandidateDialog addCandidateDialog = (AddCandidateDialog) dialogs.get(MenuDialogType.ADD_CANDIDATE);
 			return addCandidateDialog.getCandidate();
@@ -621,9 +639,9 @@ public class MainWindow extends JFrame {
 		}
 		return null;
 	}
-	
+
 	public Contact getContactDialogContact(MenuDialogType menuDialog) {
-		switch(menuDialog) {
+		switch (menuDialog) {
 		case ADD_CONTACT:
 			AddContactDialog addContactDialog = (AddContactDialog) dialogs.get(MenuDialogType.ADD_CONTACT);
 			return addContactDialog.getContact();
@@ -633,7 +651,7 @@ public class MainWindow extends JFrame {
 		}
 		return null;
 	}
-	
+
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -669,7 +687,7 @@ public class MainWindow extends JFrame {
 		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
 		panel.setSearchPanelListener(searchPanelListener);
 	}
-	
+
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
 	}

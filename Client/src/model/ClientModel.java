@@ -342,4 +342,28 @@ public class ClientModel implements ServerInterface {
 		}
 		return null;
 	}
+
+	@Override
+	public Candidate getCandidate(int candidateId) {
+		try {
+			return SERVER.getCandidate(candidateId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public RemoteInputStream getCandidateCV(String fileName) throws RemoteException {
+		try {
+			return SERVER.getCandidateCV(fileName);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

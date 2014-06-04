@@ -144,9 +144,22 @@ public class ClientView {
 		mainWindow.updateSearchPanel(candidates);
 	}
 	
+	public void resetSearchPanel() {
+		mainWindow.resetSearchPanel();
+	}
+	
+	public Candidate getSelectedCandidate() {
+		return mainWindow.getSelectedCandidate();
+	}
+	
 	// CandidatePipelinePanel methods
 	public void showCandidatePipeline() {
 		mainWindow.showCandidatePipeline();
+	}
+	
+	// CandidatePanel methods
+	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile) {
+		mainWindow.showCandidatePanel(updatedCandidate, tempFile);
 	}
 	
 	// AdminPanel methods

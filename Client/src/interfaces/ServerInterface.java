@@ -45,4 +45,6 @@ public interface ServerInterface extends Remote{
 	public boolean removeContact(Contact contact) throws RemoteException;
 	public List<Skill> getSkills() throws RemoteException;
 	public List<Candidate> searchCandidates(Search search) throws RemoteException;
+	public Candidate getCandidate(int candidateId) throws RemoteException;
+	public RemoteInputStream getCandidateCV(String fileName) throws RemoteException;
 }

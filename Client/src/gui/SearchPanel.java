@@ -39,9 +39,6 @@ public class SearchPanel extends JPanel {
 
 	private GridBagConstraints gbc;
 
-	// alerts the GUI when a candidate needs to be displayed to the user
-	private CandidateDisplayedListener candidateDisplayedListener;
-
 	// components - leftPanel
 	private JPanel leftPanel;
 	private JPanel topPanel;
@@ -54,6 +51,7 @@ public class SearchPanel extends JPanel {
 	private JButton skillsRemoveButton;
 	private JTextArea skillsTxtArea;
 	private JScrollPane skillsScrlPane;
+	private JButton resetSearchButton;
 	private JButton searchButton;
 
 	// components - rightPanel
@@ -73,6 +71,7 @@ public class SearchPanel extends JPanel {
 	public SearchPanel() {
 		candidates = new ArrayList<>();
 		selected = new ArrayList<>();
+		search = new Search();
 		init();
 	}
 
@@ -162,6 +161,11 @@ public class SearchPanel extends JPanel {
 		searchButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 		Utils.setGBC(bottomPanelGbc, 1, 1, 1, 1, GridBagConstraints.HORIZONTAL);
 		bottomPanel.add(searchButton, bottomPanelGbc);
+		resetSearchButton = new JButton("Reset Search");
+		resetSearchButton.setName("ResetSearchButton");
+		resetSearchButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		Utils.setGBC(bottomPanelGbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
+		bottomPanel.add(resetSearchButton, bottomPanelGbc);
 
 		Utils.setGBC(leftGbc, 1, 3, 1, 1, GridBagConstraints.BOTH);
 		leftPanel.add(bottomPanel, leftGbc);
@@ -242,14 +246,6 @@ public class SearchPanel extends JPanel {
 				return col == 0;
 			}
 		});
-		resultsTbl.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
-					candidateDisplayedListener.candidateDisplayed();
-				}
-			}
-		});
 		resultsTbl.setRowHeight(30);
 		resultsTblScrlPane = new JScrollPane(resultsTbl);
 		resultsTblScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -282,7 +278,12 @@ public class SearchPanel extends JPanel {
 		candidates = new ArrayList<>();
 		selected = new ArrayList<>();
 		search = new Search();
-		skillsTxtArea.removeAll();
+		skillsTxtArea.setText("");
+		nameTxt.setText("");
+		jobTxt.setText("");
+		
+		DefaultTableModel model = (DefaultTableModel) resultsTbl.getModel();
+		model.fireTableDataChanged();
 	}
 
 	public void updateDisplayedSkills(List<Skill> skills) {
@@ -352,15 +353,15 @@ public class SearchPanel extends JPanel {
 		model.fireTableDataChanged();
 	}
 
-	//TODO NEXT: remove this method and class, not necessary
-	public void setCandidateDisplayedListener(CandidateDisplayedListener candidateDisplayedListener) {
-		this.candidateDisplayedListener = candidateDisplayedListener;
+	public Candidate getSelectedCandidate() {
+		return candidates.get(resultsTbl.getSelectedRow());
 	}
-
+	
 	public void setSearchPanelListener(SearchPanelListener searchPanelListener) {
 		searchButton.addActionListener(searchPanelListener);
 		skillsAddButton.addActionListener(searchPanelListener);
 		skillsRemoveButton.addActionListener(searchPanelListener);
+		resetSearchButton.addActionListener(searchPanelListener);
+		resultsTbl.addMouseListener(searchPanelListener);
 	}
-
 }

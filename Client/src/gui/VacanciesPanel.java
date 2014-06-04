@@ -33,9 +33,6 @@ public class VacanciesPanel extends JPanel {
 	// list of vacancies to be displayed
 	private List<Vacancy> vacancies;
 	
-	// list of users to be displayed
-	private List<User> users;
-	
 	// components - topPanel
 	private JPanel topPanel;
 	private ButtonGroup group;
@@ -180,7 +177,6 @@ public class VacanciesPanel extends JPanel {
 	}
 
 	public void updateDisplayedUsers(List<User> users) {
-		this.users = users;
 		userCombo.removeAllItems();
 		
 		// add the default all users option
