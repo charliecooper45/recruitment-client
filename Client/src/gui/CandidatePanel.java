@@ -5,9 +5,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.awt.event.ActionListener;
 import java.nio.file.Path;
 
 import javafx.application.Platform;
@@ -17,8 +17,8 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -41,16 +41,18 @@ public class CandidatePanel extends JPanel {
 
 	// components = leftBottomPanel
 	private JPanel leftBottomPanel;
+	private JButton addLinkedInProfileBtn;
+	private JButton removeLinkedInProfileBtn;
 
 	// components - rightPanel
 	private JPanel rightPanel;
 	private JTabbedPane tabbedPane;
 	private JPanel linkedInPanel;
+	private JFXPanel jfxPanel;
+	private WebEngine engine;
 
 	// the displayed candidate
 	private Candidate candidate;
-	private JFXPanel jfxPanel;
-	private WebEngine engine;
 
 	public CandidatePanel() {
 		init();
@@ -124,6 +126,14 @@ public class CandidatePanel extends JPanel {
 
 		Utils.setGBC(leftBottomPanelGbc, 1, 1, 2, 1, GridBagConstraints.NONE);
 		leftBottomPanel.add(new JLabel("Candidate Options:"), leftBottomPanelGbc);
+		
+		JPanel firstRowPnl = new JPanel(new GridLayout(1, 2));
+		addLinkedInProfileBtn = new JButton("Add LinkedIn   ");
+		firstRowPnl.add(addLinkedInProfileBtn);
+		removeLinkedInProfileBtn = new JButton("Remove LinkedIn");
+		firstRowPnl.add(removeLinkedInProfileBtn);
+		Utils.setGBC(leftBottomPanelGbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
+		leftBottomPanel.add(firstRowPnl, leftBottomPanelGbc);
 
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		add(leftBottomPanel, gbc);
@@ -181,5 +191,10 @@ public class CandidatePanel extends JPanel {
 				engine.load(updatedCandidate.getLinkedInProfile());
 			}
 		});
+	}
+
+	public void setCandidatePanelListener(ActionListener actionListener) {
+		addLinkedInProfileBtn.addActionListener(actionListener);
+		removeLinkedInProfileBtn.addActionListener(actionListener);
 	}
 }

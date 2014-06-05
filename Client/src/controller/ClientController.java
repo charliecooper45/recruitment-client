@@ -5,6 +5,7 @@ import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddVacancyDialogListener;
+import gui.listeners.CandidatePanelListener;
 import gui.listeners.LoginListener;
 import gui.listeners.MenuListener;
 import gui.listeners.OrganisationPanelListener;
@@ -42,6 +43,7 @@ public class ClientController {
 	private OrganisationsPanelListener organisationsPanelListener;
 	private OrganisationPanelListener organisationPanelListener;
 	private SearchPanelListener searchPanelListener;
+	private CandidatePanelListener candidatePanelListener;
 	
 	// top panel listener
 	private TopMenuListener topMenuListener;
@@ -71,6 +73,7 @@ public class ClientController {
 		organisationsPanelListener = new OrganisationsPanelListener(this);
 		organisationPanelListener = new OrganisationPanelListener(this);
 		searchPanelListener = new SearchPanelListener(this);
+		candidatePanelListener = new CandidatePanelListener(this);
 		addVacancyDialogListener = new AddVacancyDialogListener(this);
 		removeVacancyDialogListener = new RemoveVacancyDialogListener(this);
 		addOrganisationDialogListener = new AddOrganisationDialogListener(this);
@@ -99,6 +102,7 @@ public class ClientController {
 		view.setOrganisationsPanelListener(organisationsPanelListener);
 		view.setOrganisationPanelListener(organisationPanelListener);
 		view.setSearchPanelListener(searchPanelListener);
+		view.setCandidatePanelListener(candidatePanelListener);
 		
 		// dialog listeners
 		view.setAddVacancyDialogListener(addVacancyDialogListener);

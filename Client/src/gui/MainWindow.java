@@ -13,7 +13,7 @@ import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
-import gui.listeners.CandidateDisplayedListener;
+import gui.listeners.CandidatePanelListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
@@ -161,15 +161,6 @@ public class MainWindow extends JFrame {
 		add(topMenuPanel, BorderLayout.NORTH);
 		taskListPanel = new TaskListPanel();
 		add(taskListPanel, BorderLayout.EAST);
-
-		// add listeners for switching GUI elements to the centre panels
-		CandidatePipelinePanel candidatePipelinePanel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
-		candidatePipelinePanel.setCandidateDisplayedListener(new CandidateDisplayedListener() {
-			@Override
-			public void candidateDisplayed() {
-				// changeDisplayedPanel(PanelTypes.CANDIDATE);
-			}
-		});
 	}
 
 	private void removeCentreComponent() {
@@ -688,6 +679,11 @@ public class MainWindow extends JFrame {
 		panel.setSearchPanelListener(searchPanelListener);
 	}
 
+	public void setCandidatePanelListener(CandidatePanelListener candidatePanelListener) {
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		panel.setCandidatePanelListener(candidatePanelListener);
+	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
 	}

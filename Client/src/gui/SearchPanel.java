@@ -1,6 +1,5 @@
 package gui;
 
-import gui.listeners.CandidateDisplayedListener;
 import gui.listeners.SearchPanelListener;
 
 import java.awt.Color;
@@ -8,8 +7,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

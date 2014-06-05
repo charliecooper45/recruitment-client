@@ -1,7 +1,5 @@
 package gui;
 
-import gui.listeners.CandidateDisplayedListener;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -26,9 +24,6 @@ public class CandidatePipelinePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private GridBagConstraints gbc;
-	
-	// alerts the GUI when a candidate needs to be displayed to the user
-	private CandidateDisplayedListener candidateDisplayedListener;
 	
 	// components - topPanel
 	private JPanel topPanel;
@@ -135,14 +130,6 @@ public class CandidatePipelinePanel extends JPanel {
 				return false;
 			}
 		});
-		pipelineTbl.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1){
-					candidateDisplayedListener.candidateDisplayed();
-				}
-			}
-		});
 		pipelineTbl.setRowHeight(30);
 		tableScrll = new JScrollPane(pipelineTbl);
 		tableScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -151,12 +138,5 @@ public class CandidatePipelinePanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 		
 		add(mainPanel, BorderLayout.CENTER);
-	}
-
-	/**
-	 * @param candidateDisplayedListener the candidateDisplayedListener to set
-	 */
-	public void setCandidateDisplayedListener(CandidateDisplayedListener candidateDisplayedListener) {
-		this.candidateDisplayedListener = candidateDisplayedListener;
 	}
 }

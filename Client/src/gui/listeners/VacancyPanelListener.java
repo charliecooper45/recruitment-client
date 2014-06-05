@@ -28,7 +28,6 @@ import database.beans.Vacancy;
  * @author Charlie
  */
 public class VacancyPanelListener extends ClientListener implements ActionListener {
-
 	public VacancyPanelListener(ClientController controller) {
 		super(controller);
 	}

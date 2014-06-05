@@ -4,6 +4,7 @@ import gui.TopMenuPanel.MenuPanel;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddOrganisationDialogListener;
+import gui.listeners.CandidatePanelListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
@@ -263,6 +264,10 @@ public class ClientView {
 	
 	public void setSearchPanelListener(SearchPanelListener searchPanelListener) {
 		mainWindow.setSearchPanelListener(searchPanelListener);
+	}
+	
+	public void setCandidatePanelListener(CandidatePanelListener candidatePanelListener) {
+		mainWindow.setCandidatePanelListener(candidatePanelListener);
 	}
 	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
