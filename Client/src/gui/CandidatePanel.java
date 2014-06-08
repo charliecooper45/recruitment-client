@@ -8,8 +8,14 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -21,8 +27,17 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.pdfparser.PDFParser;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.extractor.WordExtractor;
 
 import database.beans.Candidate;
 
@@ -44,6 +59,8 @@ public class CandidatePanel extends JPanel {
 	private JPanel leftBottomPanel;
 	private JButton addLinkedInProfileBtn;
 	private JButton removeLinkedInProfileBtn;
+	private JButton addCVBtn;
+	private JButton removeCVBtn;
 
 	// components - rightPanel
 	private JPanel rightPanel;
@@ -51,6 +68,8 @@ public class CandidatePanel extends JPanel {
 	private JPanel linkedInPanel;
 	private JFXPanel jfxPanel;
 	private WebEngine engine;
+	private JPanel candidateCvPanel;
+	private JTextArea documentArea;
 
 	// the displayed candidate
 	private Candidate candidate;
@@ -135,6 +154,14 @@ public class CandidatePanel extends JPanel {
 		firstRowPnl.add(removeLinkedInProfileBtn);
 		Utils.setGBC(leftBottomPanelGbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftBottomPanel.add(firstRowPnl, leftBottomPanelGbc);
+		
+		JPanel secondRowPnl = new JPanel(new GridLayout(1, 2));
+		addCVBtn = new JButton("Add CV         ");
+		secondRowPnl.add(addCVBtn);
+		removeCVBtn = new JButton("Remove CV      ");
+		secondRowPnl.add(removeCVBtn);
+		Utils.setGBC(leftBottomPanelGbc, 1, 3, 1, 1, GridBagConstraints.HORIZONTAL);
+		leftBottomPanel.add(secondRowPnl, leftBottomPanelGbc);
 
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		add(leftBottomPanel, gbc);
@@ -160,10 +187,19 @@ public class CandidatePanel extends JPanel {
 			}
 		});
 		linkedInPanel.add(jfxPanel, BorderLayout.CENTER);
+		
+		// create the panel to show the user`s CV
+		candidateCvPanel = new JPanel(new BorderLayout());
+		documentArea = new JTextArea();
+		documentArea.setEditable(false);
+		JScrollPane vacancyScrlPane = new JScrollPane(documentArea);
+		vacancyScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		vacancyScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		candidateCvPanel.add(vacancyScrlPane, BorderLayout.CENTER);
 
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("LinkedIn Profile", linkedInPanel);
-		tabbedPane.addTab("CV", new JPanel());
+		tabbedPane.addTab("CV", candidateCvPanel);
 		tabbedPane.addTab("Key Skills", new JPanel());
 		tabbedPane.addTab("Events", new JPanel());
 		tabbedPane.addTab("Notes", new JPanel());
@@ -185,15 +221,93 @@ public class CandidatePanel extends JPanel {
 		addressTxtFld.setText(updatedCandidate.getAddress());
 
 		// show the LinkedIn profile
-		// Load the url
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				engine.load(updatedCandidate.getLinkedInProfile());
 			}
 		});
+		
+		// load the cv
+		readCandidateCv(tempFile);
 	}
 
+	private void readCandidateCv(Path path) {
+		documentArea.setText("");
+		WordExtractor extractor = null;
+
+		try {
+			if (path != null) {
+				if (path.toString().endsWith(".docx") || path.toString().endsWith(".doc")) {
+					// handle doc and dox file types
+					File file = null;
+					file = path.toFile();
+					FileInputStream fis = new FileInputStream(file.getAbsolutePath());
+					HWPFDocument document = new HWPFDocument(fis);
+					extractor = new WordExtractor(document);
+					String[] fileData = extractor.getParagraphText();
+
+					for (int i = 0; i < fileData.length; i++) {
+						if (fileData[i] != null) {
+							documentArea.append(fileData[i]);
+						}
+					}
+
+				} else if (path.toString().endsWith(".txt")) {
+					// handle .txt file types
+					List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+					for (String line : lines) {
+						documentArea.append(line);
+					}
+				} else if (path.toString().endsWith(".pdf")) {
+					PDFParser parser = null;
+					String parsedText = null;
+					;
+					PDFTextStripper pdfStripper = null;
+					PDDocument pdDoc = null;
+					COSDocument cosDoc = null;
+					try {
+						parser = new PDFParser(new FileInputStream(path.toFile()));
+						try {
+							parser.parse();
+							cosDoc = parser.getDocument();
+							pdfStripper = new PDFTextStripper();
+							pdDoc = new PDDocument(cosDoc);
+							parsedText = pdfStripper.getText(pdDoc);
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							try {
+								if (cosDoc != null)
+									cosDoc.close();
+								if (pdDoc != null)
+									pdDoc.close();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+						documentArea.setText(parsedText);
+					} catch (IOException e) {
+						System.err.println("Unable to open PDF Parser. " + e.getMessage());
+					}
+				}
+			} else {
+				documentArea.setText("Candidate CV not found.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			documentArea.setText("Candidate CV not found.");
+		} finally {
+			if (extractor != null)
+				try {
+					extractor.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					documentArea.setText("Candidate CV not found.");
+				}
+		}
+	}
+	
 	public Candidate getSelectedCandidate() {
 		return candidate;
 	}
@@ -220,5 +334,7 @@ public class CandidatePanel extends JPanel {
 	public void setCandidatePanelListener(ActionListener actionListener) {
 		addLinkedInProfileBtn.addActionListener(actionListener);
 		removeLinkedInProfileBtn.addActionListener(actionListener);
+		addCVBtn.addActionListener(actionListener);
+		removeCVBtn.addActionListener(actionListener);
 	}
 }

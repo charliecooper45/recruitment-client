@@ -50,4 +50,6 @@ public interface ServerInterface extends Remote{
 	public RemoteInputStream getCandidateCV(String fileName) throws RemoteException;
 	public boolean addLinkedInProfile(Candidate candidate, URL profileURL) throws RemoteException;
 	public boolean removeLinkedInProfile(Candidate candidate) throws RemoteException;
+	public boolean addCandidateCv(Candidate candidate, RemoteInputStream remoteFileData, String oldFileName) throws RemoteException;
+	public boolean removeCandidateCv(Candidate candidate) throws RemoteException;
 }

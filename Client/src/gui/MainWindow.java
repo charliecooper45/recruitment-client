@@ -493,6 +493,13 @@ public class MainWindow extends JFrame {
 				return true;
 			}
 			break;
+		case CANDIDATE_REMOVE_CV:
+			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.CANDIDATE_REMOVE_CV.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if (response == 0) {
+				return true;
+			}
+			break;
 		}
 		return false;
 	}
