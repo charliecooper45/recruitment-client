@@ -1,16 +1,18 @@
 package gui;
 
 public enum ConfirmDialogType {
-	VACANCY_ADDED("Vacancy added"), VACANCY_REMOVED("Vacancy removed"), ORGANISATION_ADDED("Organisation added"), ORGANISATION_REMOVED("Organisation removed"), 
-	CANDIDATE_ADDED("Candidate added"), REMOVE_CANDIDATE("Candidate removed"), CONTACT_ADDED("Contact added"), CONTACT_REMOVED("Contact removed");
+	VACANCY_REMOVE_PROFILE("Are you sure you want to remove this profile?"), VACANCY_CHANGE_STATUS_OPEN("Are you sure you want to open this vacancy?"),
+	VACANCY_CHANGE_STATUS_CLOSE("Are you sure you want to close this vacancy?"), REMOVE_VACANCY("Are you sure you want to remove this vacancy?"), 
+	ORGANISATION_REMOVE_TOB("Are you sure you want to remove these terms of business?"), REMOVE_ORGANISATION("Are you sure you want to remove this organisation? All vacancies and " +
+			"contacts will also be removed"), REMOVE_CANDIDATE("Are you sure you want to remove this candidate?"), REMOVE_CONTACT("Are you sure you want to remove this contact?"), 
+	CANDIDATE_REMOVE_LINKEDIN("Are you sure you want to remove this LinkedIn profile?"); 
 	
-	private String confirmMessage;
+	private String message;
 	
-	private ConfirmDialogType(String confirmMessage) {
-		this.confirmMessage = confirmMessage;
+	private ConfirmDialogType(String message) {
+		this.message = message;
 	}
-
-	public Object getMessage() {
-		return confirmMessage;
+	public String getMessage() {
+		return message;
 	}
 }

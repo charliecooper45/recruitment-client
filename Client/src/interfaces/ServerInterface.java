@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.net.URL;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -47,4 +48,6 @@ public interface ServerInterface extends Remote{
 	public List<Candidate> searchCandidates(Search search) throws RemoteException;
 	public Candidate getCandidate(int candidateId) throws RemoteException;
 	public RemoteInputStream getCandidateCV(String fileName) throws RemoteException;
+	public boolean addLinkedInProfile(Candidate candidate, URL profileURL) throws RemoteException;
+	public boolean removeLinkedInProfile(Candidate candidate) throws RemoteException;
 }

@@ -1,30 +1,20 @@
 package gui.listeners;
 
-import gui.ConfirmDialogType;
 import gui.DialogType;
 import gui.ErrorDialogType;
-import gui.MenuDialogType;
-import gui.PanelType;
+import gui.MessageDialogType;
+import gui.ConfirmDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
-import com.healthmarketscience.rmiio.RemoteInputStreamServer;
-import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
-
 import controller.ClientController;
 import database.beans.Contact;
 import database.beans.Organisation;
-import database.beans.User;
-import database.beans.Vacancy;
 
 /**
  * Listens for events on the remove contact dialog. 
@@ -45,10 +35,10 @@ public class RemoveContactDialogListener extends ClientListener implements Actio
 			
 			switch (text) {
 			case "Confirm":
-				boolean confirmed = controller.getView().showDialog(DialogType.REMOVE_CONTACT);
+				boolean confirmed = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_CONTACT);
 				
 				if(confirmed) {
-					Contact contact = controller.getView().getContactDialogContact(MenuDialogType.REMOVE_CONTACT);
+					Contact contact = controller.getView().getContactDialogContact(DialogType.REMOVE_CONTACT);
 					
 					if(contact == null) {
 						controller.getView().showErrorDialog(ErrorDialogType.REMOVE_CONTACT_FAIL);
@@ -58,8 +48,8 @@ public class RemoveContactDialogListener extends ClientListener implements Actio
 					boolean deleted = controller.getModel().removeContact(contact);
 					
 					if(deleted) {
-						controller.getView().hideMenuDialog(MenuDialogType.REMOVE_CONTACT);
-						controller.getView().showConfirmDialog(ConfirmDialogType.CONTACT_REMOVED);
+						controller.getView().hideDialog(DialogType.REMOVE_CONTACT);
+						controller.getView().showMessageDialog(MessageDialogType.CONTACT_REMOVED);
 					} else {
 						controller.getView().showErrorDialog(ErrorDialogType.REMOVE_CONTACT_FAIL);
 					}
@@ -76,7 +66,7 @@ public class RemoveContactDialogListener extends ClientListener implements Actio
 				}
 				break;
 			case "Cancel ":
-				controller.getView().hideMenuDialog(MenuDialogType.REMOVE_CONTACT);
+				controller.getView().hideDialog(DialogType.REMOVE_CONTACT);
 				break;
 			}
 		} else if(source instanceof JComboBox<?>) {
@@ -84,7 +74,7 @@ public class RemoveContactDialogListener extends ClientListener implements Actio
 			Organisation selectedOrg = (Organisation) organisationCmbBx.getSelectedItem();
 			if (selectedOrg != null) {
 				List<Contact> contacts = controller.getModel().getOrganisationsContacts(selectedOrg);
-				controller.getView().setDisplayedContactsInDialog(MenuDialogType.REMOVE_CONTACT, contacts);
+				controller.getView().setDisplayedContactsInDialog(DialogType.REMOVE_CONTACT, contacts);
 			}
 		}
 	}

@@ -3,6 +3,7 @@ package gui;
 import gui.TopMenuPanel.MenuPanel;
 import gui.dialogs.AddCandidateDialog;
 import gui.dialogs.AddContactDialog;
+import gui.dialogs.AddLinkedInDialog;
 import gui.dialogs.AddOrganisationDialog;
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
@@ -12,6 +13,7 @@ import gui.dialogs.RemoveOrganisationDialog;
 import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
+import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.OrganisationPanelListener;
@@ -30,6 +32,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -79,7 +82,7 @@ public class MainWindow extends JFrame {
 	private Map<PanelType, JPanel> centrePanels;
 
 	// Dialog windows 
-	private Map<MenuDialogType, RecruitmentDialog> dialogs;
+	private Map<DialogType, RecruitmentDialog> dialogs;
 
 	// Holds the userId of the user of the client
 	public static String USER_ID;
@@ -141,15 +144,16 @@ public class MainWindow extends JFrame {
 		topMenuPanel = new TopMenuPanel();
 
 		// create the dialogs
-		dialogs = new EnumMap<>(MenuDialogType.class);
-		dialogs.put(MenuDialogType.ADD_VACANCY, new AddVacancyDialog(this));
-		dialogs.put(MenuDialogType.REMOVE_VACANCY, new RemoveVacancyDialog(this));
-		dialogs.put(MenuDialogType.ADD_ORGANISATION, new AddOrganisationDialog(this));
-		dialogs.put(MenuDialogType.REMOVE_ORGANISATION, new RemoveOrganisationDialog(this));
-		dialogs.put(MenuDialogType.ADD_CANDIDATE, new AddCandidateDialog(this));
-		dialogs.put(MenuDialogType.REMOVE_CANDIDATE, new RemoveCandidateDialog(this));
-		dialogs.put(MenuDialogType.ADD_CONTACT, new AddContactDialog(this));
-		dialogs.put(MenuDialogType.REMOVE_CONTACT, new RemoveContactDialog(this));
+		dialogs = new EnumMap<>(DialogType.class);
+		dialogs.put(DialogType.ADD_VACANCY, new AddVacancyDialog(this));
+		dialogs.put(DialogType.REMOVE_VACANCY, new RemoveVacancyDialog(this));
+		dialogs.put(DialogType.ADD_ORGANISATION, new AddOrganisationDialog(this));
+		dialogs.put(DialogType.REMOVE_ORGANISATION, new RemoveOrganisationDialog(this));
+		dialogs.put(DialogType.ADD_CANDIDATE, new AddCandidateDialog(this));
+		dialogs.put(DialogType.REMOVE_CANDIDATE, new RemoveCandidateDialog(this));
+		dialogs.put(DialogType.ADD_CONTACT, new AddContactDialog(this));
+		dialogs.put(DialogType.REMOVE_CONTACT, new RemoveContactDialog(this));
+		dialogs.put(DialogType.CANDIDATE_ADD_LINKEDIN, new AddLinkedInDialog(this));
 	}
 
 	private void init(UserType userType) {
@@ -333,7 +337,7 @@ public class MainWindow extends JFrame {
 		panel.setDefaultOptions();
 	}
 
-	public Candidate getSelectedCandidate() {
+	public Candidate getSearchPanelCandidate() {
 		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
 		return panel.getSelectedCandidate();
 	}
@@ -361,6 +365,16 @@ public class MainWindow extends JFrame {
 		repaint();
 	}
 
+	public void updateCandidateLinkedInProfile(URL url) {
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		panel.updateShownLinkedInProfile(url);
+	}
+	
+	public Candidate getCandidatePanelCandidate() {
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		return panel.getSelectedCandidate();
+	}
+	
 	// AdminPanel methods
 	public void showAdminPanel() {
 		removeCentreComponent();
@@ -409,7 +423,7 @@ public class MainWindow extends JFrame {
 		topMenuPanel.setSelectedPanel(panel);
 	}
 
-	public boolean showDialog(DialogType dialogType) {
+	public boolean showConfirmDialog(ConfirmDialogType dialogType) {
 		JPanel panel = null;
 		VacancyPanel vacancyPanel = null;
 		OrganisationPanel organisationPanel = null;
@@ -418,15 +432,13 @@ public class MainWindow extends JFrame {
 		switch (dialogType) {
 		case VACANCY_REMOVE_PROFILE:
 			vacancyPanel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-			response = JOptionPane.showConfirmDialog(vacancyPanel, DialogType.VACANCY_REMOVE_PROFILE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			response = JOptionPane.showConfirmDialog(vacancyPanel, ConfirmDialogType.VACANCY_REMOVE_PROFILE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0)
 				return true;
 			break;
-		case VACANCY_ADD_PROFILE:
-			break;
 		case VACANCY_CHANGE_STATUS_OPEN:
 			vacancyPanel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-			response = JOptionPane.showConfirmDialog(vacancyPanel, DialogType.VACANCY_CHANGE_STATUS_OPEN.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			response = JOptionPane.showConfirmDialog(vacancyPanel, ConfirmDialogType.VACANCY_CHANGE_STATUS_OPEN.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0) {
 				vacancyPanel.setVacancyStatus(true);
 				return true;
@@ -434,7 +446,7 @@ public class MainWindow extends JFrame {
 			break;
 		case VACANCY_CHANGE_STATUS_CLOSE:
 			vacancyPanel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-			response = JOptionPane.showConfirmDialog(vacancyPanel, DialogType.VACANCY_CHANGE_STATUS_CLOSE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			response = JOptionPane.showConfirmDialog(vacancyPanel, ConfirmDialogType.VACANCY_CHANGE_STATUS_CLOSE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0) {
 				vacancyPanel.setVacancyStatus(false);
 				return true;
@@ -442,40 +454,46 @@ public class MainWindow extends JFrame {
 			break;
 		case REMOVE_VACANCY:
 			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
-			response = JOptionPane.showConfirmDialog(panel, DialogType.REMOVE_VACANCY.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.REMOVE_VACANCY.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0) {
 				return true;
 			}
 			break;
 		case ORGANISATION_REMOVE_TOB:
 			organisationPanel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
-			response = JOptionPane.showConfirmDialog(organisationPanel, DialogType.ORGANISATION_REMOVE_TOB.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			response = JOptionPane.showConfirmDialog(organisationPanel, ConfirmDialogType.ORGANISATION_REMOVE_TOB.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0)
 				return true;
 			break;
 		case REMOVE_ORGANISATION:
 			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
-			response = JOptionPane.showConfirmDialog(panel, DialogType.REMOVE_ORGANISATION.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.REMOVE_ORGANISATION.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0) {
 				return true;
 			}
 			break;
 		case REMOVE_CANDIDATE:
 			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
-			response = JOptionPane.showConfirmDialog(panel, DialogType.REMOVE_CANDIDATE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.REMOVE_CANDIDATE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0) {
 				return true;
 			}
 			break;
 		case REMOVE_CONTACT:
 			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
-			response = JOptionPane.showConfirmDialog(panel, DialogType.REMOVE_CONTACT.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.REMOVE_CONTACT.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if (response == 0) {
+				return true;
+			}
+			break;
+		case CANDIDATE_REMOVE_LINKEDIN:
+			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.CANDIDATE_REMOVE_LINKEDIN.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0) {
 				return true;
 			}
 			break;
 		}
-
 		return false;
 	}
 
@@ -483,166 +501,181 @@ public class MainWindow extends JFrame {
 		JOptionPane.showMessageDialog(borderLayout.getLayoutComponent(BorderLayout.CENTER), errorDialog.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
-	public void showConfirmDialog(ConfirmDialogType confirmDialog) {
+	public void showMessageDialog(MessageDialogType confirmDialog) {
 		JOptionPane.showMessageDialog(borderLayout.getLayoutComponent(BorderLayout.CENTER), confirmDialog.getMessage(), "Confirmation", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	public void showMenuDialog(MenuDialogType menuDialog) {
-		switch (menuDialog) {
+	public void showDialog(DialogType dialog) {
+		switch (dialog) {
 		case ADD_VACANCY:
-			dialogs.get(MenuDialogType.ADD_VACANCY).setVisible(true);
+			dialogs.get(DialogType.ADD_VACANCY).setVisible(true);
 			break;
 		case REMOVE_VACANCY:
-			dialogs.get(MenuDialogType.REMOVE_VACANCY).setVisible(true);
+			dialogs.get(DialogType.REMOVE_VACANCY).setVisible(true);
 			break;
 		case ADD_ORGANISATION:
-			dialogs.get(MenuDialogType.ADD_ORGANISATION).setVisible(true);
+			dialogs.get(DialogType.ADD_ORGANISATION).setVisible(true);
 			break;
 		case REMOVE_ORGANISATION:
-			dialogs.get(MenuDialogType.REMOVE_ORGANISATION).setVisible(true);
+			dialogs.get(DialogType.REMOVE_ORGANISATION).setVisible(true);
 			break;
 		case ADD_CANDIDATE:
-			dialogs.get(MenuDialogType.ADD_CANDIDATE).setVisible(true);
+			dialogs.get(DialogType.ADD_CANDIDATE).setVisible(true);
 			break;
 		case REMOVE_CANDIDATE:
-			dialogs.get(MenuDialogType.REMOVE_CANDIDATE).setVisible(true);
+			dialogs.get(DialogType.REMOVE_CANDIDATE).setVisible(true);
 			break;
 		case ADD_CONTACT:
-			dialogs.get(MenuDialogType.ADD_CONTACT).setVisible(true);
+			dialogs.get(DialogType.ADD_CONTACT).setVisible(true);
 			break;
 		case REMOVE_CONTACT:
-			dialogs.get(MenuDialogType.REMOVE_CONTACT).setVisible(true);
+			dialogs.get(DialogType.REMOVE_CONTACT).setVisible(true);
+			break;
+		case CANDIDATE_ADD_LINKEDIN:
+			dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setVisible(true);
 			break;
 		}
 	}
 
-	public void hideMenuDialog(MenuDialogType menuDialog) {
-		switch (menuDialog) {
+	public void hideDialog(DialogType dialog) {
+		switch (dialog) {
 		case ADD_VACANCY:
 			//TODO NEXT: remove data from all the fields when setvisible is called with the argument false
-			dialogs.get(MenuDialogType.ADD_VACANCY).setVisible(false);
+			dialogs.get(DialogType.ADD_VACANCY).setVisible(false);
 			break;
 		case REMOVE_VACANCY:
-			dialogs.get(MenuDialogType.REMOVE_VACANCY).setVisible(false);
+			dialogs.get(DialogType.REMOVE_VACANCY).setVisible(false);
 			break;
 		case ADD_ORGANISATION:
-			dialogs.get(MenuDialogType.ADD_ORGANISATION).setVisible(false);
+			dialogs.get(DialogType.ADD_ORGANISATION).setVisible(false);
 			break;
 		case REMOVE_ORGANISATION:
-			dialogs.get(MenuDialogType.REMOVE_ORGANISATION).setVisible(false);
+			dialogs.get(DialogType.REMOVE_ORGANISATION).setVisible(false);
 			break;
 		case ADD_CANDIDATE:
-			dialogs.get(MenuDialogType.ADD_CANDIDATE).setVisible(false);
+			dialogs.get(DialogType.ADD_CANDIDATE).setVisible(false);
 			break;
 		case REMOVE_CANDIDATE:
-			dialogs.get(MenuDialogType.REMOVE_CANDIDATE).setVisible(false);
+			dialogs.get(DialogType.REMOVE_CANDIDATE).setVisible(false);
 			break;
 		case ADD_CONTACT:
-			dialogs.get(MenuDialogType.ADD_CONTACT).setVisible(false);
+			dialogs.get(DialogType.ADD_CONTACT).setVisible(false);
 			break;
 		case REMOVE_CONTACT:
-			dialogs.get(MenuDialogType.REMOVE_CONTACT).setVisible(false);
+			dialogs.get(DialogType.REMOVE_CONTACT).setVisible(false);
+			break;
+		case CANDIDATE_ADD_LINKEDIN:
+			dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setVisible(false);
 			break;
 		}
 	}
 
-	public void setDisplayedOrganisationsInDialog(MenuDialogType menuDialog, List<Organisation> organisations) {
+	public void setDisplayedOrganisationsInDialog(DialogType menuDialog, List<Organisation> organisations) {
 		switch (menuDialog) {
 		case ADD_VACANCY:
-			dialogs.get(MenuDialogType.ADD_VACANCY).setDisplayedOrganisations(organisations);
+			dialogs.get(DialogType.ADD_VACANCY).setDisplayedOrganisations(organisations);
 			break;
 		case REMOVE_ORGANISATION:
-			dialogs.get(MenuDialogType.REMOVE_ORGANISATION).setDisplayedOrganisations(organisations);
+			dialogs.get(DialogType.REMOVE_ORGANISATION).setDisplayedOrganisations(organisations);
 			break;
 		case ADD_CONTACT:
-			dialogs.get(MenuDialogType.ADD_CONTACT).setDisplayedOrganisations(organisations);
+			dialogs.get(DialogType.ADD_CONTACT).setDisplayedOrganisations(organisations);
 			break;
 		case REMOVE_CONTACT:
-			dialogs.get(MenuDialogType.REMOVE_CONTACT).setDisplayedOrganisations(organisations);
+			dialogs.get(DialogType.REMOVE_CONTACT).setDisplayedOrganisations(organisations);
 			break;
 		}
 	}
 
-	public void setDisplayedContactsInDialog(MenuDialogType menuDialog, List<Contact> contacts) {
+	public void setDisplayedContactsInDialog(DialogType menuDialog, List<Contact> contacts) {
 		switch (menuDialog) {
 		case ADD_VACANCY:
-			dialogs.get(MenuDialogType.ADD_VACANCY).setDisplayedContacts(contacts);
+			dialogs.get(DialogType.ADD_VACANCY).setDisplayedContacts(contacts);
 			break;
 		case REMOVE_CONTACT:
-			dialogs.get(MenuDialogType.REMOVE_CONTACT).setDisplayedContacts(contacts);
+			dialogs.get(DialogType.REMOVE_CONTACT).setDisplayedContacts(contacts);
 			break;
 		}
 	}
 
-	public void setDisplayedVacanciesInDialog(MenuDialogType menuDialog, List<Vacancy> vacancies) {
+	public void setDisplayedVacanciesInDialog(DialogType menuDialog, List<Vacancy> vacancies) {
 		switch (menuDialog) {
 		case REMOVE_VACANCY:
-			dialogs.get(MenuDialogType.REMOVE_VACANCY).setDisplayedVacancies(vacancies);
+			dialogs.get(DialogType.REMOVE_VACANCY).setDisplayedVacancies(vacancies);
 			break;
 		}
 
 	}
 
-	public void setDisplayedCandidatesInDialog(MenuDialogType menuDialog, List<Candidate> candidates) {
+	public void setDisplayedCandidatesInDialog(DialogType menuDialog, List<Candidate> candidates) {
 		switch (menuDialog) {
 		case REMOVE_CANDIDATE:
-			dialogs.get(MenuDialogType.REMOVE_CANDIDATE).setDisplayedCandidates(candidates);
+			dialogs.get(DialogType.REMOVE_CANDIDATE).setDisplayedCandidates(candidates);
 			break;
 		}
 	}
 
-	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
-		RecruitmentDialog dialog = dialogs.get(menuDialogType);
+	public void displayFileInDialog(DialogType menuDialog, File file) {
+		RecruitmentDialog dialog = dialogs.get(menuDialog);
 		dialog.setDisplayedFile(file);
 	}
 
-	public Vacancy getVacancyDialogVacancy(MenuDialogType menuDialog) {
-		if (menuDialog == MenuDialogType.ADD_VACANCY) {
-			AddVacancyDialog dialog = (AddVacancyDialog) dialogs.get(MenuDialogType.ADD_VACANCY);
-			return dialog.getVacancy();
-		} else if (menuDialog == MenuDialogType.REMOVE_VACANCY) {
-			RemoveVacancyDialog dialog = (RemoveVacancyDialog) dialogs.get(MenuDialogType.REMOVE_VACANCY);
-			return dialog.getVacancy();
+	public Vacancy getVacancyDialogVacancy(DialogType dialog) {
+		if (dialog == DialogType.ADD_VACANCY) {
+			AddVacancyDialog vDialog = (AddVacancyDialog) dialogs.get(DialogType.ADD_VACANCY);
+			return vDialog.getVacancy();
+		} else if (dialog == DialogType.REMOVE_VACANCY) {
+			RemoveVacancyDialog vDialog = (RemoveVacancyDialog) dialogs.get(DialogType.REMOVE_VACANCY);
+			return vDialog.getVacancy();
 		}
 		return null;
 	}
 
-	public Organisation getOrganisationDialogOrganisation(MenuDialogType menuDialog) {
-		switch (menuDialog) {
+	public Organisation getOrganisationDialogOrganisation(DialogType dialog) {
+		switch (dialog) {
 		case ADD_ORGANISATION:
-			AddOrganisationDialog addOrgDialog = (AddOrganisationDialog) dialogs.get(MenuDialogType.ADD_ORGANISATION);
+			AddOrganisationDialog addOrgDialog = (AddOrganisationDialog) dialogs.get(DialogType.ADD_ORGANISATION);
 			return addOrgDialog.getOrganisation();
 		case REMOVE_ORGANISATION:
-			RemoveOrganisationDialog removeOrgDialog = (RemoveOrganisationDialog) dialogs.get(MenuDialogType.REMOVE_ORGANISATION);
+			RemoveOrganisationDialog removeOrgDialog = (RemoveOrganisationDialog) dialogs.get(DialogType.REMOVE_ORGANISATION);
 			return removeOrgDialog.getOrganisation();
 		}
 		return null;
 	}
 
-	public Candidate getCandidateDialogCandidate(MenuDialogType menuDialog) {
-		switch (menuDialog) {
+	public Candidate getCandidateDialogCandidate(DialogType dialog) {
+		switch (dialog) {
 		case ADD_CANDIDATE:
-			AddCandidateDialog addCandidateDialog = (AddCandidateDialog) dialogs.get(MenuDialogType.ADD_CANDIDATE);
+			AddCandidateDialog addCandidateDialog = (AddCandidateDialog) dialogs.get(DialogType.ADD_CANDIDATE);
 			return addCandidateDialog.getCandidate();
 		case REMOVE_CANDIDATE:
-			RemoveCandidateDialog removeCandidateDialog = (RemoveCandidateDialog) dialogs.get(MenuDialogType.REMOVE_CANDIDATE);
+			RemoveCandidateDialog removeCandidateDialog = (RemoveCandidateDialog) dialogs.get(DialogType.REMOVE_CANDIDATE);
 			return removeCandidateDialog.getCandidate();
 		}
 		return null;
 	}
 
-	public Contact getContactDialogContact(MenuDialogType menuDialog) {
-		switch (menuDialog) {
+	public Contact getContactDialogContact(DialogType dialog) {
+		switch (dialog) {
 		case ADD_CONTACT:
-			AddContactDialog addContactDialog = (AddContactDialog) dialogs.get(MenuDialogType.ADD_CONTACT);
+			AddContactDialog addContactDialog = (AddContactDialog) dialogs.get(DialogType.ADD_CONTACT);
 			return addContactDialog.getContact();
 		case REMOVE_CONTACT:
-			RemoveContactDialog removeContactDialog = (RemoveContactDialog) dialogs.get(MenuDialogType.REMOVE_CONTACT);
+			RemoveContactDialog removeContactDialog = (RemoveContactDialog) dialogs.get(DialogType.REMOVE_CONTACT);
 			return removeContactDialog.getContact();
 		}
 		return null;
 	}
 
+	public String getLinkedInProfileDialogUrl(DialogType dialog) {
+		switch(dialog) {
+		case CANDIDATE_ADD_LINKEDIN:
+			AddLinkedInDialog linkedInDialog = (AddLinkedInDialog) dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN);
+			return linkedInDialog.getProfileUrl();
+		}
+		return "";
+	}
+	
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -685,34 +718,38 @@ public class MainWindow extends JFrame {
 	}
 	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
-		dialogs.get(MenuDialogType.ADD_VACANCY).setActionListener(actionListener);
+		dialogs.get(DialogType.ADD_VACANCY).setActionListener(actionListener);
 	}
 
 	public void setRemoveVacancyDialogListener(RemoveVacancyDialogListener removeVacancyDialogListener) {
-		dialogs.get(MenuDialogType.REMOVE_VACANCY).setActionListener(removeVacancyDialogListener);
+		dialogs.get(DialogType.REMOVE_VACANCY).setActionListener(removeVacancyDialogListener);
 	}
 
 	public void setAddOrganisationDialogListener(AddOrganisationDialogListener addOrganisationDialogListener) {
-		dialogs.get(MenuDialogType.ADD_ORGANISATION).setActionListener(addOrganisationDialogListener);
+		dialogs.get(DialogType.ADD_ORGANISATION).setActionListener(addOrganisationDialogListener);
 	}
 
 	public void setRemoveOrganisationDialogListener(RemoveOrganisationDialogListener removeOrganisationDialogListener) {
-		dialogs.get(MenuDialogType.REMOVE_ORGANISATION).setActionListener(removeOrganisationDialogListener);
+		dialogs.get(DialogType.REMOVE_ORGANISATION).setActionListener(removeOrganisationDialogListener);
 	}
 
 	public void setAddCandidateDialogListener(AddCandidateDialogListener addCandidateDialogListener) {
-		dialogs.get(MenuDialogType.ADD_CANDIDATE).setActionListener(addCandidateDialogListener);
+		dialogs.get(DialogType.ADD_CANDIDATE).setActionListener(addCandidateDialogListener);
 	}
 
 	public void setRemoveCandidateDialogListener(RemoveCandidateDialogListener removeCandidateDialogListener) {
-		dialogs.get(MenuDialogType.REMOVE_CANDIDATE).setActionListener(removeCandidateDialogListener);
+		dialogs.get(DialogType.REMOVE_CANDIDATE).setActionListener(removeCandidateDialogListener);
 	}
 
 	public void setAddContactDialogListener(AddContactDialogListener addContactDialogListener) {
-		dialogs.get(MenuDialogType.ADD_CONTACT).setActionListener(addContactDialogListener);
+		dialogs.get(DialogType.ADD_CONTACT).setActionListener(addContactDialogListener);
 	}
 
 	public void setRemoveContactDialogListener(RemoveContactDialogListener removeContactDialogListener) {
-		dialogs.get(MenuDialogType.REMOVE_CONTACT).setActionListener(removeContactDialogListener);
+		dialogs.get(DialogType.REMOVE_CONTACT).setActionListener(removeContactDialogListener);
+	}
+
+	public void setAddLinkedInProfileLister(AddLinkedInProfileListener addLinkedInProfileListener) {
+		dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setActionListener(addLinkedInProfileListener);
 	}
 }

@@ -1,9 +1,9 @@
 package gui.listeners;
 
 import gui.CandidatePanel;
-import gui.ConfirmDialogType;
+import gui.MessageDialogType;
 import gui.ErrorDialogType;
-import gui.MenuDialogType;
+import gui.DialogType;
 import gui.PanelType;
 
 import java.awt.event.ActionEvent;
@@ -44,7 +44,7 @@ public class AddCandidateDialogListener extends ClientListener implements Action
 			case "Confirm":
 				InputStream inputStream;
 				RemoteInputStreamServer cvData = null;
-				Candidate candidate = controller.getView().getCandidateDialogCandidate(MenuDialogType.ADD_CANDIDATE);
+				Candidate candidate = controller.getView().getCandidateDialogCandidate(DialogType.ADD_CANDIDATE);
 				if (candidate != null) {
 					// the candidate is valid and can be added
 					try {
@@ -57,8 +57,8 @@ public class AddCandidateDialogListener extends ClientListener implements Action
 						boolean candidateAdded = controller.getModel().addCandidate(candidate, cvData);
 
 						if (candidateAdded) {
-							controller.getView().hideMenuDialog(MenuDialogType.ADD_CANDIDATE);
-							controller.getView().showConfirmDialog(ConfirmDialogType.CANDIDATE_ADDED);
+							controller.getView().hideDialog(DialogType.ADD_CANDIDATE);
+							controller.getView().showMessageDialog(MessageDialogType.CANDIDATE_ADDED);
 							
 							// Check if the candidate pipeline panel is displayed and then update if necessary
 							//TODO NEXT: implement this
@@ -80,13 +80,13 @@ public class AddCandidateDialogListener extends ClientListener implements Action
 				}
 				break;
 			case "Cancel ":
-				controller.getView().hideMenuDialog(MenuDialogType.ADD_CANDIDATE);
+				controller.getView().hideDialog(DialogType.ADD_CANDIDATE);
 				break;
 			case "..":
 				File file = controller.getView().showFileChooser("Select CV to add.");
 				if (file != null) {
 					// update the view to show the new file
-					controller.getView().displayFileInDialog(MenuDialogType.ADD_CANDIDATE, file);
+					controller.getView().displayFileInDialog(DialogType.ADD_CANDIDATE, file);
 				}
 				break;
 			}

@@ -1,9 +1,9 @@
 package gui.listeners;
 
-import gui.ConfirmDialogType;
-import gui.DialogType;
 import gui.ErrorDialogType;
-import gui.MenuDialogType;
+import gui.MessageDialogType;
+import gui.DialogType;
+import gui.ConfirmDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,15 +33,15 @@ public class RemoveCandidateDialogListener extends ClientListener implements Act
 
 			switch (text) {
 			case "Confirm":
-				boolean confirmed = controller.getView().showDialog(DialogType.REMOVE_CANDIDATE);
+				boolean confirmed = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_CANDIDATE);
 				
 				if(confirmed) {
-					Candidate candidate = controller.getView().getCandidateDialogCandidate(MenuDialogType.REMOVE_CANDIDATE);
+					Candidate candidate = controller.getView().getCandidateDialogCandidate(DialogType.REMOVE_CANDIDATE);
 					boolean deleted = controller.getModel().removeCandidate(candidate);
 					
 					if(deleted) {
-						controller.getView().hideMenuDialog(MenuDialogType.REMOVE_CANDIDATE);
-						controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_CANDIDATE);
+						controller.getView().hideDialog(DialogType.REMOVE_CANDIDATE);
+						controller.getView().showMessageDialog(MessageDialogType.REMOVE_CANDIDATE);
 						
 						// Check if the candidate pipeline panel is displayed and then update if necessary
 						//TODO NEXT: implement this
@@ -60,7 +60,7 @@ public class RemoveCandidateDialogListener extends ClientListener implements Act
 				} 
 				break;
 			case "Cancel ":
-				controller.getView().hideMenuDialog(MenuDialogType.REMOVE_CANDIDATE);
+				controller.getView().hideDialog(DialogType.REMOVE_CANDIDATE);
 				break;
 			}
 		}

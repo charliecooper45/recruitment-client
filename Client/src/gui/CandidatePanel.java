@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.nio.file.Path;
 
 import javafx.application.Platform;
@@ -126,7 +127,7 @@ public class CandidatePanel extends JPanel {
 
 		Utils.setGBC(leftBottomPanelGbc, 1, 1, 2, 1, GridBagConstraints.NONE);
 		leftBottomPanel.add(new JLabel("Candidate Options:"), leftBottomPanelGbc);
-		
+
 		JPanel firstRowPnl = new JPanel(new GridLayout(1, 2));
 		addLinkedInProfileBtn = new JButton("Add LinkedIn   ");
 		firstRowPnl.add(addLinkedInProfileBtn);
@@ -191,6 +192,29 @@ public class CandidatePanel extends JPanel {
 				engine.load(updatedCandidate.getLinkedInProfile());
 			}
 		});
+	}
+
+	public Candidate getSelectedCandidate() {
+		return candidate;
+	}
+
+	public void updateShownLinkedInProfile(final URL url) {
+		if (url == null) {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					engine.load("");
+				}
+			});
+		} else {
+			// Load the url
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					engine.load(url.toString());
+				}
+			});
+		}
 	}
 
 	public void setCandidatePanelListener(ActionListener actionListener) {

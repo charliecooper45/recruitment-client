@@ -3,6 +3,7 @@ package gui;
 import gui.TopMenuPanel.MenuPanel;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
+import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.OrganisationPanelListener;
@@ -18,6 +19,7 @@ import interfaces.UserType;
 
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -149,8 +151,8 @@ public class ClientView {
 		mainWindow.resetSearchPanel();
 	}
 	
-	public Candidate getSelectedCandidate() {
-		return mainWindow.getSelectedCandidate();
+	public Candidate getSearchPanelCandidate() {
+		return mainWindow.getSearchPanelCandidate();
 	}
 	
 	// CandidatePipelinePanel methods
@@ -161,6 +163,14 @@ public class ClientView {
 	// CandidatePanel methods
 	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile) {
 		mainWindow.showCandidatePanel(updatedCandidate, tempFile);
+	}
+	
+	public void updateCandidateLinkedInProfile(URL url) {
+		mainWindow.updateCandidateLinkedInProfile(url);
+	}
+	
+	public Candidate getCandidatePanelCandidate() {
+		return mainWindow.getCandidatePanelCandidate();
 	}
 	
 	// AdminPanel methods
@@ -177,60 +187,64 @@ public class ClientView {
 		mainWindow.setSelectedTopMenuPanel(panel);
 	}
 	
-	public boolean showDialog(DialogType dialogType) {
-		return mainWindow.showDialog(dialogType);
+	public boolean showConfirmDialog(ConfirmDialogType dialogType) {
+		return mainWindow.showConfirmDialog(dialogType);
 	}
 
 	public void showErrorDialog(ErrorDialogType errorDialog) {
 		mainWindow.showErrorDialog(errorDialog);
 	}
 
-	public void showConfirmDialog(ConfirmDialogType confirmDialog) {
-		mainWindow.showConfirmDialog(confirmDialog);		
+	public void showMessageDialog(MessageDialogType confirmDialog) {
+		mainWindow.showMessageDialog(confirmDialog);		
 	}
 	
-	public void showMenuDialog(MenuDialogType menuDialog) {
-		mainWindow.showMenuDialog(menuDialog);
+	public void showDialog(DialogType dialog) {
+		mainWindow.showDialog(dialog);
 	}
 
-	public void hideMenuDialog(MenuDialogType menuDialog) {
-		mainWindow.hideMenuDialog(menuDialog);
+	public void hideDialog(DialogType dialog) {
+		mainWindow.hideDialog(dialog);
 	}
 
-	public void setDisplayedOrganisationsInDialog(MenuDialogType menuDialog, List<Organisation> organisations) {
+	public void setDisplayedOrganisationsInDialog(DialogType menuDialog, List<Organisation> organisations) {
 		mainWindow.setDisplayedOrganisationsInDialog(menuDialog, organisations);
 	}
 	
-	public void setDisplayedContactsInDialog(MenuDialogType menuDialog, List<Contact> contacts) {
+	public void setDisplayedContactsInDialog(DialogType menuDialog, List<Contact> contacts) {
 		mainWindow.setDisplayedContactsInDialog(menuDialog, contacts);
 	}
 
-	public void setDisplayedVacanciesInDialog(MenuDialogType menuDialog, List<Vacancy> vacancies) {
+	public void setDisplayedVacanciesInDialog(DialogType menuDialog, List<Vacancy> vacancies) {
 		mainWindow.setDisplayedVacanciesInDialog(menuDialog, vacancies);
 	}
 	
-	public void setDisplayedCandidatesInDialog(MenuDialogType menuDialog, List<Candidate> candidates) {
+	public void setDisplayedCandidatesInDialog(DialogType menuDialog, List<Candidate> candidates) {
 		mainWindow.setDisplayedCandidatesInDialog(menuDialog, candidates);
 	}
 	
-	public void displayFileInDialog(MenuDialogType menuDialogType, File file) {
+	public void displayFileInDialog(DialogType menuDialogType, File file) {
 		mainWindow.displayFileInDialog(menuDialogType, file);
 	}
 
-	public Vacancy getVacancyDialogVacancy(MenuDialogType menuDialog) {
-		return mainWindow.getVacancyDialogVacancy(menuDialog);
+	public Vacancy getVacancyDialogVacancy(DialogType dialog) {
+		return mainWindow.getVacancyDialogVacancy(dialog);
 	}
 	
-	public Organisation getOrganisationDialogOrganisation(MenuDialogType menuDialog) {
-		return mainWindow.getOrganisationDialogOrganisation(menuDialog);
+	public Organisation getOrganisationDialogOrganisation(DialogType dialog) {
+		return mainWindow.getOrganisationDialogOrganisation(dialog);
 	}
 	
-	public Candidate getCandidateDialogCandidate(MenuDialogType menuDialog) {
-		return mainWindow.getCandidateDialogCandidate(menuDialog);
+	public Candidate getCandidateDialogCandidate(DialogType dialog) {
+		return mainWindow.getCandidateDialogCandidate(dialog);
 	}
 	
-	public Contact getContactDialogContact(MenuDialogType menuDialog) {
-		return mainWindow.getContactDialogContact(menuDialog);
+	public Contact getContactDialogContact(DialogType dialog) {
+		return mainWindow.getContactDialogContact(dialog);
+	}
+	
+	public String getLinkedInProfileDialogUrl(DialogType dialog) {
+		return mainWindow.getLinkedInProfileDialogUrl(dialog);
 	}
 	
 	// methods to set listeners and controller
@@ -300,6 +314,10 @@ public class ClientView {
 	
 	public void setRemoveContactDialogListener(RemoveContactDialogListener removeContactDialogListener) {
 		mainWindow.setRemoveContactDialogListener(removeContactDialogListener);
+	}
+	
+	public void setAddLinkedInProfileListener(AddLinkedInProfileListener addLinkedInProfileListener) {
+		mainWindow.setAddLinkedInProfileLister(addLinkedInProfileListener);
 	}
 	
 	// main method

@@ -59,7 +59,7 @@ public class SearchPanelListener extends ClientListener implements ActionListene
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
 			// retrieve the selected candidate so it`s values can be updated from the server
-			Candidate selectedCandidate = controller.getView().getSelectedCandidate();
+			Candidate selectedCandidate = controller.getView().getSearchPanelCandidate();
 			Candidate updatedCandidate = controller.getModel().getCandidate(selectedCandidate.getId());
 			Path tempFile = null;
 			

@@ -3,7 +3,7 @@ package gui.listeners;
 import gui.ConfirmDialogType;
 import gui.DialogType;
 import gui.ErrorDialogType;
-import gui.MenuDialogType;
+import gui.MessageDialogType;
 import gui.PanelType;
 
 import java.awt.event.ActionEvent;
@@ -36,15 +36,15 @@ public class RemoveOrganisationDialogListener extends ClientListener implements 
 
 			switch (text) {
 			case "Confirm":
-				boolean confirmed = controller.getView().showDialog(DialogType.REMOVE_ORGANISATION);
+				boolean confirmed = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_ORGANISATION);
 				
 				if(confirmed) {
-					Organisation organisation = controller.getView().getOrganisationDialogOrganisation(MenuDialogType.REMOVE_ORGANISATION);
+					Organisation organisation = controller.getView().getOrganisationDialogOrganisation(DialogType.REMOVE_ORGANISATION);
 					boolean deleted = controller.getModel().removeOrganisation(organisation);
 					
 					if (deleted) {
-						controller.getView().hideMenuDialog(MenuDialogType.REMOVE_ORGANISATION);
-						controller.getView().showConfirmDialog(ConfirmDialogType.ORGANISATION_REMOVED);
+						controller.getView().hideDialog(DialogType.REMOVE_ORGANISATION);
+						controller.getView().showMessageDialog(MessageDialogType.ORGANISATION_REMOVED);
 						
 						// check if the organisations or vacancies panel is displayed and then update if necessary
 						//TODO NEXT: update the contacts panel
@@ -65,7 +65,7 @@ public class RemoveOrganisationDialogListener extends ClientListener implements 
 				}
 				break;
 			case "Cancel ":
-				controller.getView().hideMenuDialog(MenuDialogType.REMOVE_ORGANISATION);
+				controller.getView().hideDialog(DialogType.REMOVE_ORGANISATION);
 				break;
 			}
 		}

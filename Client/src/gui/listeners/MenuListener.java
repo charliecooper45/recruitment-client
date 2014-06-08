@@ -1,6 +1,6 @@
 package gui.listeners;
 
-import gui.MenuDialogType;
+import gui.DialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,39 +30,39 @@ public class MenuListener extends ClientListener implements ActionListener {
 		switch (action) {
 		case "Add Vacancy":
 			organisations = controller.getModel().getOrganisations();
-			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.ADD_VACANCY, organisations);
-			controller.getView().showMenuDialog(MenuDialogType.ADD_VACANCY);
+			controller.getView().setDisplayedOrganisationsInDialog(DialogType.ADD_VACANCY, organisations);
+			controller.getView().showDialog(DialogType.ADD_VACANCY);
 			break;
 		case "Remove Vacancy":
 			List<Vacancy> vacancies = controller.getModel().getVacancies(false, null);
-			controller.getView().setDisplayedVacanciesInDialog(MenuDialogType.REMOVE_VACANCY, vacancies);
-			controller.getView().showMenuDialog(MenuDialogType.REMOVE_VACANCY);
+			controller.getView().setDisplayedVacanciesInDialog(DialogType.REMOVE_VACANCY, vacancies);
+			controller.getView().showDialog(DialogType.REMOVE_VACANCY);
 			break;
 		case "Add Organisation":
-			controller.getView().showMenuDialog(MenuDialogType.ADD_ORGANISATION);
+			controller.getView().showDialog(DialogType.ADD_ORGANISATION);
 			break;
 		case "Remove Organisation":
 			organisations = controller.getModel().getOrganisations();
-			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.REMOVE_ORGANISATION, organisations);
-			controller.getView().showMenuDialog(MenuDialogType.REMOVE_ORGANISATION);
+			controller.getView().setDisplayedOrganisationsInDialog(DialogType.REMOVE_ORGANISATION, organisations);
+			controller.getView().showDialog(DialogType.REMOVE_ORGANISATION);
 			break;
 		case "Add Candidate":
-			controller.getView().showMenuDialog(MenuDialogType.ADD_CANDIDATE);
+			controller.getView().showDialog(DialogType.ADD_CANDIDATE);
 			break;
 		case "Remove Candidate":
 			List<Candidate> candidates = controller.getModel().getCandidates();
-			controller.getView().setDisplayedCandidatesInDialog(MenuDialogType.REMOVE_CANDIDATE, candidates);
-			controller.getView().showMenuDialog(MenuDialogType.REMOVE_CANDIDATE);
+			controller.getView().setDisplayedCandidatesInDialog(DialogType.REMOVE_CANDIDATE, candidates);
+			controller.getView().showDialog(DialogType.REMOVE_CANDIDATE);
 			break;
 		case "Add Contact":
 			organisations = controller.getModel().getOrganisations();
-			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.ADD_CONTACT, organisations);
-			controller.getView().showMenuDialog(MenuDialogType.ADD_CONTACT);
+			controller.getView().setDisplayedOrganisationsInDialog(DialogType.ADD_CONTACT, organisations);
+			controller.getView().showDialog(DialogType.ADD_CONTACT);
 			break;
 		case "Remove Contact":
 			organisations = controller.getModel().getOrganisations();
-			controller.getView().setDisplayedOrganisationsInDialog(MenuDialogType.REMOVE_CONTACT, organisations);
-			controller.getView().showMenuDialog(MenuDialogType.REMOVE_CONTACT);
+			controller.getView().setDisplayedOrganisationsInDialog(DialogType.REMOVE_CONTACT, organisations);
+			controller.getView().showDialog(DialogType.REMOVE_CONTACT);
 			break;
 		}
 	}

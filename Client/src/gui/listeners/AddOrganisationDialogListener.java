@@ -1,9 +1,9 @@
 package gui.listeners;
 
-import gui.ConfirmDialogType;
 import gui.ErrorDialogType;
-import gui.MenuDialogType;
+import gui.MessageDialogType;
 import gui.PanelType;
+import gui.DialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +20,6 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
 import database.beans.Organisation;
-import database.beans.Vacancy;
 
 /**
  * Listener for events on the add organisation dialog.
@@ -43,7 +42,7 @@ public class AddOrganisationDialogListener extends ClientListener implements Act
 			case "Confirm":
 				InputStream inputStream;
 				RemoteInputStreamServer tobData = null;
-				Organisation organisation = controller.getView().getOrganisationDialogOrganisation(MenuDialogType.ADD_ORGANISATION);
+				Organisation organisation = controller.getView().getOrganisationDialogOrganisation(DialogType.ADD_ORGANISATION);
 				
 				if(organisation != null) {
 					// the organisation is valid and can be added
@@ -58,8 +57,8 @@ public class AddOrganisationDialogListener extends ClientListener implements Act
 						boolean tobAdded = controller.getModel().addOrganisation(organisation, tobData);
 						
 						if (tobAdded) {
-							controller.getView().hideMenuDialog(MenuDialogType.ADD_ORGANISATION);
-							controller.getView().showConfirmDialog(ConfirmDialogType.ORGANISATION_ADDED);
+							controller.getView().hideDialog(DialogType.ADD_ORGANISATION);
+							controller.getView().showMessageDialog(MessageDialogType.ORGANISATION_ADDED);
 							
 							// check if the organisations panel is displayed and then update if necessary
 							PanelType shownPanel = controller.getView().getDisplayedPanel();
@@ -82,13 +81,13 @@ public class AddOrganisationDialogListener extends ClientListener implements Act
 				}
 				break;
 			case "Cancel ":
-				controller.getView().hideMenuDialog(MenuDialogType.ADD_ORGANISATION);
+				controller.getView().hideDialog(DialogType.ADD_ORGANISATION);
 				break;
 			case "..":
 				File file = controller.getView().showFileChooser("Select terms of business to add.");
 				if (file != null) {
 					// update the view to show the new file
-					controller.getView().displayFileInDialog(MenuDialogType.ADD_ORGANISATION, file);
+					controller.getView().displayFileInDialog(DialogType.ADD_ORGANISATION, file);
 				}
 				break;
 			}

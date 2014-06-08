@@ -5,6 +5,7 @@ import interfaces.ServerInterface;
 import interfaces.UserType;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -365,5 +366,29 @@ public class ClientModel implements ServerInterface {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean addLinkedInProfile(Candidate candidate, URL profileURL) {
+		try {
+			return SERVER.addLinkedInProfile(candidate, profileURL);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeLinkedInProfile(Candidate candidate) {
+		try {
+			return SERVER.removeLinkedInProfile(candidate);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

@@ -1,7 +1,7 @@
 package gui.listeners;
 
-import gui.DialogType;
 import gui.ErrorDialogType;
+import gui.ConfirmDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,7 +67,7 @@ public class OrganisationPanelListener extends ClientListener implements ActionL
 					}
 				}
 			} else if (button.getText().equals("Remove TOB")) {
-				boolean confirm = controller.getView().showDialog(DialogType.ORGANISATION_REMOVE_TOB);
+				boolean confirm = controller.getView().showConfirmDialog(ConfirmDialogType.ORGANISATION_REMOVE_TOB);
 				if (confirm) {
 					Organisation organisation = controller.getView().getDisplayedOrganisation();
 					if(organisation.getTermsOfBusiness() != null) {

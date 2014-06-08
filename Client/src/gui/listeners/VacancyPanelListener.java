@@ -1,7 +1,7 @@
 package gui.listeners;
 
-import gui.DialogType;
 import gui.ErrorDialogType;
+import gui.ConfirmDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,7 +65,7 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 					}
 				}
 			} else if (button.getText().equals("Remove profile")) {
-				boolean confirm = controller.getView().showDialog(DialogType.VACANCY_REMOVE_PROFILE);
+				boolean confirm = controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_REMOVE_PROFILE);
 				if (confirm) {
 					Vacancy vacancy = controller.getView().getDisplayedVacancy();
 					if (vacancy.getProfile() != null) {
@@ -85,12 +85,12 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 
 			String comboBoxValue = (String) comboBox.getSelectedItem();
 			if (status == true && comboBoxValue.equals("Closed")) {
-				if (controller.getView().showDialog(DialogType.VACANCY_CHANGE_STATUS_CLOSE)) {
+				if (controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_CHANGE_STATUS_CLOSE)) {
 					// close the vacancy
 					controller.getModel().changeVacancyStatus(displayedVacancy);
 				}
 			} else if (status == false && comboBoxValue.equals("Open")) {
-				if (controller.getView().showDialog(DialogType.VACANCY_CHANGE_STATUS_OPEN)) {
+				if (controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_CHANGE_STATUS_OPEN)) {
 					// open the vacancy
 					controller.getModel().changeVacancyStatus(displayedVacancy);
 				}

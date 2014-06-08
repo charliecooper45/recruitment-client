@@ -1,9 +1,9 @@
 package gui.listeners;
 
-import gui.ConfirmDialogType;
 import gui.ErrorDialogType;
-import gui.MenuDialogType;
+import gui.MessageDialogType;
 import gui.PanelType;
+import gui.DialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,7 +45,7 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 			case "Confirm":
 				InputStream inputStream;
 				RemoteInputStreamServer profileData = null;
-				Vacancy vacancy = controller.getView().getVacancyDialogVacancy(MenuDialogType.ADD_VACANCY);
+				Vacancy vacancy = controller.getView().getVacancyDialogVacancy(DialogType.ADD_VACANCY);
 				if (vacancy != null) {
 					// the vacancy is valid and can be added
 					try {
@@ -59,8 +59,8 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 						boolean profileAdded = controller.getModel().addVacancy(vacancy, profileData);
 
 						if (profileAdded) {
-							controller.getView().hideMenuDialog(MenuDialogType.ADD_VACANCY);
-							controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_ADDED);
+							controller.getView().hideDialog(DialogType.ADD_VACANCY);
+							controller.getView().showMessageDialog(MessageDialogType.VACANCY_ADDED);
 							// check if the vacancies panel is displayed and then update if necessary
 							PanelType shownPanel = controller.getView().getDisplayedPanel();
 							if (shownPanel == PanelType.VACANCIES) {
@@ -78,13 +78,13 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 				}
 				break;
 			case "Cancel ":
-				controller.getView().hideMenuDialog(MenuDialogType.ADD_VACANCY);
+				controller.getView().hideDialog(DialogType.ADD_VACANCY);
 				break;
 			case "..":
 				File file = controller.getView().showFileChooser("Select profile to add.");
 				if (file != null) {
 					// update the view to show the new file
-					controller.getView().displayFileInDialog(MenuDialogType.ADD_VACANCY, file);
+					controller.getView().displayFileInDialog(DialogType.ADD_VACANCY, file);
 				}
 				break;
 			}
@@ -93,7 +93,7 @@ public class AddVacancyDialogListener extends ClientListener implements ActionLi
 			Organisation selectedOrg = (Organisation) organisationCmbBx.getSelectedItem();
 			if (selectedOrg != null) {
 				List<Contact> contacts = controller.getModel().getOrganisationsContacts(selectedOrg);
-				controller.getView().setDisplayedContactsInDialog(MenuDialogType.ADD_VACANCY, contacts);
+				controller.getView().setDisplayedContactsInDialog(DialogType.ADD_VACANCY, contacts);
 			}
 		}
 	}

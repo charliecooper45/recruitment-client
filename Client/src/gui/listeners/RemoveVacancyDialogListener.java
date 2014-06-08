@@ -1,10 +1,10 @@
 package gui.listeners;
 
-import gui.ConfirmDialogType;
-import gui.DialogType;
 import gui.ErrorDialogType;
-import gui.MenuDialogType;
+import gui.MessageDialogType;
 import gui.PanelType;
+import gui.DialogType;
+import gui.ConfirmDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,14 +34,14 @@ public class RemoveVacancyDialogListener extends ClientListener implements Actio
 
 			switch (text) {
 			case "Confirm":
-				boolean confirmed = controller.getView().showDialog(DialogType.REMOVE_VACANCY);
+				boolean confirmed = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_VACANCY);
 				if (confirmed) {
-					Vacancy vacancy = controller.getView().getVacancyDialogVacancy(MenuDialogType.REMOVE_VACANCY);
+					Vacancy vacancy = controller.getView().getVacancyDialogVacancy(DialogType.REMOVE_VACANCY);
 					boolean deleted = controller.getModel().removeVacancy(vacancy);
 
 					if (deleted) {
-						controller.getView().hideMenuDialog(MenuDialogType.REMOVE_VACANCY);
-						controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_REMOVED);
+						controller.getView().hideDialog(DialogType.REMOVE_VACANCY);
+						controller.getView().showMessageDialog(MessageDialogType.VACANCY_REMOVED);
 						// check if the vacancies panel is displayed and then update if necessary
 						PanelType shownPanel = controller.getView().getDisplayedPanel();
 						if (shownPanel == PanelType.VACANCIES) {
@@ -55,7 +55,7 @@ public class RemoveVacancyDialogListener extends ClientListener implements Actio
 				}
 				break;
 			case "Cancel ":
-				controller.getView().hideMenuDialog(MenuDialogType.REMOVE_VACANCY);
+				controller.getView().hideDialog(DialogType.REMOVE_VACANCY);
 				break;
 			}
 		}
