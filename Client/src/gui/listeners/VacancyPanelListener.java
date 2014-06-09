@@ -1,19 +1,22 @@
 package gui.listeners;
 
-import gui.ErrorDialogType;
 import gui.ConfirmDialogType;
+import gui.ErrorDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTabbedPane;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
@@ -21,6 +24,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
+import database.beans.Event;
 import database.beans.Vacancy;
 
 /**
@@ -94,6 +98,25 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 					// open the vacancy
 					controller.getModel().changeVacancyStatus(displayedVacancy);
 				}
+			}
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+		Object source = event.getSource();
+		
+		if(source instanceof JTabbedPane) {
+			JTabbedPane tabbedPane = (JTabbedPane) source;
+			
+			int index = tabbedPane.getSelectedIndex();
+			
+			if(index == 1) {
+				// update the shortlist from the server
+				List<Event> shortlistEvents = controller.getModel().getShortlist(controller.getView().getDisplayedVacancy().getVacancyId());
+				
+				// update the view to display the shortlist
+				controller.getView().updateDisplayedShortlist(shortlistEvents);
 			}
 		}
 	}

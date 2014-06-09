@@ -16,6 +16,7 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 
 import database.beans.Candidate;
 import database.beans.Contact;
+import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
@@ -414,5 +415,17 @@ public class ClientModel implements ServerInterface {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public List<Event> getShortlist(int vacancyId) {
+		try {
+			return SERVER.getShortlist(vacancyId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

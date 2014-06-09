@@ -1,5 +1,7 @@
 package gui;
 
+import gui.listeners.VacancyPanelListener;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,13 +10,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -24,8 +26,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
@@ -34,6 +38,7 @@ import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 
+import database.beans.Event;
 import database.beans.Vacancy;
 
 //TODO NEXT: set max width so doesn`t resize
@@ -68,9 +73,15 @@ public class VacancyPanel extends JPanel {
 	private JTabbedPane tabbedPane;
 	private JPanel vacancyProfilePanel;
 	private JTextArea documentArea;
+	private JPanel shortlistPanel;
+	private JTable shortlistTbl;
+	private JScrollPane shortlistScrl;
 
 	// the displayed vacancy
 	private Vacancy vacancy;
+	
+	// the shortlist events shown in the shortlistTbl
+	private List<Event> shortlistEvents;
 
 	public VacancyPanel() {
 		init();
@@ -171,6 +182,7 @@ public class VacancyPanel extends JPanel {
 		rightPanelGbc.weightx = 1;
 		rightPanelGbc.weighty = 1;
 
+		// set up the vacancy profile panel
 		vacancyProfilePanel = new JPanel(new BorderLayout());
 		documentArea = new JTextArea();
 		documentArea.setEditable(false);
@@ -178,10 +190,68 @@ public class VacancyPanel extends JPanel {
 		vacancyScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		vacancyScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		vacancyProfilePanel.add(vacancyScrlPane, BorderLayout.CENTER);
-
+		
+		// setup the shortlist panel
+		shortlistEvents = new ArrayList<>();
+		shortlistPanel = new JPanel(new BorderLayout());
+		shortlistTbl = new JTable(new DefaultTableModel() {
+			private static final long serialVersionUID = 1L;
+			private String[] columns = {"Candidate ID", "Candidate Name", "Phone Number", "Date", "UserID"};
+			
+			@Override
+			public Object getValueAt(int row, int column) {
+				Event event = shortlistEvents.get(row);
+				
+				switch (column) {
+				case 0:
+					return event.getCandidate().getId();
+				case 1:
+					return event.getCandidate().getFirstName() + " " + event.getCandidate().getSurname();
+				case 2:
+					return event.getCandidate().getPhoneNumber();
+				case 3:
+					return event.getDate();
+				case 4:
+					return event.getUserId();
+				}
+				return "test data";
+			}
+			
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+			
+			@Override
+			public int getRowCount() {
+				if(shortlistEvents != null) {
+					return shortlistEvents.size();
+				} else { 
+					return 0;
+				}
+			}
+			
+			@Override
+			public int getColumnCount() {
+				return 5;
+			}
+			
+			@Override
+			public String getColumnName(int index) {
+				return columns[index];
+			}
+		});
+		shortlistTbl.getTableHeader().setFont(shortlistTbl.getFont().deriveFont(Font.BOLD, 16));
+		shortlistTbl.setFont(shortlistTbl.getFont().deriveFont(14.0f));
+		shortlistTbl.setRowHeight(20);
+		shortlistScrl = new JScrollPane(shortlistTbl);
+		shortlistScrl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		shortlistScrl.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		shortlistPanel.add(shortlistScrl, BorderLayout.CENTER);
+		
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("Vacancy Profile", vacancyProfilePanel);
-		tabbedPane.addTab("Shortlist", new JPanel());
+		tabbedPane.addTab("Shortlist", shortlistPanel);
 		tabbedPane.addTab("Progress Report", new JPanel());
 		tabbedPane.addTab("Notes", new JPanel());
 		Utils.setGBC(rightPanelGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
@@ -192,6 +262,7 @@ public class VacancyPanel extends JPanel {
 
 	public void setDisplayedVacancy(Vacancy updatedVacancy, Path tempFile) {
 		this.vacancy = updatedVacancy;
+		tabbedPane.setSelectedIndex(0);
 
 		if (updatedVacancy.getStatus()) {
 			vacancyNameLbl.setForeground(Color.GREEN);
@@ -234,6 +305,12 @@ public class VacancyPanel extends JPanel {
 		}
 	}
 
+	public void updateShortlist(List<Event> shortlistEvents) {
+		this.shortlistEvents = shortlistEvents;
+		DefaultTableModel model = (DefaultTableModel) shortlistTbl.getModel();
+		model.fireTableDataChanged();
+	}
+	
 	private void readVacancyProfile(Path path) {
 		documentArea.setText("");
 		WordExtractor extractor = null;
@@ -310,9 +387,11 @@ public class VacancyPanel extends JPanel {
 		}
 	}
 
-	public void setVacancyPanelListener(ActionListener actionListener) {
-		addVacancyProfileBtn.addActionListener(actionListener);
-		removeVacancyProfileBtn.addActionListener(actionListener);
-		statusCmbBox.addActionListener(actionListener);
+	public void setVacancyPanelListener(VacancyPanelListener listener) {
+		addVacancyProfileBtn.addActionListener(listener);
+		removeVacancyProfileBtn.addActionListener(listener);
+		statusCmbBox.addActionListener(listener);
+		tabbedPane.addMouseListener(listener);
 	}
+
 }

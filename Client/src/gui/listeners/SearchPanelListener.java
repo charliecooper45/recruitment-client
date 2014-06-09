@@ -51,6 +51,10 @@ public class SearchPanelListener extends ClientListener implements ActionListene
 			case "ResetSearchButton":
 				controller.getView().resetSearchPanel();
 				break;
+			case "AddShortlistButton":
+				System.err.println("Shortlist button pressed");
+				List<Candidate> selectedCandidates;
+				break;
 			}
 		}
 	}

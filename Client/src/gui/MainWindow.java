@@ -25,6 +25,7 @@ import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
+import gui.listeners.VacancyPanelListener;
 import interfaces.UserType;
 
 import java.awt.BorderLayout;
@@ -54,6 +55,7 @@ import javax.swing.filechooser.FileFilter;
 
 import database.beans.Candidate;
 import database.beans.Contact;
+import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
@@ -237,6 +239,11 @@ public class MainWindow extends JFrame {
 		return panel.getDisplayedVacancy();
 	}
 
+	public void updateDisplayedShortlist(List<Event> shortlistEvents) {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
+		panel.updateShortlist(shortlistEvents);
+	}
+	
 	// OrganisationsPanel methods
 	public void showOrganisationsPanel(List<Organisation> organisations) {
 		removeCentreComponent();
@@ -699,9 +706,9 @@ public class MainWindow extends JFrame {
 		panel.setVacanciesPanelListener(vacanciesPanelListener);
 	}
 
-	public void setVacancyPanelListener(ActionListener actionListener) {
+	public void setVacancyPanelListener(VacancyPanelListener listener) {
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-		panel.setVacancyPanelListener(actionListener);
+		panel.setVacancyPanelListener(listener);
 	}
 
 	public void setOrganisationsPanelListener(OrganisationsPanelListener organisationsPanelListener) {

@@ -260,6 +260,7 @@ public class SearchPanel extends JPanel {
 		Utils.setGBC(rightPanelGbc, 2, 3, 1, 1, GridBagConstraints.HORIZONTAL);
 		rightPanel.add(vacancyCmBx, rightPanelGbc);
 		shortlistBtn = new JButton("   Add to shortlist   ");
+		shortlistBtn.setName("AddShortlistButton");
 		rightPanelGbc.anchor = GridBagConstraints.LINE_START;
 		Utils.setGBC(rightPanelGbc, 3, 3, 1, 1, GridBagConstraints.NONE);
 		rightPanel.add(shortlistBtn, rightPanelGbc);
@@ -359,6 +360,7 @@ public class SearchPanel extends JPanel {
 		skillsAddButton.addActionListener(searchPanelListener);
 		skillsRemoveButton.addActionListener(searchPanelListener);
 		resetSearchButton.addActionListener(searchPanelListener);
+		shortlistBtn.addActionListener(searchPanelListener);
 		resultsTbl.addMouseListener(searchPanelListener);
 	}
 }

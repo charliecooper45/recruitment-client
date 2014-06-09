@@ -9,6 +9,7 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 
 import database.beans.Candidate;
 import database.beans.Contact;
+import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
@@ -52,4 +53,5 @@ public interface ServerInterface extends Remote{
 	public boolean removeLinkedInProfile(Candidate candidate) throws RemoteException;
 	public boolean addCandidateCv(Candidate candidate, RemoteInputStream remoteFileData, String oldFileName) throws RemoteException;
 	public boolean removeCandidateCv(Candidate candidate) throws RemoteException;
+	public List<Event> getShortlist(int vacancyId) throws RemoteException;
 }

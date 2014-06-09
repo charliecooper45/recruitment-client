@@ -15,6 +15,7 @@ import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
+import gui.listeners.VacancyPanelListener;
 import interfaces.UserType;
 
 import java.awt.event.ActionListener;
@@ -30,6 +31,7 @@ import model.LoginAttempt;
 import controller.ClientController;
 import database.beans.Candidate;
 import database.beans.Contact;
+import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
@@ -94,6 +96,10 @@ public class ClientView {
 
 	public Vacancy getDisplayedVacancy() {
 		return mainWindow.getDisplayedVacancy();
+	}
+	
+	public void updateDisplayedShortlist(List<Event> shortlistEvents) {
+		mainWindow.updateDisplayedShortlist(shortlistEvents);
 	}
 	
 	// OrganisationsPanel methods
@@ -264,8 +270,8 @@ public class ClientView {
 		mainWindow.setVacanciesPanelListeners(vacanciesPanelListener);
 	}
 
-	public void setVacancyPanelListener(ActionListener actionListener) {
-		mainWindow.setVacancyPanelListener(actionListener);
+	public void setVacancyPanelListener(VacancyPanelListener listener) {
+		mainWindow.setVacancyPanelListener(listener);
 	}
 
 	public void setOrganisationsPanelListener(OrganisationsPanelListener organisationsPanelListener) {
