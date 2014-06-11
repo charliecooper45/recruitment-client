@@ -102,6 +102,10 @@ public class ClientView {
 		mainWindow.updateDisplayedShortlist(shortlistEvents);
 	}
 	
+	public Event getSelectedShortlistEvent() {
+		return mainWindow.getSelectedShortlistEvent();
+	}
+	
 	// OrganisationsPanel methods
 	public void showOrganisationsPanel(List<Organisation> organisations) {
 		mainWindow.showOrganisationsPanel(organisations);
@@ -161,6 +165,14 @@ public class ClientView {
 		return mainWindow.getSearchPanelCandidate();
 	}
 	
+	public List<Candidate> getSelectedShortlistCandidates() {
+		return mainWindow.getSelectedShortlistCandidates();
+	}
+	
+	public Vacancy getShortlistVacancy() {
+		return mainWindow.getShortlistVacancy();
+	}
+	
 	// CandidatePipelinePanel methods
 	public void showCandidatePipeline() {
 		mainWindow.showCandidatePipeline();
@@ -177,6 +189,14 @@ public class ClientView {
 	
 	public Candidate getCandidatePanelCandidate() {
 		return mainWindow.getCandidatePanelCandidate();
+	}
+	
+	public Candidate getUpdatedCandidate() {
+		return mainWindow.getUpdatedCandidate();
+	}
+	
+	public void updateDisplayedCandidate(Candidate candidate) {
+		mainWindow.updateDisplayedCandidate(candidate);
 	}
 	
 	// AdminPanel methods

@@ -23,7 +23,6 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
 import database.beans.Candidate;
-import database.beans.Vacancy;
 
 /**
  * Listener for events on the candidate panel.
@@ -40,7 +39,7 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 
 		if (source instanceof JButton) {
 			JButton button = (JButton) source;
-			System.err.println(button.getText().trim());
+			
 			if (button.getText().trim().equals("Add LinkedIn")) {
 				controller.getView().showDialog(DialogType.CANDIDATE_ADD_LINKEDIN);
 			} else if (button.getText().trim().equals("Remove LinkedIn")) {
@@ -98,6 +97,18 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 					} else {
 						controller.getView().showErrorDialog(ErrorDialogType.CANDIDATE_NO_CV);
 					}
+				}
+			} else if (button.getText().trim().equals("Save candidate data")) {
+				Candidate updatedCandidate = controller.getView().getUpdatedCandidate();
+				
+				// send a message with the update candidate information to the server
+				boolean updated = controller.getModel().updateCandidateDetails(updatedCandidate);
+				
+				if(updated) {
+					controller.getView().showMessageDialog(MessageDialogType.CANDIDATE_UPDATED);
+					controller.getView().updateDisplayedCandidate(updatedCandidate);
+				} else {
+					controller.getView().showErrorDialog(ErrorDialogType.CANDIDATE_UPDATE_FAIL);
 				}
 			}
 		}

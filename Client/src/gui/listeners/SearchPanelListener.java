@@ -1,5 +1,9 @@
 package gui.listeners;
 
+import gui.ErrorDialogType;
+import gui.MainWindow;
+import gui.MessageDialogType;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,6 +20,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import controller.ClientController;
 import database.beans.Candidate;
 import database.beans.Search;
+import database.beans.Vacancy;
 
 /**
  * Listener for events on the search panel.
@@ -52,8 +57,16 @@ public class SearchPanelListener extends ClientListener implements ActionListene
 				controller.getView().resetSearchPanel();
 				break;
 			case "AddShortlistButton":
-				System.err.println("Shortlist button pressed");
-				List<Candidate> selectedCandidates;
+				List<Candidate> selectedCandidates = controller.getView().getSelectedShortlistCandidates();
+				Vacancy vacancy = controller.getView().getShortlistVacancy();
+				
+				boolean added = controller.getModel().addCandidatesToShortlist(selectedCandidates, vacancy, MainWindow.USER_ID);
+				
+				if(added) {
+					controller.getView().showMessageDialog(MessageDialogType.ADD_TO_SHORTLIST);
+				} else {
+					controller.getView().showErrorDialog(ErrorDialogType.ADD_TO_SHORTLIST_FAIL);
+				}
 				break;
 			}
 		}

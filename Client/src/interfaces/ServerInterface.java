@@ -54,4 +54,7 @@ public interface ServerInterface extends Remote{
 	public boolean addCandidateCv(Candidate candidate, RemoteInputStream remoteFileData, String oldFileName) throws RemoteException;
 	public boolean removeCandidateCv(Candidate candidate) throws RemoteException;
 	public List<Event> getShortlist(int vacancyId) throws RemoteException;
+	public boolean addCandidatesToShortlist(List<Candidate> candidates, Vacancy vacancy, String userId) throws RemoteException;
+	public boolean removeCandidateFromShortlist(int candidateId, int vacancyId) throws RemoteException;
+	public boolean updateCandidateDetails(Candidate candidate) throws RemoteException;
 }

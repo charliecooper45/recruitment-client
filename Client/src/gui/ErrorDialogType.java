@@ -5,7 +5,8 @@ public enum ErrorDialogType {
 	ORGANISATION_NO_TOB("No terms of business currently stored for this vacancy"), ADD_ORGANISATION_FAIL("Unable to add the organisation"), REMOVE_ORGANISATION_FAIL("Unable to remove " +
 			"organisation"), ADD_CANDIDATE_FAIL("Unable to add candidate"), REMOVE_CANDIDATE_FAIL("Unable to remove the candidate"), ADD_CONTACT_FAIL("Unable to add contact"), 
 	REMOVE_CONTACT_FAIL("Unable to remove contact"), ADD_LINKEDIN_FAIL("Unable to add LinkedIn profile, please check the URL"),	REMOVE_LINKEDIN_FAIL("Unable to remove LinkedIn profile"), 
-	CANDIDATE_NO_CV("No CV currently stored for this candidate");
+	CANDIDATE_NO_CV("No CV currently stored for this candidate"), ADD_TO_SHORTLIST_FAIL("Cannot add candidate(s) to shortlist"), REMOVE_FROM_SHORTLIST_FAIL("Unable to remove candidate from shortlist)"), 
+	CANDIDATE_UPDATE_FAIL("Unable to update candidate");
 	
 	private String errorMessage;
 	

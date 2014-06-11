@@ -2,9 +2,12 @@ package gui.listeners;
 
 import gui.ConfirmDialogType;
 import gui.ErrorDialogType;
+import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +34,7 @@ import database.beans.Vacancy;
  * Listener for events on the vacancy panel.
  * @author Charlie
  */
-public class VacancyPanelListener extends ClientListener implements ActionListener {
+public class VacancyPanelListener extends ClientListener implements ActionListener, KeyListener {
 	public VacancyPanelListener(ClientController controller) {
 		super(controller);
 	}
@@ -120,4 +123,33 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 			}
 		}
 	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+			// the user wishes to remove the shortlist event
+			Event shortlistEvent = controller.getView().getSelectedShortlistEvent();
+			
+			
+			boolean delete = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_FROM_SHORTLIST);
+			
+			if(delete) {
+				// send a message to the server to delete the shortlist event
+				boolean deleted = controller.getModel().removeCandidateFromShortlist(shortlistEvent.getCandidate().getId(), shortlistEvent.getVacancyId());
+				
+				if(deleted) {
+					controller.getView().showMessageDialog(MessageDialogType.REMOVED_FROM_SHORTLIST);
+					
+					// update the view to display the updated shortlist
+					List<Event> shortlistEvents = controller.getModel().getShortlist(controller.getView().getDisplayedVacancy().getVacancyId());
+					controller.getView().updateDisplayedShortlist(shortlistEvents);
+				} else {
+					controller.getView().showErrorDialog(ErrorDialogType.REMOVE_FROM_SHORTLIST_FAIL);
+				}
+			}
+		}
+	}
+
+	@Override public void keyPressed(KeyEvent e) {}
+	@Override public void keyTyped(KeyEvent e) {}
 }

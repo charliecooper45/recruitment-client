@@ -293,6 +293,10 @@ public class VacancyPanel extends JPanel {
 		return vacancy;
 	}
 
+	public Event getSelectedShortlistEvent() {
+		return shortlistEvents.get(shortlistTbl.getSelectedRow());
+	}
+	
 	public void setVacancyStatus(boolean status) {
 		vacancy.setStatus(status);
 
@@ -392,6 +396,7 @@ public class VacancyPanel extends JPanel {
 		removeVacancyProfileBtn.addActionListener(listener);
 		statusCmbBox.addActionListener(listener);
 		tabbedPane.addMouseListener(listener);
+		shortlistTbl.addKeyListener(listener);
 	}
 
 }

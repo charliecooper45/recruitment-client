@@ -355,6 +355,21 @@ public class SearchPanel extends JPanel {
 		return candidates.get(resultsTbl.getSelectedRow());
 	}
 	
+	public List<Candidate> getSelectedCandidates() {
+		List<Candidate> selectedCandidates = new ArrayList<>();
+		DefaultTableModel model = (DefaultTableModel) resultsTbl.getModel();
+		for(int i = 0; i < candidates.size(); i++) {
+			if((boolean) model.getValueAt(i, 0)) {
+				selectedCandidates.add(candidates.get(i));
+			}
+		}
+		return selectedCandidates;
+	}
+	
+	public Vacancy getShortlistVacancy() {
+		return (Vacancy) vacancyCmBx.getSelectedItem();
+	}
+	
 	public void setSearchPanelListener(SearchPanelListener searchPanelListener) {
 		searchButton.addActionListener(searchPanelListener);
 		skillsAddButton.addActionListener(searchPanelListener);
@@ -363,4 +378,5 @@ public class SearchPanel extends JPanel {
 		shortlistBtn.addActionListener(searchPanelListener);
 		resultsTbl.addMouseListener(searchPanelListener);
 	}
+
 }

@@ -243,7 +243,12 @@ public class MainWindow extends JFrame {
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
 		panel.updateShortlist(shortlistEvents);
 	}
-	
+
+	public Event getSelectedShortlistEvent() {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
+		return panel.getSelectedShortlistEvent();
+	}
+
 	// OrganisationsPanel methods
 	public void showOrganisationsPanel(List<Organisation> organisations) {
 		removeCentreComponent();
@@ -349,6 +354,16 @@ public class MainWindow extends JFrame {
 		return panel.getSelectedCandidate();
 	}
 
+	public List<Candidate> getSelectedShortlistCandidates() {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		return panel.getSelectedCandidates();
+	}
+
+	public Vacancy getShortlistVacancy() {
+		SearchPanel panel = (SearchPanel) centrePanels.get(PanelType.SEARCH);
+		return panel.getShortlistVacancy();
+	}
+
 	// CandidatePipelinePanel methods
 	public void showCandidatePipeline() {
 		removeCentreComponent();
@@ -376,10 +391,20 @@ public class MainWindow extends JFrame {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		panel.updateShownLinkedInProfile(url);
 	}
-	
+
 	public Candidate getCandidatePanelCandidate() {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		return panel.getSelectedCandidate();
+	}
+
+	public Candidate getUpdatedCandidate() {
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		return panel.getUpdatedCandidate();
+	}
+	
+	public void updateDisplayedCandidate(Candidate candidate) {
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		panel.updateDisplayedCandidate(candidate);
 	}
 	
 	// AdminPanel methods
@@ -503,6 +528,13 @@ public class MainWindow extends JFrame {
 		case CANDIDATE_REMOVE_CV:
 			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
 			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.CANDIDATE_REMOVE_CV.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if (response == 0) {
+				return true;
+			}
+			break;
+		case REMOVE_FROM_SHORTLIST:
+			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.REMOVE_FROM_SHORTLIST.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0) {
 				return true;
 			}
@@ -682,14 +714,14 @@ public class MainWindow extends JFrame {
 	}
 
 	public String getLinkedInProfileDialogUrl(DialogType dialog) {
-		switch(dialog) {
+		switch (dialog) {
 		case CANDIDATE_ADD_LINKEDIN:
 			AddLinkedInDialog linkedInDialog = (AddLinkedInDialog) dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN);
 			return linkedInDialog.getProfileUrl();
 		}
 		return "";
 	}
-	
+
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -730,7 +762,7 @@ public class MainWindow extends JFrame {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		panel.setCandidatePanelListener(candidatePanelListener);
 	}
-	
+
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(DialogType.ADD_VACANCY).setActionListener(actionListener);
 	}

@@ -428,4 +428,40 @@ public class ClientModel implements ServerInterface {
 		}
 		return null;
 	}
+
+	@Override
+	public boolean addCandidatesToShortlist(List<Candidate> candidates, Vacancy vacancy, String userId) {
+		try {
+			return SERVER.addCandidatesToShortlist(candidates, vacancy, userId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeCandidateFromShortlist(int candidateId, int vacancyId) {
+		try {
+			return SERVER.removeCandidateFromShortlist(candidateId, vacancyId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean updateCandidateDetails(Candidate candidate) {
+		try {
+			return SERVER.updateCandidateDetails(candidate);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

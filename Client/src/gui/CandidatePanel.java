@@ -54,6 +54,7 @@ public class CandidatePanel extends JPanel {
 	private JTextField phoneNoTxtFld;
 	private JTextField emailTxtFld;
 	private JTextField addressTxtFld;
+	private JButton saveChangesBtn;
 
 	// components = leftBottomPanel
 	private JPanel leftBottomPanel;
@@ -73,7 +74,7 @@ public class CandidatePanel extends JPanel {
 
 	// the displayed candidate
 	private Candidate candidate;
-
+	
 	public CandidatePanel() {
 		init();
 	}
@@ -97,7 +98,7 @@ public class CandidatePanel extends JPanel {
 		leftTopPnlGbc.weighty = 1;
 		leftTopPnlGbc.anchor = GridBagConstraints.CENTER;
 
-		candidateNameLbl = new JLabel("Lionel Messi");
+		candidateNameLbl = new JLabel("");
 		candidateNameLbl.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		Utils.setGBC(leftTopPnlGbc, 1, 1, 2, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(candidateNameLbl, leftTopPnlGbc);
@@ -132,6 +133,12 @@ public class CandidatePanel extends JPanel {
 		addressTxtFld = new JTextField();
 		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(addressTxtFld, leftTopPnlGbc);
+		
+		// button
+		leftTopPnlGbc.anchor = GridBagConstraints.CENTER;
+		saveChangesBtn = new JButton("Save candidate data");
+		Utils.setGBC(leftTopPnlGbc, 1, 7, 2, 1, GridBagConstraints.NONE);
+		leftTopPanel.add(saveChangesBtn, leftTopPnlGbc);
 
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		add(leftTopPanel, gbc);
@@ -312,6 +319,27 @@ public class CandidatePanel extends JPanel {
 		return candidate;
 	}
 
+	public Candidate getUpdatedCandidate() {
+		String jobTitle = titleTxtFld.getText().trim();
+		String phoneNumber = phoneNoTxtFld.getText().trim();
+		String email = emailTxtFld.getText().trim();
+		String address = addressTxtFld.getText().trim();
+		
+		if(jobTitle.length() == 0)	
+			jobTitle = null;
+		if(phoneNumber.length() == 0) 
+			phoneNumber = null;
+		if(email.length() == 0)
+			email = null;
+		if(address.length() == 0)
+			address = null;
+				
+		Candidate updatedCandidate = new Candidate(candidate.getId(), candidate.getFirstName(), candidate.getSurname(), jobTitle, phoneNumber, 
+				email, address, candidate.getNotes(), candidate.getLinkedInProfile(), candidate.getCV(), candidate.getUserId());
+		
+		return updatedCandidate;
+	}
+	
 	public void updateShownLinkedInProfile(final URL url) {
 		if (url == null) {
 			Platform.runLater(new Runnable() {
@@ -331,10 +359,23 @@ public class CandidatePanel extends JPanel {
 		}
 	}
 
+	public void updateDisplayedCandidate(Candidate candidate) {
+		this.candidate = candidate;
+
+		candidateNameLbl.setText(candidate.getFirstName() + " " + candidate.getSurname());
+		createdByLbl.setText(candidate.getUserId());
+		titleTxtFld.setText(candidate.getJobTitle());
+		phoneNoTxtFld.setText(candidate.getPhoneNumber());
+		emailTxtFld.setText(candidate.getEmailAddress());
+		addressTxtFld.setText(candidate.getAddress());
+	}
+	
 	public void setCandidatePanelListener(ActionListener actionListener) {
+		saveChangesBtn.addActionListener(actionListener);
 		addLinkedInProfileBtn.addActionListener(actionListener);
 		removeLinkedInProfileBtn.addActionListener(actionListener);
 		addCVBtn.addActionListener(actionListener);
 		removeCVBtn.addActionListener(actionListener);
 	}
+
 }
