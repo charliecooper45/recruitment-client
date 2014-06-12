@@ -19,6 +19,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 
 import controller.ClientController;
 import database.beans.Candidate;
+import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Vacancy;
 
@@ -78,6 +79,8 @@ public class SearchPanelListener extends ClientListener implements ActionListene
 			// retrieve the selected candidate so it`s values can be updated from the server
 			Candidate selectedCandidate = controller.getView().getSearchPanelCandidate();
 			Candidate updatedCandidate = controller.getModel().getCandidate(selectedCandidate.getId());
+			List<Organisation> organisations = controller.getModel().getOrganisations();
+			
 			Path tempFile = null;
 			
 			// get the candidate CV
@@ -92,7 +95,7 @@ public class SearchPanelListener extends ClientListener implements ActionListene
 				// TODO NEXT B: Possible display an error message here
 				e1.printStackTrace();
 			}
-			controller.getView().showCandidatePanel(updatedCandidate, tempFile);
+			controller.getView().showCandidatePanel(updatedCandidate, tempFile, organisations);
 		}
 	}
 }

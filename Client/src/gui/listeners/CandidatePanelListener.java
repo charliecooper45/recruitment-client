@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
 
 import javax.swing.JButton;
 
@@ -23,6 +24,7 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
 import database.beans.Candidate;
+import database.beans.Organisation;
 
 /**
  * Listener for events on the candidate panel.
@@ -73,7 +75,8 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 							RemoteInputStream remoteCvData = controller.getModel().getCandidateCV(candidateCv);
 							InputStream fileData = RemoteInputStreamClient.wrap(remoteCvData);
 							Path tempFile = controller.storeTempFile(fileData, candidateCv);
-							controller.getView().showCandidatePanel(candidate, tempFile);
+							List<Organisation> organisations = controller.getModel().getOrganisations();
+							controller.getView().showCandidatePanel(candidate, tempFile, organisations);
 						}
 					} catch (FileNotFoundException e) {
 						// TODO handle this exception
@@ -92,7 +95,8 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 					if (candidate.getCV() != null) {
 						if (controller.getModel().removeCandidateCv(candidate)) {
 							candidate.setCV(null);
-							controller.getView().showCandidatePanel(candidate, null);
+							List<Organisation> organisations = controller.getModel().getOrganisations();
+							controller.getView().showCandidatePanel(candidate, null, organisations);
 						}
 					} else {
 						controller.getView().showErrorDialog(ErrorDialogType.CANDIDATE_NO_CV);

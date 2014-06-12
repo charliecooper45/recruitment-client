@@ -11,6 +11,8 @@ public class Candidate implements Serializable {
 	private String firstName;
 	private String surname;
 	private String jobTitle;
+	private int organisationId;
+	private String organisationName;
 	private String phoneNumber;
 	private String emailAddress;
 	private String address;
@@ -19,11 +21,13 @@ public class Candidate implements Serializable {
 	private String CV;
 	private String userId;
 
-	public Candidate(int id, String firstName, String surname, String jobTitle, String phoneNumber, String emailAddress, String address, String notes, String linkedInProfile, String cV, String userId) {
+	public Candidate(int id, String firstName, String surname, String jobTitle, int organisationId, String organisationName, String phoneNumber, String emailAddress, String address, String notes, String linkedInProfile, String cV, String userId) {
 		this.id = id;
 		this.firstName = firstName;
 		this.surname = surname;
 		this.jobTitle = jobTitle;
+		this.organisationId = organisationId;
+		this.organisationName = organisationName;
 		this.phoneNumber = phoneNumber;
 		this.emailAddress = emailAddress;
 		this.address = address;
@@ -79,6 +83,22 @@ public class Candidate implements Serializable {
 
 	public void setCV(String CV) {
 		this.CV = CV;
+	}
+	
+	public String getOrganisationName() {
+		return organisationName;
+	}
+	
+	public void setOrganisationName(String organisationName) {
+		this.organisationName = organisationName;
+	}
+	
+	public int getOrganisationId() {
+		return organisationId;
+	}
+	
+	public void setOrganisationId(int organisationId) {
+		this.organisationId = organisationId;
 	}
 	
 	@Override

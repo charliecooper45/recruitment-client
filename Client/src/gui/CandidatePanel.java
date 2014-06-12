@@ -25,6 +25,7 @@ import javafx.scene.web.WebView;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -40,6 +41,7 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 
 import database.beans.Candidate;
+import database.beans.Organisation;
 
 public class CandidatePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -51,6 +53,7 @@ public class CandidatePanel extends JPanel {
 	private JLabel candidateNameLbl;
 	private JLabel createdByLbl;
 	private JTextField titleTxtFld;
+	private JComboBox<Organisation> orgCmbBox;
 	private JTextField phoneNoTxtFld;
 	private JTextField emailTxtFld;
 	private JTextField addressTxtFld;
@@ -74,6 +77,9 @@ public class CandidatePanel extends JPanel {
 
 	// the displayed candidate
 	private Candidate candidate;
+	
+	// the displayed organisations
+	private List<Organisation> organisations;
 	
 	public CandidatePanel() {
 		init();
@@ -112,10 +118,12 @@ public class CandidatePanel extends JPanel {
 		Utils.setGBC(leftTopPnlGbc, 1, 3, 1, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(new JLabel("Job Title:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 4, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Phone Number:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Organisation:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 5, 1, 1, GridBagConstraints.NONE);
-		leftTopPanel.add(new JLabel("Email Address:"), leftTopPnlGbc);
+		leftTopPanel.add(new JLabel("Phone Number:"), leftTopPnlGbc);
 		Utils.setGBC(leftTopPnlGbc, 1, 6, 1, 1, GridBagConstraints.NONE);
+		leftTopPanel.add(new JLabel("Email Address:"), leftTopPnlGbc);
+		Utils.setGBC(leftTopPnlGbc, 1, 7, 1, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(new JLabel("Address:"), leftTopPnlGbc);
 
 		// fields
@@ -124,20 +132,23 @@ public class CandidatePanel extends JPanel {
 		titleTxtFld = new JTextField();
 		Utils.setGBC(leftTopPnlGbc, 2, 3, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(titleTxtFld, leftTopPnlGbc);
-		phoneNoTxtFld = new JTextField();
+		orgCmbBox = new JComboBox<Organisation>();
 		Utils.setGBC(leftTopPnlGbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
+		leftTopPanel.add(orgCmbBox, leftTopPnlGbc);
+		phoneNoTxtFld = new JTextField();
+		Utils.setGBC(leftTopPnlGbc, 2, 5, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(phoneNoTxtFld, leftTopPnlGbc);
 		emailTxtFld = new JTextField();
-		Utils.setGBC(leftTopPnlGbc, 2, 5, 1, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(emailTxtFld, leftTopPnlGbc);
 		addressTxtFld = new JTextField();
-		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(leftTopPnlGbc, 2, 7, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(addressTxtFld, leftTopPnlGbc);
 		
 		// button
 		leftTopPnlGbc.anchor = GridBagConstraints.CENTER;
 		saveChangesBtn = new JButton("Save candidate data");
-		Utils.setGBC(leftTopPnlGbc, 1, 7, 2, 1, GridBagConstraints.NONE);
+		Utils.setGBC(leftTopPnlGbc, 1, 8, 2, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(saveChangesBtn, leftTopPnlGbc);
 
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
@@ -217,7 +228,7 @@ public class CandidatePanel extends JPanel {
 		add(rightPanel, gbc);
 	}
 
-	public void setDisplayedCandidate(final Candidate updatedCandidate, Path tempFile) {
+	public void setDisplayedCandidate(final Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
 		this.candidate = updatedCandidate;
 
 		candidateNameLbl.setText(updatedCandidate.getFirstName() + " " + updatedCandidate.getSurname());
@@ -226,6 +237,7 @@ public class CandidatePanel extends JPanel {
 		phoneNoTxtFld.setText(updatedCandidate.getPhoneNumber());
 		emailTxtFld.setText(updatedCandidate.getEmailAddress());
 		addressTxtFld.setText(updatedCandidate.getAddress());
+		setDisplayedOrganisations(organisations);
 
 		// show the LinkedIn profile
 		Platform.runLater(new Runnable() {
@@ -239,6 +251,24 @@ public class CandidatePanel extends JPanel {
 		readCandidateCv(tempFile);
 	}
 
+	private void setDisplayedOrganisations(List<Organisation> organisations) {
+		this.organisations = organisations;
+		Organisation displayedOrg = null;
+		orgCmbBox.removeAllItems();
+		
+		orgCmbBox.addItem(new Organisation(-1, "", null, null, null, null, null, null, null, -1));
+		for(Organisation org : organisations) {
+			orgCmbBox.addItem(org);
+			
+			if(org.getId() == candidate.getOrganisationId()) {
+				displayedOrg = org;
+			}
+		}
+		
+		if(displayedOrg != null)
+			orgCmbBox.setSelectedItem(displayedOrg);
+	}
+	
 	private void readCandidateCv(Path path) {
 		documentArea.setText("");
 		WordExtractor extractor = null;
@@ -321,6 +351,7 @@ public class CandidatePanel extends JPanel {
 
 	public Candidate getUpdatedCandidate() {
 		String jobTitle = titleTxtFld.getText().trim();
+		Organisation organisation = (Organisation) orgCmbBox.getSelectedItem();
 		String phoneNumber = phoneNoTxtFld.getText().trim();
 		String email = emailTxtFld.getText().trim();
 		String address = addressTxtFld.getText().trim();
@@ -334,8 +365,8 @@ public class CandidatePanel extends JPanel {
 		if(address.length() == 0)
 			address = null;
 				
-		Candidate updatedCandidate = new Candidate(candidate.getId(), candidate.getFirstName(), candidate.getSurname(), jobTitle, phoneNumber, 
-				email, address, candidate.getNotes(), candidate.getLinkedInProfile(), candidate.getCV(), candidate.getUserId());
+		Candidate updatedCandidate = new Candidate(candidate.getId(), candidate.getFirstName(), candidate.getSurname(), jobTitle, organisation.getOrganisationId(),
+				organisation.getOrganisationName(), phoneNumber, email, address, candidate.getNotes(), candidate.getLinkedInProfile(), candidate.getCV(), candidate.getUserId());
 		
 		return updatedCandidate;
 	}
@@ -368,6 +399,13 @@ public class CandidatePanel extends JPanel {
 		phoneNoTxtFld.setText(candidate.getPhoneNumber());
 		emailTxtFld.setText(candidate.getEmailAddress());
 		addressTxtFld.setText(candidate.getAddress());
+		
+		for(Organisation org : organisations) {
+			if(org.getId() == candidate.getOrganisationId()) {
+				orgCmbBox.setSelectedItem(org);
+				break;
+			}
+		}
 	}
 	
 	public void setCandidatePanelListener(ActionListener actionListener) {

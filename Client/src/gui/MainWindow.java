@@ -376,11 +376,11 @@ public class MainWindow extends JFrame {
 	}
 
 	// CandidatePanel methods
-	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile) {
+	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
 		removeCentreComponent();
 
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
-		panel.setDisplayedCandidate(updatedCandidate, tempFile);
+		panel.setDisplayedCandidate(updatedCandidate, tempFile, organisations);
 		add(panel);
 
 		revalidate();
@@ -629,6 +629,9 @@ public class MainWindow extends JFrame {
 			break;
 		case REMOVE_CONTACT:
 			dialogs.get(DialogType.REMOVE_CONTACT).setDisplayedOrganisations(organisations);
+			break;
+		case ADD_CANDIDATE:
+			dialogs.get(DialogType.ADD_CANDIDATE).setDisplayedOrganisations(organisations);
 			break;
 		}
 	}

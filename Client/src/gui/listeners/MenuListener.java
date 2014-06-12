@@ -47,6 +47,8 @@ public class MenuListener extends ClientListener implements ActionListener {
 			controller.getView().showDialog(DialogType.REMOVE_ORGANISATION);
 			break;
 		case "Add Candidate":
+			organisations = controller.getModel().getOrganisations();
+			controller.getView().setDisplayedOrganisationsInDialog(DialogType.ADD_CANDIDATE, organisations);
 			controller.getView().showDialog(DialogType.ADD_CANDIDATE);
 			break;
 		case "Remove Candidate":

@@ -179,8 +179,8 @@ public class ClientView {
 	}
 	
 	// CandidatePanel methods
-	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile) {
-		mainWindow.showCandidatePanel(updatedCandidate, tempFile);
+	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
+		mainWindow.showCandidatePanel(updatedCandidate, tempFile, organisations);
 	}
 	
 	public void updateCandidateLinkedInProfile(URL url) {
