@@ -1,5 +1,7 @@
 package gui;
 
+import gui.listeners.CandidatePanelListener;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -7,7 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,8 +31,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
@@ -41,6 +44,7 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 
 import database.beans.Candidate;
+import database.beans.CandidateSkill;
 import database.beans.Organisation;
 
 public class CandidatePanel extends JPanel {
@@ -65,6 +69,8 @@ public class CandidatePanel extends JPanel {
 	private JButton removeLinkedInProfileBtn;
 	private JButton addCVBtn;
 	private JButton removeCVBtn;
+	private JButton addSkillBtn;
+	private JButton removeSkillBtn;
 
 	// components - rightPanel
 	private JPanel rightPanel;
@@ -74,12 +80,18 @@ public class CandidatePanel extends JPanel {
 	private WebEngine engine;
 	private JPanel candidateCvPanel;
 	private JTextArea documentArea;
+	private JPanel skillsPanel;
+	private JTable skillsTbl;
+	private JScrollPane skillsScrl;
 
 	// the displayed candidate
 	private Candidate candidate;
 	
 	// the displayed organisations
 	private List<Organisation> organisations;
+	
+	// the skills in the skillsTbl
+	private List<CandidateSkill> skills;
 	
 	public CandidatePanel() {
 		init();
@@ -181,6 +193,14 @@ public class CandidatePanel extends JPanel {
 		Utils.setGBC(leftBottomPanelGbc, 1, 3, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftBottomPanel.add(secondRowPnl, leftBottomPanelGbc);
 
+		JPanel thirdRowPnl = new JPanel(new GridLayout(1, 2));
+		addSkillBtn = new JButton("Add Skill       ");
+		thirdRowPnl.add(addSkillBtn);
+		removeSkillBtn = new JButton("Remove Skill    ");
+		thirdRowPnl.add(removeSkillBtn);
+		Utils.setGBC(leftBottomPanelGbc, 1, 4, 1, 1, GridBagConstraints.HORIZONTAL);
+		leftBottomPanel.add(thirdRowPnl, leftBottomPanelGbc);
+		
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		add(leftBottomPanel, gbc);
 	}
@@ -214,11 +234,62 @@ public class CandidatePanel extends JPanel {
 		vacancyScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		vacancyScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		candidateCvPanel.add(vacancyScrlPane, BorderLayout.CENTER);
+		
+		// setup the skills panel
+		skillsPanel = new JPanel(new BorderLayout());
+		skillsTbl = new JTable(new DefaultTableModel() {
+			private static final long serialVersionUID = 1L;
+			private String[] columns = {"Name", "User ID"};
+			
+			@Override
+			public Object getValueAt(int row, int column) {
+				CandidateSkill skill = skills.get(row);
+				
+				switch (column) {
+				case 0:
+					return skill.getSkillName();
+				case 1:
+					return skill.getUserId();
+				}
+				return "";
+			}
+			
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+			
+			@Override
+			public int getRowCount() {
+				if(skills != null) {
+					return skills.size();
+				} else { 
+					return 0;
+				}
+			}
+			
+			@Override
+			public int getColumnCount() {
+				return 2;
+			}
+			
+			@Override
+			public String getColumnName(int index) {
+				return columns[index];
+			}
+		});
+		skillsTbl.getTableHeader().setFont(skillsTbl.getFont().deriveFont(Font.BOLD, 16));
+		skillsTbl.setFont(skillsTbl.getFont().deriveFont(14.0f));
+		skillsTbl.setRowHeight(20);
+		skillsScrl = new JScrollPane(skillsTbl);
+		skillsScrl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		skillsScrl.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		skillsPanel.add(skillsScrl, BorderLayout.CENTER);
 
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("LinkedIn Profile", linkedInPanel);
 		tabbedPane.addTab("CV", candidateCvPanel);
-		tabbedPane.addTab("Key Skills", new JPanel());
+		tabbedPane.addTab("Key Skills", skillsPanel);
 		tabbedPane.addTab("Events", new JPanel());
 		tabbedPane.addTab("Notes", new JPanel());
 		Utils.setGBC(rightPanelGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
@@ -230,6 +301,7 @@ public class CandidatePanel extends JPanel {
 
 	public void setDisplayedCandidate(final Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
 		this.candidate = updatedCandidate;
+		tabbedPane.setSelectedIndex(0);
 
 		candidateNameLbl.setText(updatedCandidate.getFirstName() + " " + updatedCandidate.getSurname());
 		createdByLbl.setText(updatedCandidate.getUserId());
@@ -408,12 +480,20 @@ public class CandidatePanel extends JPanel {
 		}
 	}
 	
-	public void setCandidatePanelListener(ActionListener actionListener) {
-		saveChangesBtn.addActionListener(actionListener);
-		addLinkedInProfileBtn.addActionListener(actionListener);
-		removeLinkedInProfileBtn.addActionListener(actionListener);
-		addCVBtn.addActionListener(actionListener);
-		removeCVBtn.addActionListener(actionListener);
+	public void updateDisplayedCandidateSkills(List<CandidateSkill> candidateSkills) {
+		this.skills = candidateSkills;
+		DefaultTableModel model = (DefaultTableModel) skillsTbl.getModel();
+		model.fireTableDataChanged();
 	}
-
+	
+	public void setCandidatePanelListener(CandidatePanelListener listener) {
+		saveChangesBtn.addActionListener(listener);
+		addLinkedInProfileBtn.addActionListener(listener);
+		removeLinkedInProfileBtn.addActionListener(listener);
+		addCVBtn.addActionListener(listener);
+		removeCVBtn.addActionListener(listener);
+		addSkillBtn.addActionListener(listener);
+		removeSkillBtn.addActionListener(listener);
+		tabbedPane.addMouseListener(listener);
+	}
 }

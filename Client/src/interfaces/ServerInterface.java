@@ -8,6 +8,7 @@ import java.util.List;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 
 import database.beans.Candidate;
+import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
 import database.beans.Organisation;
@@ -57,4 +58,7 @@ public interface ServerInterface extends Remote{
 	public boolean addCandidatesToShortlist(List<Candidate> candidates, Vacancy vacancy, String userId) throws RemoteException;
 	public boolean removeCandidateFromShortlist(int candidateId, int vacancyId) throws RemoteException;
 	public boolean updateCandidateDetails(Candidate candidate) throws RemoteException;
+	public List<CandidateSkill> getCandidateSkills(int candidateId) throws RemoteException;
+	public boolean addSkillToCandidate(Skill skill, Candidate candidate, String userId) throws RemoteException;
+	public boolean removeSkillFromCandidate(Skill skill, Candidate candidate) throws RemoteException;
 }

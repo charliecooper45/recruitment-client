@@ -5,6 +5,7 @@ import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
+import gui.listeners.AddSkillListener;
 import gui.listeners.AddVacancyDialogListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.LoginListener;
@@ -14,6 +15,7 @@ import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
+import gui.listeners.RemoveSkillListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TopMenuListener;
@@ -60,6 +62,8 @@ public class ClientController {
 	private AddContactDialogListener addContactDialogListener;
 	private RemoveContactDialogListener removeContactDialogListener;
 	private AddLinkedInProfileListener addLinkedInProfileListener;
+	private AddSkillListener addSkillListener;
+	private RemoveSkillListener removeSkillListener;
 	
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
@@ -85,6 +89,8 @@ public class ClientController {
 		addContactDialogListener = new AddContactDialogListener(this);
 		removeContactDialogListener = new RemoveContactDialogListener(this);
 		addLinkedInProfileListener = new AddLinkedInProfileListener(this);
+		addSkillListener = new AddSkillListener(this);
+		removeSkillListener = new RemoveSkillListener(this);
 
 		setListenersAndShowGUI();
 	}
@@ -117,6 +123,8 @@ public class ClientController {
 		view.setAddContactDialogListener(addContactDialogListener);
 		view.setRemoveContactDialogListener(removeContactDialogListener);
 		view.setAddLinkedInProfileListener(addLinkedInProfileListener);
+		view.setAddSkillListener(addSkillListener);
+		view.setRemoveSkillListener(removeSkillListener);
 	}
 
 	public Path storeTempFile(InputStream inStream, String name) {

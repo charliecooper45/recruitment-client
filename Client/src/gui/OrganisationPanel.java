@@ -183,6 +183,7 @@ public class OrganisationPanel extends JPanel {
 
 	public void setDisplayedOrganisation(Organisation updatedOrganisation, Path tempFile) {
 		organisation = updatedOrganisation;
+		tabbedPane.setSelectedIndex(0);
 		
 		orgNameLbl.setText(updatedOrganisation.getOrganisationName());
 		createdByLbl.setText(updatedOrganisation.getUserId());

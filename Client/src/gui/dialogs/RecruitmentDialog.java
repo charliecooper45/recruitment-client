@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import database.beans.Candidate;
 import database.beans.Contact;
 import database.beans.Organisation;
+import database.beans.Skill;
 import database.beans.Vacancy;
 
 public abstract class RecruitmentDialog extends JDialog{
@@ -50,6 +51,10 @@ public abstract class RecruitmentDialog extends JDialog{
 	}
 	
 	public void setDisplayedCandidates(List<Candidate> candidates) {
+		// by default this does nothing, can be overriden in appropriate dialogs
+	}
+	
+	public void setDisplayedSkills(List<Skill> skills) {
 		// by default this does nothing, can be overriden in appropriate dialogs
 	}
 	

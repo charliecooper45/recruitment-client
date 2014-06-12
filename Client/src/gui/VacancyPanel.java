@@ -398,5 +398,4 @@ public class VacancyPanel extends JPanel {
 		tabbedPane.addMouseListener(listener);
 		shortlistTbl.addKeyListener(listener);
 	}
-
 }

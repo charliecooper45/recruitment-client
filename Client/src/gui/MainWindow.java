@@ -5,22 +5,26 @@ import gui.dialogs.AddCandidateDialog;
 import gui.dialogs.AddContactDialog;
 import gui.dialogs.AddLinkedInDialog;
 import gui.dialogs.AddOrganisationDialog;
+import gui.dialogs.AddSkillDialog;
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveCandidateDialog;
 import gui.dialogs.RemoveContactDialog;
 import gui.dialogs.RemoveOrganisationDialog;
 import gui.dialogs.RemoveVacancyDialog;
+import gui.dialogs.RemoveSkillDialog;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
+import gui.listeners.AddSkillListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
+import gui.listeners.RemoveSkillListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TopMenuListener;
@@ -54,6 +58,7 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
 import database.beans.Candidate;
+import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
 import database.beans.Organisation;
@@ -156,6 +161,8 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.ADD_CONTACT, new AddContactDialog(this));
 		dialogs.put(DialogType.REMOVE_CONTACT, new RemoveContactDialog(this));
 		dialogs.put(DialogType.CANDIDATE_ADD_LINKEDIN, new AddLinkedInDialog(this));
+		dialogs.put(DialogType.ADD_SKILL, new AddSkillDialog(this));
+		dialogs.put(DialogType.REMOVE_SKILL, new RemoveSkillDialog(this));
 	}
 
 	private void init(UserType userType) {
@@ -401,12 +408,17 @@ public class MainWindow extends JFrame {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		return panel.getUpdatedCandidate();
 	}
-	
+
 	public void updateDisplayedCandidate(Candidate candidate) {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		panel.updateDisplayedCandidate(candidate);
 	}
-	
+
+	public void updateDisplayedCandidateSkills(List<CandidateSkill> candidateSkills) {
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		panel.updateDisplayedCandidateSkills(candidateSkills);
+	}
+
 	// AdminPanel methods
 	public void showAdminPanel() {
 		removeCentreComponent();
@@ -580,6 +592,12 @@ public class MainWindow extends JFrame {
 		case CANDIDATE_ADD_LINKEDIN:
 			dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setVisible(true);
 			break;
+		case ADD_SKILL:
+			dialogs.get(DialogType.ADD_SKILL).setVisible(true);
+			break;
+		case REMOVE_SKILL:
+			dialogs.get(DialogType.REMOVE_SKILL).setVisible(true);
+			break;
 		}
 	}
 
@@ -613,11 +631,17 @@ public class MainWindow extends JFrame {
 		case CANDIDATE_ADD_LINKEDIN:
 			dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setVisible(false);
 			break;
+		case ADD_SKILL:
+			dialogs.get(DialogType.ADD_SKILL).setVisible(false);
+			break;
+		case REMOVE_SKILL:
+			dialogs.get(DialogType.REMOVE_SKILL).setVisible(false);
+			break;
 		}
 	}
 
-	public void setDisplayedOrganisationsInDialog(DialogType menuDialog, List<Organisation> organisations) {
-		switch (menuDialog) {
+	public void setDisplayedOrganisationsInDialog(DialogType dialog, List<Organisation> organisations) {
+		switch (dialog) {
 		case ADD_VACANCY:
 			dialogs.get(DialogType.ADD_VACANCY).setDisplayedOrganisations(organisations);
 			break;
@@ -636,8 +660,8 @@ public class MainWindow extends JFrame {
 		}
 	}
 
-	public void setDisplayedContactsInDialog(DialogType menuDialog, List<Contact> contacts) {
-		switch (menuDialog) {
+	public void setDisplayedContactsInDialog(DialogType dialog, List<Contact> contacts) {
+		switch (dialog) {
 		case ADD_VACANCY:
 			dialogs.get(DialogType.ADD_VACANCY).setDisplayedContacts(contacts);
 			break;
@@ -647,8 +671,8 @@ public class MainWindow extends JFrame {
 		}
 	}
 
-	public void setDisplayedVacanciesInDialog(DialogType menuDialog, List<Vacancy> vacancies) {
-		switch (menuDialog) {
+	public void setDisplayedVacanciesInDialog(DialogType dialog, List<Vacancy> vacancies) {
+		switch (dialog) {
 		case REMOVE_VACANCY:
 			dialogs.get(DialogType.REMOVE_VACANCY).setDisplayedVacancies(vacancies);
 			break;
@@ -656,10 +680,21 @@ public class MainWindow extends JFrame {
 
 	}
 
-	public void setDisplayedCandidatesInDialog(DialogType menuDialog, List<Candidate> candidates) {
-		switch (menuDialog) {
+	public void setDisplayedCandidatesInDialog(DialogType dialog, List<Candidate> candidates) {
+		switch (dialog) {
 		case REMOVE_CANDIDATE:
 			dialogs.get(DialogType.REMOVE_CANDIDATE).setDisplayedCandidates(candidates);
+			break;
+		}
+	}
+
+	public void setDisplayedSkillsInDialog(DialogType dialog, List<Skill> skills) {
+		switch (dialog) {
+		case ADD_SKILL:
+			dialogs.get(DialogType.ADD_SKILL).setDisplayedSkills(skills);
+			break;
+		case REMOVE_SKILL:
+			dialogs.get(DialogType.REMOVE_SKILL).setDisplayedSkills(skills);
 			break;
 		}
 	}
@@ -725,6 +760,18 @@ public class MainWindow extends JFrame {
 		return "";
 	}
 
+	public Skill getSkillDialogSkill(DialogType dialog) {
+		switch(dialog) {
+		case ADD_SKILL:
+			AddSkillDialog addSkillDialog = (AddSkillDialog) dialogs.get(DialogType.ADD_SKILL);
+			return addSkillDialog.getSelectedSkill();
+		case REMOVE_SKILL:
+			RemoveSkillDialog removeSkillDialog = (RemoveSkillDialog) dialogs.get(DialogType.REMOVE_SKILL);
+			return removeSkillDialog.getSelectedSkill();
+		}
+		return null;
+	}
+	
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -800,5 +847,13 @@ public class MainWindow extends JFrame {
 
 	public void setAddLinkedInProfileLister(AddLinkedInProfileListener addLinkedInProfileListener) {
 		dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setActionListener(addLinkedInProfileListener);
+	}
+
+	public void setAddSkillListener(AddSkillListener addSkillListener) {
+		dialogs.get(DialogType.ADD_SKILL).setActionListener(addSkillListener);
+	}
+
+	public void setRemoveSkillListener(RemoveSkillListener removeSkillListener) {
+		dialogs.get(DialogType.REMOVE_SKILL).setActionListener(removeSkillListener);
 	}
 }

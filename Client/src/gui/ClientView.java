@@ -5,12 +5,14 @@ import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
+import gui.listeners.AddSkillListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
+import gui.listeners.RemoveSkillListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TopMenuListener;
@@ -30,6 +32,7 @@ import model.ClientModel;
 import model.LoginAttempt;
 import controller.ClientController;
 import database.beans.Candidate;
+import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
 import database.beans.Organisation;
@@ -199,6 +202,10 @@ public class ClientView {
 		mainWindow.updateDisplayedCandidate(candidate);
 	}
 	
+	public void updateDisplayedCandidateSkills(List<CandidateSkill> candidateSkills) {
+		mainWindow.updateDisplayedCandidateSkills(candidateSkills);
+	}
+	
 	// AdminPanel methods
 	public void showAdminPanel() {
 		mainWindow.showAdminPanel();
@@ -233,20 +240,24 @@ public class ClientView {
 		mainWindow.hideDialog(dialog);
 	}
 
-	public void setDisplayedOrganisationsInDialog(DialogType menuDialog, List<Organisation> organisations) {
-		mainWindow.setDisplayedOrganisationsInDialog(menuDialog, organisations);
+	public void setDisplayedOrganisationsInDialog(DialogType dialog, List<Organisation> organisations) {
+		mainWindow.setDisplayedOrganisationsInDialog(dialog, organisations);
 	}
 	
-	public void setDisplayedContactsInDialog(DialogType menuDialog, List<Contact> contacts) {
-		mainWindow.setDisplayedContactsInDialog(menuDialog, contacts);
+	public void setDisplayedContactsInDialog(DialogType dialog, List<Contact> contacts) {
+		mainWindow.setDisplayedContactsInDialog(dialog, contacts);
 	}
 
-	public void setDisplayedVacanciesInDialog(DialogType menuDialog, List<Vacancy> vacancies) {
-		mainWindow.setDisplayedVacanciesInDialog(menuDialog, vacancies);
+	public void setDisplayedVacanciesInDialog(DialogType dialog, List<Vacancy> vacancies) {
+		mainWindow.setDisplayedVacanciesInDialog(dialog, vacancies);
 	}
 	
-	public void setDisplayedCandidatesInDialog(DialogType menuDialog, List<Candidate> candidates) {
-		mainWindow.setDisplayedCandidatesInDialog(menuDialog, candidates);
+	public void setDisplayedCandidatesInDialog(DialogType dialog, List<Candidate> candidates) {
+		mainWindow.setDisplayedCandidatesInDialog(dialog, candidates);
+	}
+	
+	public void setDisplayedSkillsInDialog(DialogType dialog, List<Skill> skills) {
+		mainWindow.setDisplayedSkillsInDialog(dialog, skills);
 	}
 	
 	public void displayFileInDialog(DialogType menuDialogType, File file) {
@@ -271,6 +282,10 @@ public class ClientView {
 	
 	public String getLinkedInProfileDialogUrl(DialogType dialog) {
 		return mainWindow.getLinkedInProfileDialogUrl(dialog);
+	}
+	
+	public Skill getSkillDialogSkill(DialogType dialog) {
+		return mainWindow.getSkillDialogSkill(dialog);
 	}
 	
 	// methods to set listeners and controller
@@ -344,6 +359,14 @@ public class ClientView {
 	
 	public void setAddLinkedInProfileListener(AddLinkedInProfileListener addLinkedInProfileListener) {
 		mainWindow.setAddLinkedInProfileLister(addLinkedInProfileListener);
+	}
+	
+	public void setAddSkillListener(AddSkillListener addSkillListener) {
+		mainWindow.setAddSkillListener(addSkillListener);
+	}
+	
+	public void setRemoveSkillListener(RemoveSkillListener removeSkillListener) {
+		mainWindow.setRemoveSkillListener(removeSkillListener);
 	}
 	
 	// main method

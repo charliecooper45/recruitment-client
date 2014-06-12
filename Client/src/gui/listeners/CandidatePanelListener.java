@@ -7,15 +7,18 @@ import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JTabbedPane;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
@@ -24,7 +27,9 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
 import database.beans.Candidate;
+import database.beans.CandidateSkill;
 import database.beans.Organisation;
+import database.beans.Skill;
 
 /**
  * Listener for events on the candidate panel.
@@ -114,6 +119,40 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 				} else {
 					controller.getView().showErrorDialog(ErrorDialogType.CANDIDATE_UPDATE_FAIL);
 				}
+			} else if (button.getText().trim().equals("Add Skill")) {
+				List<Skill> skills = controller.getModel().getSkills();
+				controller.getView().setDisplayedSkillsInDialog(DialogType.ADD_SKILL, skills);
+				controller.getView().showDialog(DialogType.ADD_SKILL);
+			} else if (button.getText().trim().equals("Remove Skill")) {
+				Candidate candidate = controller.getView().getCandidatePanelCandidate();
+				List<CandidateSkill> candidateSkills = controller.getModel().getCandidateSkills(candidate.getId());
+				List<Skill> skills = new ArrayList<>();
+				
+				for(CandidateSkill candidateSkill : candidateSkills) {
+					skills.add(new Skill(candidateSkill.getSkillName(), null));
+				}
+				controller.getView().setDisplayedSkillsInDialog(DialogType.REMOVE_SKILL, skills);
+				controller.getView().showDialog(DialogType.REMOVE_SKILL);
+			}
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+		Object source = event.getSource();
+		
+		if(source instanceof JTabbedPane) {
+			JTabbedPane tabbedPane = (JTabbedPane) source;
+			
+			int index = tabbedPane.getSelectedIndex();
+			
+			if(index == 2) {
+				Candidate candidate = controller.getView().getCandidatePanelCandidate();
+				// update the key skills from the server
+				List<CandidateSkill> candidateSkill = controller.getModel().getCandidateSkills(candidate.getId());
+				
+				// update the view to display the skills
+				controller.getView().updateDisplayedCandidateSkills(candidateSkill);
 			}
 		}
 	}

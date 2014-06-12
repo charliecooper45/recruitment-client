@@ -130,7 +130,6 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 			// the user wishes to remove the shortlist event
 			Event shortlistEvent = controller.getView().getSelectedShortlistEvent();
 			
-			
 			boolean delete = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_FROM_SHORTLIST);
 			
 			if(delete) {

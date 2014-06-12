@@ -15,6 +15,7 @@ import java.util.List;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 
 import database.beans.Candidate;
+import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
 import database.beans.Organisation;
@@ -457,6 +458,42 @@ public class ClientModel implements ServerInterface {
 	public boolean updateCandidateDetails(Candidate candidate) {
 		try {
 			return SERVER.updateCandidateDetails(candidate);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public List<CandidateSkill> getCandidateSkills(int candidateId) {
+		try {
+			return SERVER.getCandidateSkills(candidateId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean addSkillToCandidate(Skill skill, Candidate candidate, String userId) {
+		try {
+			return SERVER.addSkillToCandidate(skill, candidate, userId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeSkillFromCandidate(Skill skill, Candidate candidate) {
+		try {
+			return SERVER.removeSkillFromCandidate(skill, candidate);
 		} catch (RemoteException e) {
 			//TODO NEXT: Deal with this exception - possible propogate it?
 			//TODO NEXT: if null is returned handle this
