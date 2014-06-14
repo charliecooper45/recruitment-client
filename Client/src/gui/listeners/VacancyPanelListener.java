@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
@@ -27,7 +26,9 @@ import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
+import database.beans.Contact;
 import database.beans.Event;
+import database.beans.Organisation;
 import database.beans.Vacancy;
 
 /**
@@ -57,11 +58,12 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 						boolean profileAdded = controller.getModel().addVacancyProfile(vacancy, remoteFileData, oldFileName);
 
 						if (profileAdded) {
+							List<Contact> contacts = controller.getModel().getOrganisationsContacts(new Organisation(vacancy.getOrganisationId(), vacancy.getOrganisationName(), null, null, null, null, null, null, null, -1));
 							String vacancyProfile = vacancy.getProfile();
 							RemoteInputStream remoteVacancyProfileData = controller.getModel().getVacancyProfile(vacancyProfile);
 							InputStream fileData = RemoteInputStreamClient.wrap(remoteVacancyProfileData);
 							Path tempFile = controller.storeTempFile(fileData, vacancyProfile);
-							controller.getView().showVacancyPanel(vacancy, tempFile);
+							controller.getView().showVacancyPanel(vacancy, tempFile, contacts);
 						}
 					} catch (FileNotFoundException e) {
 						// TODO handle this exception
@@ -78,46 +80,62 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 					if (vacancy.getProfile() != null) {
 						if (controller.getModel().removeVacancyProfile(vacancy)) {
 							vacancy.setProfile(null);
-							controller.getView().showVacancyPanel(vacancy, null);
+							List<Contact> contacts = controller.getModel().getOrganisationsContacts(new Organisation(vacancy.getOrganisationId(), vacancy.getOrganisationName(), null, null, null, null, null, null, null, -1));
+							controller.getView().showVacancyPanel(vacancy, null, contacts);
 						}
 					} else {
 						controller.getView().showErrorDialog(ErrorDialogType.VACANCY_NO_PROFILE);
 					}
 				}
-			}
-		} else if (source instanceof JComboBox<?>) {
-			Vacancy displayedVacancy = controller.getView().getDisplayedVacancy();
-			JComboBox<?> comboBox = (JComboBox<?>) source;
-			boolean status = displayedVacancy.getStatus();
-
-			String comboBoxValue = (String) comboBox.getSelectedItem();
-			if (status == true && comboBoxValue.equals("Closed")) {
-				if (controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_CHANGE_STATUS_CLOSE)) {
-					// close the vacancy
-					controller.getModel().changeVacancyStatus(displayedVacancy);
+			} else if (button.getText().trim().equals("Save vacancy data")) {
+				Vacancy updatedVacancy = controller.getView().getUpdatedVacancy();
+				
+				// send a message to the server with the updated vacancy details
+				boolean updated = controller.getModel().updateVacancyDetails(updatedVacancy);
+				
+				if(updated) {
+					List<Contact> contacts = controller.getModel().getOrganisationsContacts(new Organisation(updatedVacancy.getOrganisationId(), updatedVacancy.getOrganisationName(), null, null, null, null, null, null, null, -1));
+					controller.getView().showMessageDialog(MessageDialogType.VACANCY_UPDATED);
+					controller.getView().updateDisplayedVacancy(updatedVacancy, contacts);
+				} else {
+					controller.getView().showErrorDialog(ErrorDialogType.VACANCY_UPDATE_FAIL);
 				}
-			} else if (status == false && comboBoxValue.equals("Open")) {
-				if (controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_CHANGE_STATUS_OPEN)) {
-					// open the vacancy
-					controller.getModel().changeVacancyStatus(displayedVacancy);
-				}
+				
 			}
 		}
+		/**
+		Vacancy displayedVacancy = controller.getView().getDisplayedVacancy();
+		JComboBox<?> comboBox = (JComboBox<?>) source;
+		boolean status = displayedVacancy.getStatus();
+
+		String comboBoxValue = (String) comboBox.getSelectedItem();
+		if (status == true && comboBoxValue.equals("Closed")) {
+			if (controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_CHANGE_STATUS_CLOSE)) {
+				// close the vacancy
+				controller.getModel().changeVacancyStatus(displayedVacancy);
+			}
+		} else if (status == false && comboBoxValue.equals("Open")) {
+			if (controller.getView().showConfirmDialog(ConfirmDialogType.VACANCY_CHANGE_STATUS_OPEN)) {
+				// open the vacancy
+				controller.getModel().changeVacancyStatus(displayedVacancy);
+			}
+		}
+		**/
 	}
 
 	@Override
 	public void mousePressed(MouseEvent event) {
 		Object source = event.getSource();
-		
-		if(source instanceof JTabbedPane) {
+
+		if (source instanceof JTabbedPane) {
 			JTabbedPane tabbedPane = (JTabbedPane) source;
-			
+
 			int index = tabbedPane.getSelectedIndex();
-			
-			if(index == 1) {
+
+			if (index == 1) {
 				// update the shortlist from the server
 				List<Event> shortlistEvents = controller.getModel().getShortlist(controller.getView().getDisplayedVacancy().getVacancyId());
-				
+
 				// update the view to display the shortlist
 				controller.getView().updateDisplayedShortlist(shortlistEvents);
 			}
@@ -126,19 +144,19 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+		if (e.getKeyCode() == KeyEvent.VK_DELETE) {
 			// the user wishes to remove the shortlist event
 			Event shortlistEvent = controller.getView().getSelectedShortlistEvent();
-			
+
 			boolean delete = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_FROM_SHORTLIST);
-			
-			if(delete) {
+
+			if (delete) {
 				// send a message to the server to delete the shortlist event
 				boolean deleted = controller.getModel().removeCandidateFromShortlist(shortlistEvent.getCandidate().getId(), shortlistEvent.getVacancyId());
-				
-				if(deleted) {
+
+				if (deleted) {
 					controller.getView().showMessageDialog(MessageDialogType.REMOVED_FROM_SHORTLIST);
-					
+
 					// update the view to display the updated shortlist
 					List<Event> shortlistEvents = controller.getModel().getShortlist(controller.getView().getDisplayedVacancy().getVacancyId());
 					controller.getView().updateDisplayedShortlist(shortlistEvents);
@@ -149,6 +167,11 @@ public class VacancyPanelListener extends ClientListener implements ActionListen
 		}
 	}
 
-	@Override public void keyPressed(KeyEvent e) {}
-	@Override public void keyTyped(KeyEvent e) {}
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
 }

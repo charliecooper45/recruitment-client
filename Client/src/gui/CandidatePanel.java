@@ -56,6 +56,7 @@ public class CandidatePanel extends JPanel {
 	private JPanel leftTopPanel;
 	private JLabel candidateNameLbl;
 	private JLabel createdByLbl;
+	private JLabel candidateIdLbl;
 	private JTextField titleTxtFld;
 	private JComboBox<Organisation> orgCmbBox;
 	private JTextField phoneNoTxtFld;
@@ -121,8 +122,11 @@ public class CandidatePanel extends JPanel {
 		Utils.setGBC(leftTopPnlGbc, 1, 1, 2, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(candidateNameLbl, leftTopPnlGbc);
 		createdByLbl = new JLabel("Created by: MC01");
-		Utils.setGBC(leftTopPnlGbc, 1, 2, 2, 1, GridBagConstraints.NONE);
+		Utils.setGBC(leftTopPnlGbc, 1, 2, 1, 1, GridBagConstraints.NONE);
 		leftTopPanel.add(createdByLbl, leftTopPnlGbc);
+		candidateIdLbl = new JLabel("");
+		Utils.setGBC(leftTopPnlGbc, 2, 2, 1, 1, GridBagConstraints.NONE);
+		leftTopPanel.add(candidateIdLbl, leftTopPnlGbc);
 
 		// labels
 		leftTopPnlGbc.insets = new Insets(0, 15, 0, 0);
@@ -302,9 +306,10 @@ public class CandidatePanel extends JPanel {
 	public void setDisplayedCandidate(final Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
 		this.candidate = updatedCandidate;
 		tabbedPane.setSelectedIndex(0);
-
+		
 		candidateNameLbl.setText(updatedCandidate.getFirstName() + " " + updatedCandidate.getSurname());
 		createdByLbl.setText(updatedCandidate.getUserId());
+		candidateIdLbl.setText(String.valueOf(updatedCandidate.getId()));
 		titleTxtFld.setText(updatedCandidate.getJobTitle());
 		phoneNoTxtFld.setText(updatedCandidate.getPhoneNumber());
 		emailTxtFld.setText(updatedCandidate.getEmailAddress());

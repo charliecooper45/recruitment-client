@@ -93,8 +93,8 @@ public class ClientView {
 	}
 	
 	// VacancyPanel methods
-	public void showVacancyPanel(Vacancy updatedVacancy, Path tempFile) {
-		mainWindow.showVacancyPanel(updatedVacancy, tempFile);
+	public void showVacancyPanel(Vacancy updatedVacancy, Path tempFile, List<Contact> contacts) {
+		mainWindow.showVacancyPanel(updatedVacancy, tempFile, contacts);
 	}
 
 	public Vacancy getDisplayedVacancy() {
@@ -107,6 +107,14 @@ public class ClientView {
 	
 	public Event getSelectedShortlistEvent() {
 		return mainWindow.getSelectedShortlistEvent();
+	}
+	
+	public Vacancy getUpdatedVacancy() {
+		return mainWindow.getUpdatedVacancy();
+	}
+	
+	public void updateDisplayedVacancy(Vacancy vacancy, List<Contact> contacts) {
+		mainWindow.updateDisplayedVacancy(vacancy, contacts);
 	}
 	
 	// OrganisationsPanel methods

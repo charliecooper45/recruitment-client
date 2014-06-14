@@ -15,6 +15,8 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 
 import controller.ClientController;
+import database.beans.Contact;
+import database.beans.Organisation;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -82,7 +84,8 @@ public class VacanciesPanelListener extends ClientListener implements ActionList
 				// TODO NEXT B: Possible display an error message here
 				e1.printStackTrace();
 			}
-			controller.getView().showVacancyPanel(updatedVacancy, tempFile);
+			List<Contact> contacts = controller.getModel().getOrganisationsContacts(new Organisation(updatedVacancy.getOrganisationId(), updatedVacancy.getOrganisationName(), null, null, null, null, null, null, null, -1));
+			controller.getView().showVacancyPanel(updatedVacancy, tempFile, contacts);
 		}
 	}
 

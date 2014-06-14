@@ -93,6 +93,14 @@ public class Vacancy implements Serializable, Comparable<Vacancy> {
 		this.status = status;
 	}
 	
+	public void setVacancyDate(Date vacancyDate) {
+		this.vacancyDate = vacancyDate;
+	}
+	
+	public void setContactId(int contactId) {
+		this.contactId = contactId;
+	}
+	
 	@Override
 	public String toString() {
 		String statusString = "open";
@@ -104,11 +112,6 @@ public class Vacancy implements Serializable, Comparable<Vacancy> {
 	
 	@Override
 	public int compareTo(Vacancy vacancy) {
-		int compare = this.organisationName.compareTo(vacancy.organisationName);
-		
-		if(compare == 0) {
-			compare = this.name.compareTo(vacancy.name);
-		}
-		return compare;
+		return this.name.compareTo(vacancy.name);
 	}
 }

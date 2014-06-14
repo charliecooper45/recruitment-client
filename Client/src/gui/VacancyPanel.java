@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -38,6 +39,9 @@ import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 
+import com.toedter.calendar.JDateChooser;
+
+import database.beans.Contact;
 import database.beans.Event;
 import database.beans.Vacancy;
 
@@ -56,9 +60,10 @@ public class VacancyPanel extends JPanel {
 	private JLabel createdByLbl;
 	private JLabel vacancyIdLbl;
 	private JComboBox<String> statusCmbBox;
-	private JTextField dateTxtFld;
-	private JTextField contactTxtFld;
+	private JDateChooser dateChooser;
+	private JComboBox<Contact> contactCmbBox;
 	private JTextField phoneNoTxtFld;
+	private JButton saveChangesBtn;
 
 	// components - leftBottomPanel
 	private JPanel leftBottomPanel;
@@ -142,15 +147,22 @@ public class VacancyPanel extends JPanel {
 		statusCmbBox.addItem("Closed");
 		Utils.setGBC(leftTopPnlGbc, 2, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(statusCmbBox, leftTopPnlGbc);
-		dateTxtFld = new JTextField();
+		dateChooser = new JDateChooser();
 		Utils.setGBC(leftTopPnlGbc, 2, 5, 1, 1, GridBagConstraints.HORIZONTAL);
-		leftTopPanel.add(dateTxtFld, leftTopPnlGbc);
-		contactTxtFld = new JTextField();
+		leftTopPanel.add(dateChooser, leftTopPnlGbc);
+		contactCmbBox = new JComboBox<Contact>();
 		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
-		leftTopPanel.add(contactTxtFld, leftTopPnlGbc);
+		leftTopPanel.add(contactCmbBox, leftTopPnlGbc);
 		phoneNoTxtFld = new JTextField();
+		phoneNoTxtFld.setEditable(false);
 		Utils.setGBC(leftTopPnlGbc, 2, 7, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(phoneNoTxtFld, leftTopPnlGbc);
+		
+		// button
+		leftTopPnlGbc.anchor = GridBagConstraints.CENTER;
+		saveChangesBtn = new JButton("Save vacancy data");
+		Utils.setGBC(leftTopPnlGbc, 1, 8, 2, 1, GridBagConstraints.NONE);
+		leftTopPanel.add(saveChangesBtn, leftTopPnlGbc);
 
 		leftPanel.add(leftTopPanel);
 	}
@@ -260,7 +272,7 @@ public class VacancyPanel extends JPanel {
 		add(rightPanel, BorderLayout.CENTER);
 	}
 
-	public void setDisplayedVacancy(Vacancy updatedVacancy, Path tempFile) {
+	public void setDisplayedVacancy(Vacancy updatedVacancy, Path tempFile, List<Contact> contacts) {
 		this.vacancy = updatedVacancy;
 		tabbedPane.setSelectedIndex(0);
 
@@ -275,8 +287,16 @@ public class VacancyPanel extends JPanel {
 		organisationNameLbl.setText(updatedVacancy.getOrganisationName());
 		createdByLbl.setText(updatedVacancy.getUserId());
 		vacancyIdLbl.setText(String.valueOf(updatedVacancy.getVacancyId()));
-		dateTxtFld.setText(updatedVacancy.getVacancyDate().toString());
-		contactTxtFld.setText(updatedVacancy.getContactName());
+		dateChooser.setDate(updatedVacancy.getVacancyDate());
+		Contact selectedContact = null;
+		contactCmbBox.removeAllItems();
+		for(Contact contact: contacts) {
+			contactCmbBox.addItem(contact);
+			if(contact.getId() == updatedVacancy.getContactId()) {
+				selectedContact = contact;
+			}
+		}
+		contactCmbBox.setSelectedItem(selectedContact);
 		phoneNoTxtFld.setText(updatedVacancy.getContactPhoneNumber());
 
 		boolean open = updatedVacancy.getStatus();
@@ -391,11 +411,66 @@ public class VacancyPanel extends JPanel {
 		}
 	}
 
+	public Vacancy getUpdatedVacancy() {
+		boolean statusBoolean;
+		String status = (String) statusCmbBox.getSelectedItem();
+		if(status.equals("Open")) {
+			statusBoolean = true;
+		} else {
+			statusBoolean = false;
+		}
+		Date dateAdded = dateChooser.getDate();
+		Contact contact = (Contact) contactCmbBox.getSelectedItem();
+		
+		vacancy.setStatus(statusBoolean);
+		vacancy.setVacancyDate(dateAdded);
+		vacancy.setContactId(contact.getId());
+		
+		return vacancy;
+	}
+	
+	public void updateDisplayedVacancy(Vacancy updatedVacancy, List<Contact> contacts) {
+		this.vacancy = updatedVacancy;
+		tabbedPane.setSelectedIndex(0);
+
+		if (updatedVacancy.getStatus()) {
+			vacancyNameLbl.setForeground(Color.GREEN);
+			organisationNameLbl.setForeground(Color.GREEN);
+		} else {
+			vacancyNameLbl.setForeground(Color.RED);
+			organisationNameLbl.setForeground(Color.RED);
+		}
+		vacancyNameLbl.setText(updatedVacancy.getName());
+		organisationNameLbl.setText(updatedVacancy.getOrganisationName());
+		createdByLbl.setText(updatedVacancy.getUserId());
+		vacancyIdLbl.setText(String.valueOf(updatedVacancy.getVacancyId()));
+		dateChooser.setDate(updatedVacancy.getVacancyDate());
+		Contact selectedContact = null;
+		contactCmbBox.removeAllItems();
+		for(Contact contact: contacts) {
+			contactCmbBox.addItem(contact);
+			if(contact.getId() == updatedVacancy.getContactId()) {
+				selectedContact = contact;
+			}
+		}
+		contactCmbBox.setSelectedItem(selectedContact);
+		phoneNoTxtFld.setText(updatedVacancy.getContactPhoneNumber());
+
+		boolean open = updatedVacancy.getStatus();
+		if (open) {
+			statusCmbBox.setSelectedItem("Open");
+		} else {
+			statusCmbBox.setSelectedItem("Closed");
+		}
+	}
+	
 	public void setVacancyPanelListener(VacancyPanelListener listener) {
+		saveChangesBtn.addActionListener(listener);
 		addVacancyProfileBtn.addActionListener(listener);
 		removeVacancyProfileBtn.addActionListener(listener);
 		statusCmbBox.addActionListener(listener);
 		tabbedPane.addMouseListener(listener);
 		shortlistTbl.addKeyListener(listener);
 	}
+
 }

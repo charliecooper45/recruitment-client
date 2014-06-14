@@ -230,11 +230,11 @@ public class MainWindow extends JFrame {
 	}
 
 	// VacancyPanel methods
-	public void showVacancyPanel(Vacancy updatedVacancy, Path tempFile) {
+	public void showVacancyPanel(Vacancy updatedVacancy, Path tempFile, List<Contact> contacts) {
 		removeCentreComponent();
 
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-		panel.setDisplayedVacancy(updatedVacancy, tempFile);
+		panel.setDisplayedVacancy(updatedVacancy, tempFile, contacts);
 		add(panel);
 
 		revalidate();
@@ -256,6 +256,16 @@ public class MainWindow extends JFrame {
 		return panel.getSelectedShortlistEvent();
 	}
 
+	public Vacancy getUpdatedVacancy() {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
+		return panel.getUpdatedVacancy();
+	}
+	
+	public void updateDisplayedVacancy(Vacancy vacancy, List<Contact> contacts) {
+		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
+		panel.updateDisplayedVacancy(vacancy, contacts);
+	}
+	
 	// OrganisationsPanel methods
 	public void showOrganisationsPanel(List<Organisation> organisations) {
 		removeCentreComponent();
@@ -479,22 +489,6 @@ public class MainWindow extends JFrame {
 			response = JOptionPane.showConfirmDialog(vacancyPanel, ConfirmDialogType.VACANCY_REMOVE_PROFILE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0)
 				return true;
-			break;
-		case VACANCY_CHANGE_STATUS_OPEN:
-			vacancyPanel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-			response = JOptionPane.showConfirmDialog(vacancyPanel, ConfirmDialogType.VACANCY_CHANGE_STATUS_OPEN.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
-			if (response == 0) {
-				vacancyPanel.setVacancyStatus(true);
-				return true;
-			}
-			break;
-		case VACANCY_CHANGE_STATUS_CLOSE:
-			vacancyPanel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
-			response = JOptionPane.showConfirmDialog(vacancyPanel, ConfirmDialogType.VACANCY_CHANGE_STATUS_CLOSE.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
-			if (response == 0) {
-				vacancyPanel.setVacancyStatus(false);
-				return true;
-			}
 			break;
 		case REMOVE_VACANCY:
 			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
