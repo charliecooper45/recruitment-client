@@ -333,7 +333,7 @@ public class CandidatePanel extends JPanel {
 		Organisation displayedOrg = null;
 		orgCmbBox.removeAllItems();
 		
-		orgCmbBox.addItem(new Organisation(-1, "", null, null, null, null, null, null, null, -1));
+		orgCmbBox.addItem(new Organisation(-1, "No Organisation", null, null, null, null, null, null, null, -1));
 		for(Organisation org : organisations) {
 			orgCmbBox.addItem(org);
 			
@@ -445,6 +445,7 @@ public class CandidatePanel extends JPanel {
 		Candidate updatedCandidate = new Candidate(candidate.getId(), candidate.getFirstName(), candidate.getSurname(), jobTitle, organisation.getOrganisationId(),
 				organisation.getOrganisationName(), phoneNumber, email, address, candidate.getNotes(), candidate.getLinkedInProfile(), candidate.getCV(), candidate.getUserId());
 		
+		this.candidate = updatedCandidate;
 		return updatedCandidate;
 	}
 	
@@ -467,24 +468,6 @@ public class CandidatePanel extends JPanel {
 		}
 	}
 
-	public void updateDisplayedCandidate(Candidate candidate) {
-		this.candidate = candidate;
-
-		candidateNameLbl.setText(candidate.getFirstName() + " " + candidate.getSurname());
-		createdByLbl.setText(candidate.getUserId());
-		titleTxtFld.setText(candidate.getJobTitle());
-		phoneNoTxtFld.setText(candidate.getPhoneNumber());
-		emailTxtFld.setText(candidate.getEmailAddress());
-		addressTxtFld.setText(candidate.getAddress());
-		
-		for(Organisation org : organisations) {
-			if(org.getId() == candidate.getOrganisationId()) {
-				orgCmbBox.setSelectedItem(org);
-				break;
-			}
-		}
-	}
-	
 	public void updateDisplayedCandidateSkills(List<CandidateSkill> candidateSkills) {
 		this.skills = candidateSkills;
 		DefaultTableModel model = (DefaultTableModel) skillsTbl.getModel();

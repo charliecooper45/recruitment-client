@@ -147,6 +147,10 @@ public class ClientView {
 		return mainWindow.getDisplayedOrganisation();
 	}
 	
+	public Organisation getUpdatedOrganisation() {
+		return mainWindow.getUpdatedOrganisation();
+	}
+	
 	// SearchPanel methods
 	public void showSearchPanel(List<Skill> skills, List<Vacancy> vacancies) {
 		mainWindow.showSearchPanel(skills, vacancies);
@@ -204,10 +208,6 @@ public class ClientView {
 	
 	public Candidate getUpdatedCandidate() {
 		return mainWindow.getUpdatedCandidate();
-	}
-	
-	public void updateDisplayedCandidate(Candidate candidate) {
-		mainWindow.updateDisplayedCandidate(candidate);
 	}
 	
 	public void updateDisplayedCandidateSkills(List<CandidateSkill> candidateSkills) {

@@ -323,6 +323,11 @@ public class MainWindow extends JFrame {
 		return panel.getDisplayedOrganisation();
 	}
 
+	public Organisation getUpdatedOrganisation() {
+		OrganisationPanel panel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
+		return panel.getUpdatedOrganisation();
+	}
+	
 	// SearchPanel methods
 	public void showSearchPanel(List<Skill> skills, List<Vacancy> vacancies) {
 		Component centreComponent = borderLayout.getLayoutComponent(BorderLayout.CENTER);
@@ -417,11 +422,6 @@ public class MainWindow extends JFrame {
 	public Candidate getUpdatedCandidate() {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		return panel.getUpdatedCandidate();
-	}
-
-	public void updateDisplayedCandidate(Candidate candidate) {
-		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
-		panel.updateDisplayedCandidate(candidate);
 	}
 
 	public void updateDisplayedCandidateSkills(List<CandidateSkill> candidateSkills) {

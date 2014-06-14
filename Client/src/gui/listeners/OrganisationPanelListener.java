@@ -2,6 +2,7 @@ package gui.listeners;
 
 import gui.ErrorDialogType;
 import gui.ConfirmDialogType;
+import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
+import database.beans.Candidate;
 import database.beans.Organisation;
 
 /**
@@ -78,6 +80,17 @@ public class OrganisationPanelListener extends ClientListener implements ActionL
 					} else {
 						controller.getView().showErrorDialog(ErrorDialogType.ORGANISATION_NO_TOB);
 					}
+				}
+			} else if (button.getText().trim().equals("Save organisation data")) {
+				Organisation updatedOrganisation = controller.getView().getUpdatedOrganisation();
+				
+				// send a message to the server to update the Organisation
+				boolean updated = controller.getModel().updateOrganisationDetails(updatedOrganisation);
+				
+				if(updated) {
+					controller.getView().showMessageDialog(MessageDialogType.ORGANISATION_UPDATED);
+				} else {
+					controller.getView().showErrorDialog(ErrorDialogType.ORGANISATION_UPDATE_FAIL);
 				}
 			}
 		}

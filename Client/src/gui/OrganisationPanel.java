@@ -52,6 +52,7 @@ public class OrganisationPanel extends JPanel {
 	private JTextField emailTxtFld;
 	private JTextField websiteTxtFLd;
 	private JTextField addressTxtFld;
+	private JButton saveChangesBtn;
 
 	// components = leftBottomPanel
 	private JPanel leftBottomPanel;
@@ -131,6 +132,12 @@ public class OrganisationPanel extends JPanel {
 		addressTxtFld = new JTextField();
 		Utils.setGBC(leftTopPnlGbc, 2, 6, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(addressTxtFld, leftTopPnlGbc);
+		
+		// button
+		leftTopPnlGbc.anchor = GridBagConstraints.CENTER;
+		saveChangesBtn = new JButton("Save organisation data");
+		Utils.setGBC(leftTopPnlGbc, 1, 8, 2, 1, GridBagConstraints.NONE);
+		leftTopPanel.add(saveChangesBtn, leftTopPnlGbc);
 
 		leftPanel.add(leftTopPanel);
 	}
@@ -276,9 +283,33 @@ public class OrganisationPanel extends JPanel {
 		return organisation;
 	}
 	
-	public void setOrganisationPanelListener(OrganisationPanelListener organisationPanelListener) {
-		addTobBtn.addActionListener(organisationPanelListener);
-		removeTobBtn.addActionListener(organisationPanelListener);
+	public Organisation getUpdatedOrganisation() {
+		String switchboardNumber = switchboardTxtFld.getText();
+		String emailAddress = emailTxtFld.getText();
+		String website = websiteTxtFLd.getText();
+		String address = addressTxtFld.getText();
+		
+		if(switchboardNumber.length() == 0)	
+			switchboardNumber = null;
+		if(emailAddress.length() == 0) 
+			emailAddress = null;
+		if(website.length() == 0)
+			website = null;
+		if(address.length() == 0)
+			address = null;
+		
+		organisation.setPhoneNumber(switchboardNumber);
+		organisation.setEmailAddress(emailAddress);
+		organisation.setWebsite(website);
+		organisation.setAddress(address);
+		return organisation;
 	}
+	
+	public void setOrganisationPanelListener(OrganisationPanelListener listener) {
+		saveChangesBtn.addActionListener(listener);
+		addTobBtn.addActionListener(listener);
+		removeTobBtn.addActionListener(listener);
+	}
+
 
 }

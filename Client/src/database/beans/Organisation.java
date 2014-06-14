@@ -80,6 +80,22 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 		this.termsOfBusiness = termsOfBusiness;
 	}
 	
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+	
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+	
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
 	@Override
 	public String toString() {
 		return organisationName;

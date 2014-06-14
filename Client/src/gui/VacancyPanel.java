@@ -290,13 +290,18 @@ public class VacancyPanel extends JPanel {
 		dateChooser.setDate(updatedVacancy.getVacancyDate());
 		Contact selectedContact = null;
 		contactCmbBox.removeAllItems();
+		contactCmbBox.addItem(new Contact(-1, "No", "Contact", null, null, null, null, null, -1, null));
 		for(Contact contact: contacts) {
 			contactCmbBox.addItem(contact);
 			if(contact.getId() == updatedVacancy.getContactId()) {
 				selectedContact = contact;
 			}
 		}
-		contactCmbBox.setSelectedItem(selectedContact);
+		if(selectedContact != null) {
+			contactCmbBox.setSelectedItem(selectedContact);
+		} else {
+			contactCmbBox.setSelectedIndex(0);
+		}
 		phoneNoTxtFld.setText(updatedVacancy.getContactPhoneNumber());
 
 		boolean open = updatedVacancy.getStatus();
@@ -440,28 +445,22 @@ public class VacancyPanel extends JPanel {
 			vacancyNameLbl.setForeground(Color.RED);
 			organisationNameLbl.setForeground(Color.RED);
 		}
-		vacancyNameLbl.setText(updatedVacancy.getName());
-		organisationNameLbl.setText(updatedVacancy.getOrganisationName());
-		createdByLbl.setText(updatedVacancy.getUserId());
-		vacancyIdLbl.setText(String.valueOf(updatedVacancy.getVacancyId()));
-		dateChooser.setDate(updatedVacancy.getVacancyDate());
 		Contact selectedContact = null;
 		contactCmbBox.removeAllItems();
+		contactCmbBox.addItem(new Contact(-1, "No", "Contact", null, null, null, null, null, -1, null));
 		for(Contact contact: contacts) {
 			contactCmbBox.addItem(contact);
 			if(contact.getId() == updatedVacancy.getContactId()) {
 				selectedContact = contact;
+				phoneNoTxtFld.setText(contact.getPhoneNumber());
 			}
 		}
-		contactCmbBox.setSelectedItem(selectedContact);
-		phoneNoTxtFld.setText(updatedVacancy.getContactPhoneNumber());
-
-		boolean open = updatedVacancy.getStatus();
-		if (open) {
-			statusCmbBox.setSelectedItem("Open");
+		if(selectedContact != null) {
+			contactCmbBox.setSelectedItem(selectedContact);
 		} else {
-			statusCmbBox.setSelectedItem("Closed");
+			contactCmbBox.setSelectedIndex(0);
 		}
+		contactCmbBox.setSelectedItem(selectedContact);
 	}
 	
 	public void setVacancyPanelListener(VacancyPanelListener listener) {

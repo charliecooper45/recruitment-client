@@ -115,7 +115,6 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 				
 				if(updated) {
 					controller.getView().showMessageDialog(MessageDialogType.CANDIDATE_UPDATED);
-					controller.getView().updateDisplayedCandidate(updatedCandidate);
 				} else {
 					controller.getView().showErrorDialog(ErrorDialogType.CANDIDATE_UPDATE_FAIL);
 				}
