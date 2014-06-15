@@ -16,6 +16,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -45,6 +46,7 @@ import org.apache.poi.hwpf.extractor.WordExtractor;
 
 import database.beans.Candidate;
 import database.beans.CandidateSkill;
+import database.beans.Event;
 import database.beans.Organisation;
 
 public class CandidatePanel extends JPanel {
@@ -84,16 +86,22 @@ public class CandidatePanel extends JPanel {
 	private JPanel skillsPanel;
 	private JTable skillsTbl;
 	private JScrollPane skillsScrl;
+	private JPanel eventsPanel;
+	private JTable eventsTbl;
+	private JScrollPane eventsScrl;
 
 	// the displayed candidate
 	private Candidate candidate;
-	
+
 	// the displayed organisations
 	private List<Organisation> organisations;
-	
+
 	// the skills in the skillsTbl
 	private List<CandidateSkill> skills;
-	
+
+	// the events in the eventsTbl
+	private List<Event> events;
+
 	public CandidatePanel() {
 		init();
 	}
@@ -160,7 +168,7 @@ public class CandidatePanel extends JPanel {
 		addressTxtFld = new JTextField();
 		Utils.setGBC(leftTopPnlGbc, 2, 7, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftTopPanel.add(addressTxtFld, leftTopPnlGbc);
-		
+
 		// button
 		leftTopPnlGbc.anchor = GridBagConstraints.CENTER;
 		saveChangesBtn = new JButton("Save candidate data");
@@ -188,7 +196,7 @@ public class CandidatePanel extends JPanel {
 		firstRowPnl.add(removeLinkedInProfileBtn);
 		Utils.setGBC(leftBottomPanelGbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftBottomPanel.add(firstRowPnl, leftBottomPanelGbc);
-		
+
 		JPanel secondRowPnl = new JPanel(new GridLayout(1, 2));
 		addCVBtn = new JButton("Add CV         ");
 		secondRowPnl.add(addCVBtn);
@@ -204,7 +212,7 @@ public class CandidatePanel extends JPanel {
 		thirdRowPnl.add(removeSkillBtn);
 		Utils.setGBC(leftBottomPanelGbc, 1, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftBottomPanel.add(thirdRowPnl, leftBottomPanelGbc);
-		
+
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		add(leftBottomPanel, gbc);
 	}
@@ -229,7 +237,7 @@ public class CandidatePanel extends JPanel {
 			}
 		});
 		linkedInPanel.add(jfxPanel, BorderLayout.CENTER);
-		
+
 		// create the panel to show the user`s CV
 		candidateCvPanel = new JPanel(new BorderLayout());
 		documentArea = new JTextArea();
@@ -238,17 +246,17 @@ public class CandidatePanel extends JPanel {
 		vacancyScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		vacancyScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		candidateCvPanel.add(vacancyScrlPane, BorderLayout.CENTER);
-		
+
 		// setup the skills panel
 		skillsPanel = new JPanel(new BorderLayout());
 		skillsTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = {"Name", "User ID"};
-			
+			private String[] columns = { "Name", "User ID" };
+
 			@Override
 			public Object getValueAt(int row, int column) {
 				CandidateSkill skill = skills.get(row);
-				
+
 				switch (column) {
 				case 0:
 					return skill.getSkillName();
@@ -257,26 +265,26 @@ public class CandidatePanel extends JPanel {
 				}
 				return "";
 			}
-			
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
-			
+
 			@Override
 			public int getRowCount() {
-				if(skills != null) {
+				if (skills != null) {
 					return skills.size();
-				} else { 
+				} else {
 					return 0;
 				}
 			}
-			
+
 			@Override
 			public int getColumnCount() {
 				return 2;
 			}
-			
+
 			@Override
 			public String getColumnName(int index) {
 				return columns[index];
@@ -290,11 +298,68 @@ public class CandidatePanel extends JPanel {
 		skillsScrl.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		skillsPanel.add(skillsScrl, BorderLayout.CENTER);
 
+		// setup the events panel
+		eventsPanel = new JPanel(new BorderLayout());
+		eventsTbl = new JTable(new DefaultTableModel() {
+			private static final long serialVersionUID = 1L;
+			private String[] columns = { "Date", "Time", "Event Type", "Vacancy", "User" };
+
+			@Override
+			public Object getValueAt(int row, int column) {
+				Event event = events.get(row);
+
+				switch (column) {
+				case 0:
+					return event.getDate();
+				case 1:
+					return event.getTime();
+				case 2:
+					return event.getEventType();
+				case 3:
+					return event.getVacancyName();
+				case 4:
+					return event.getUserId();
+				}
+				return "";
+			}
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+			@Override
+			public int getRowCount() {
+				if (events != null) {
+					return events.size();
+				} else {
+					return 0;
+				}
+			}
+
+			@Override
+			public int getColumnCount() {
+				return 5;
+			}
+
+			@Override
+			public String getColumnName(int index) {
+				return columns[index];
+			}
+		});
+		eventsTbl.getTableHeader().setFont(eventsTbl.getFont().deriveFont(Font.BOLD, 16));
+		eventsTbl.setFont(eventsTbl.getFont().deriveFont(14.0f));
+		eventsTbl.setRowHeight(20);
+		eventsScrl = new JScrollPane(eventsTbl);
+		eventsScrl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		eventsScrl.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		eventsPanel.add(eventsScrl, BorderLayout.CENTER);
+
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("LinkedIn Profile", linkedInPanel);
 		tabbedPane.addTab("CV", candidateCvPanel);
 		tabbedPane.addTab("Key Skills", skillsPanel);
-		tabbedPane.addTab("Events", new JPanel());
+		tabbedPane.addTab("Events", eventsPanel);
 		tabbedPane.addTab("Notes", new JPanel());
 		Utils.setGBC(rightPanelGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		rightPanel.add(tabbedPane, rightPanelGbc);
@@ -306,7 +371,7 @@ public class CandidatePanel extends JPanel {
 	public void setDisplayedCandidate(final Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
 		this.candidate = updatedCandidate;
 		tabbedPane.setSelectedIndex(0);
-		
+
 		candidateNameLbl.setText(updatedCandidate.getFirstName() + " " + updatedCandidate.getSurname());
 		createdByLbl.setText(updatedCandidate.getUserId());
 		candidateIdLbl.setText(String.valueOf(updatedCandidate.getId()));
@@ -323,7 +388,7 @@ public class CandidatePanel extends JPanel {
 				engine.load(updatedCandidate.getLinkedInProfile());
 			}
 		});
-		
+
 		// load the cv
 		readCandidateCv(tempFile);
 	}
@@ -332,20 +397,20 @@ public class CandidatePanel extends JPanel {
 		this.organisations = organisations;
 		Organisation displayedOrg = null;
 		orgCmbBox.removeAllItems();
-		
+
 		orgCmbBox.addItem(new Organisation(-1, "No Organisation", null, null, null, null, null, null, null, -1));
-		for(Organisation org : organisations) {
+		for (Organisation org : organisations) {
 			orgCmbBox.addItem(org);
-			
-			if(org.getId() == candidate.getOrganisationId()) {
+
+			if (org.getId() == candidate.getOrganisationId()) {
 				displayedOrg = org;
 			}
 		}
-		
-		if(displayedOrg != null)
+
+		if (displayedOrg != null)
 			orgCmbBox.setSelectedItem(displayedOrg);
 	}
-	
+
 	private void readCandidateCv(Path path) {
 		documentArea.setText("");
 		WordExtractor extractor = null;
@@ -421,7 +486,7 @@ public class CandidatePanel extends JPanel {
 				}
 		}
 	}
-	
+
 	public Candidate getSelectedCandidate() {
 		return candidate;
 	}
@@ -432,23 +497,22 @@ public class CandidatePanel extends JPanel {
 		String phoneNumber = phoneNoTxtFld.getText().trim();
 		String email = emailTxtFld.getText().trim();
 		String address = addressTxtFld.getText().trim();
-		
-		if(jobTitle.length() == 0)	
+
+		if (jobTitle.length() == 0)
 			jobTitle = null;
-		if(phoneNumber.length() == 0) 
+		if (phoneNumber.length() == 0)
 			phoneNumber = null;
-		if(email.length() == 0)
+		if (email.length() == 0)
 			email = null;
-		if(address.length() == 0)
+		if (address.length() == 0)
 			address = null;
-				
-		Candidate updatedCandidate = new Candidate(candidate.getId(), candidate.getFirstName(), candidate.getSurname(), jobTitle, organisation.getOrganisationId(),
-				organisation.getOrganisationName(), phoneNumber, email, address, candidate.getNotes(), candidate.getLinkedInProfile(), candidate.getCV(), candidate.getUserId());
-		
+
+		Candidate updatedCandidate = new Candidate(candidate.getId(), candidate.getFirstName(), candidate.getSurname(), jobTitle, organisation.getOrganisationId(), organisation.getOrganisationName(), phoneNumber, email, address, candidate.getNotes(), candidate.getLinkedInProfile(), candidate.getCV(), candidate.getUserId());
+
 		this.candidate = updatedCandidate;
 		return updatedCandidate;
 	}
-	
+
 	public void updateShownLinkedInProfile(final URL url) {
 		if (url == null) {
 			Platform.runLater(new Runnable() {
@@ -473,7 +537,13 @@ public class CandidatePanel extends JPanel {
 		DefaultTableModel model = (DefaultTableModel) skillsTbl.getModel();
 		model.fireTableDataChanged();
 	}
-	
+
+	public void updateDisplayedCandidateEvents(List<Event> events) {
+		this.events = events;
+		DefaultTableModel model = (DefaultTableModel) eventsTbl.getModel();
+		model.fireTableDataChanged();
+	}
+
 	public void setCandidatePanelListener(CandidatePanelListener listener) {
 		saveChangesBtn.addActionListener(listener);
 		addLinkedInProfileBtn.addActionListener(listener);
@@ -484,4 +554,5 @@ public class CandidatePanel extends JPanel {
 		removeSkillBtn.addActionListener(listener);
 		tabbedPane.addMouseListener(listener);
 	}
+
 }

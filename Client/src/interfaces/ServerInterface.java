@@ -63,4 +63,5 @@ public interface ServerInterface extends Remote{
 	public boolean removeSkillFromCandidate(Skill skill, Candidate candidate) throws RemoteException;
 	public boolean updateVacancyDetails(Vacancy vacancy) throws RemoteException;
 	public boolean updateOrganisationDetails(Organisation organisation) throws RemoteException;
+	public List<Event> getCandidateEvents(int candidateId) throws RemoteException;
 }

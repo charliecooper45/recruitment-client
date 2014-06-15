@@ -28,6 +28,7 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import controller.ClientController;
 import database.beans.Candidate;
 import database.beans.CandidateSkill;
+import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Skill;
 
@@ -152,6 +153,13 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 				
 				// update the view to display the skills
 				controller.getView().updateDisplayedCandidateSkills(candidateSkill);
+			} else if(index == 3) {
+				Candidate candidate = controller.getView().getCandidatePanelCandidate();
+				// update the events from the server
+				List<Event> events = controller.getModel().getCandidateEvents(candidate.getId());
+				
+				// update the view to display the events
+				controller.getView().updateDisplayedCandidateEvents(events);
 			}
 		}
 	}

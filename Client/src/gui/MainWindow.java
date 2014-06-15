@@ -429,6 +429,11 @@ public class MainWindow extends JFrame {
 		panel.updateDisplayedCandidateSkills(candidateSkills);
 	}
 
+	public void updateDisplayedCandidateEvents(List<Event> events) {
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		panel.updateDisplayedCandidateEvents(events);		
+	}
+	
 	// AdminPanel methods
 	public void showAdminPanel() {
 		removeCentreComponent();

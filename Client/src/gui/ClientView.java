@@ -214,6 +214,10 @@ public class ClientView {
 		mainWindow.updateDisplayedCandidateSkills(candidateSkills);
 	}
 	
+	public void updateDisplayedCandidateEvents(List<Event> events) {
+		mainWindow.updateDisplayedCandidateEvents(events);
+	}
+	
 	// AdminPanel methods
 	public void showAdminPanel() {
 		mainWindow.showAdminPanel();
