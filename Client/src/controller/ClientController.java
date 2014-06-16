@@ -3,6 +3,7 @@ package controller;
 import gui.ClientView;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
+import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
@@ -51,7 +52,7 @@ public class ClientController {
 	// top panel listener
 	private TopMenuListener topMenuListener;
 	
-	// menu listeners
+	// menu and dialog listeners
 	private MenuListener menuListener;
 	private AddVacancyDialogListener addVacancyDialogListener;
 	private RemoveVacancyDialogListener removeVacancyDialogListener;
@@ -64,6 +65,7 @@ public class ClientController {
 	private AddLinkedInProfileListener addLinkedInProfileListener;
 	private AddSkillListener addSkillListener;
 	private RemoveSkillListener removeSkillListener;
+	private AddEventDialogListener eventDialogListener;
 	
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
@@ -91,6 +93,7 @@ public class ClientController {
 		addLinkedInProfileListener = new AddLinkedInProfileListener(this);
 		addSkillListener = new AddSkillListener(this);
 		removeSkillListener = new RemoveSkillListener(this);
+		eventDialogListener = new AddEventDialogListener(this);
 
 		setListenersAndShowGUI();
 	}
@@ -125,6 +128,7 @@ public class ClientController {
 		view.setAddLinkedInProfileListener(addLinkedInProfileListener);
 		view.setAddSkillListener(addSkillListener);
 		view.setRemoveSkillListener(removeSkillListener);
+		view.setAddEventDialogListener(eventDialogListener);
 	}
 
 	public Path storeTempFile(InputStream inStream, String name) {

@@ -3,6 +3,7 @@ package gui;
 import gui.TopMenuPanel.MenuPanel;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
+import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
@@ -300,6 +301,14 @@ public class ClientView {
 		return mainWindow.getSkillDialogSkill(dialog);
 	}
 	
+	public Organisation getEventDialogOrganisation() {
+		return mainWindow.getEventDialogOrganisation();
+	}
+	
+	public Event getEventDialogEvent(DialogType dialogType) {
+		return mainWindow.getEventDialogEvent(dialogType);
+	}
+	
 	// methods to set listeners and controller
 	public void setController(ClientController controller) {
 		this.controller = controller;
@@ -381,6 +390,10 @@ public class ClientView {
 		mainWindow.setRemoveSkillListener(removeSkillListener);
 	}
 	
+	public void setAddEventDialogListener(AddEventDialogListener eventDialogListener) {
+		mainWindow.setAddEventDialogListener(eventDialogListener);
+	}
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -392,4 +405,5 @@ public class ClientView {
 			}
 		});
 	}
+
 }

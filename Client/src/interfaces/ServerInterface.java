@@ -11,6 +11,7 @@ import database.beans.Candidate;
 import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
+import database.beans.EventType;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
@@ -64,4 +65,6 @@ public interface ServerInterface extends Remote{
 	public boolean updateVacancyDetails(Vacancy vacancy) throws RemoteException;
 	public boolean updateOrganisationDetails(Organisation organisation) throws RemoteException;
 	public List<Event> getCandidateEvents(int candidateId) throws RemoteException;
+	public List<Vacancy> getOrganisationVacancies(int organisationId) throws RemoteException;
+	public boolean addEvent(Event event) throws RemoteException;
 }

@@ -16,7 +16,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -74,6 +73,8 @@ public class CandidatePanel extends JPanel {
 	private JButton removeCVBtn;
 	private JButton addSkillBtn;
 	private JButton removeSkillBtn;
+	private JButton addEventBtn;
+	private JButton removeEventBtn;
 
 	// components - rightPanel
 	private JPanel rightPanel;
@@ -212,6 +213,14 @@ public class CandidatePanel extends JPanel {
 		thirdRowPnl.add(removeSkillBtn);
 		Utils.setGBC(leftBottomPanelGbc, 1, 4, 1, 1, GridBagConstraints.HORIZONTAL);
 		leftBottomPanel.add(thirdRowPnl, leftBottomPanelGbc);
+		
+		JPanel fourthRowPnl = new JPanel(new GridLayout(1, 2));
+		addEventBtn = new JButton("Add Event       ");
+		fourthRowPnl.add(addEventBtn);
+		removeEventBtn = new JButton("Remove Event    ");
+		fourthRowPnl.add(removeEventBtn);
+		Utils.setGBC(leftBottomPanelGbc, 1, 5, 1, 1, GridBagConstraints.HORIZONTAL);
+		leftBottomPanel.add(fourthRowPnl, leftBottomPanelGbc);
 
 		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
 		add(leftBottomPanel, gbc);
@@ -552,6 +561,8 @@ public class CandidatePanel extends JPanel {
 		removeCVBtn.addActionListener(listener);
 		addSkillBtn.addActionListener(listener);
 		removeSkillBtn.addActionListener(listener);
+		addEventBtn.addActionListener(listener);
+		removeEventBtn.addActionListener(listener);
 		tabbedPane.addMouseListener(listener);
 	}
 

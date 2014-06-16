@@ -29,6 +29,7 @@ import controller.ClientController;
 import database.beans.Candidate;
 import database.beans.CandidateSkill;
 import database.beans.Event;
+import database.beans.EventType;
 import database.beans.Organisation;
 import database.beans.Skill;
 
@@ -108,6 +109,13 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 						controller.getView().showErrorDialog(ErrorDialogType.CANDIDATE_NO_CV);
 					}
 				}
+			} else if (button.getText().trim().equals("Add Event")) {
+				List<Organisation> organisations = controller.getModel().getOrganisations();
+				controller.getView().setDisplayedOrganisationsInDialog(DialogType.ADD_EVENT, organisations);
+				controller.getView().showDialog(DialogType.ADD_EVENT);
+				
+			} else if (button.getText().trim().equals("Remove Event")) {
+				
 			} else if (button.getText().trim().equals("Save candidate data")) {
 				Candidate updatedCandidate = controller.getView().getUpdatedCandidate();
 				
@@ -140,24 +148,24 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 	@Override
 	public void mousePressed(MouseEvent event) {
 		Object source = event.getSource();
-		
-		if(source instanceof JTabbedPane) {
+
+		if (source instanceof JTabbedPane) {
 			JTabbedPane tabbedPane = (JTabbedPane) source;
-			
+
 			int index = tabbedPane.getSelectedIndex();
-			
-			if(index == 2) {
+
+			if (index == 2) {
 				Candidate candidate = controller.getView().getCandidatePanelCandidate();
 				// update the key skills from the server
 				List<CandidateSkill> candidateSkill = controller.getModel().getCandidateSkills(candidate.getId());
-				
+
 				// update the view to display the skills
 				controller.getView().updateDisplayedCandidateSkills(candidateSkill);
-			} else if(index == 3) {
+			} else if (index == 3) {
 				Candidate candidate = controller.getView().getCandidatePanelCandidate();
 				// update the events from the server
 				List<Event> events = controller.getModel().getCandidateEvents(candidate.getId());
-				
+
 				// update the view to display the events
 				controller.getView().updateDisplayedCandidateEvents(events);
 			}

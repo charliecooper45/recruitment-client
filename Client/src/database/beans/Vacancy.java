@@ -21,7 +21,7 @@ public class Vacancy implements Serializable, Comparable<Vacancy> {
 	private int contactId;
 	private String contactName;
 	private String contactPhoneNumber;
-	
+
 	public Vacancy(int vacancyId, boolean status, String name, Date vacancyDate, String text, String profile, int organisationId, String organisationName, String userId, int contactId, String contactName, String contactPhoneNumber) {
 		this.vacancyId = vacancyId;
 		this.status = status;
@@ -60,7 +60,7 @@ public class Vacancy implements Serializable, Comparable<Vacancy> {
 	public int getVacancyId() {
 		return vacancyId;
 	}
-	
+
 	public String getContactName() {
 		return contactName;
 	}
@@ -72,15 +72,15 @@ public class Vacancy implements Serializable, Comparable<Vacancy> {
 	public String getProfile() {
 		return profile;
 	}
-	
+
 	public String getText() {
 		return text;
 	}
-	
+
 	public int getOrganisationId() {
 		return organisationId;
 	}
-	
+
 	public int getContactId() {
 		return contactId;
 	}
@@ -88,28 +88,32 @@ public class Vacancy implements Serializable, Comparable<Vacancy> {
 	public void setProfile(String profile) {
 		this.profile = profile;
 	}
-	
+
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
+
 	public void setVacancyDate(Date vacancyDate) {
 		this.vacancyDate = vacancyDate;
 	}
-	
+
 	public void setContactId(int contactId) {
 		this.contactId = contactId;
 	}
-	
+
 	@Override
 	public String toString() {
-		String statusString = "open";
-		if(!status) {
-			statusString = "closed";
+		if (organisationName != null) {
+			String statusString = "open";
+			if (!status) {
+				statusString = "closed";
+			}
+			return name + " @ " + organisationName + " (" + statusString + ")";
+		} else {
+			return vacancyId + ": " + name;
 		}
-		return name + " @ " + organisationName + " (" + statusString + ")";
 	}
-	
+
 	@Override
 	public int compareTo(Vacancy vacancy) {
 		return this.name.compareTo(vacancy.name);

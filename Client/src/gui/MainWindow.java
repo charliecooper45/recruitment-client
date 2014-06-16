@@ -3,6 +3,7 @@ package gui;
 import gui.TopMenuPanel.MenuPanel;
 import gui.dialogs.AddCandidateDialog;
 import gui.dialogs.AddContactDialog;
+import gui.dialogs.AddEventDialog;
 import gui.dialogs.AddLinkedInDialog;
 import gui.dialogs.AddOrganisationDialog;
 import gui.dialogs.AddSkillDialog;
@@ -11,10 +12,11 @@ import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveCandidateDialog;
 import gui.dialogs.RemoveContactDialog;
 import gui.dialogs.RemoveOrganisationDialog;
-import gui.dialogs.RemoveVacancyDialog;
 import gui.dialogs.RemoveSkillDialog;
+import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
+import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
@@ -163,6 +165,7 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.CANDIDATE_ADD_LINKEDIN, new AddLinkedInDialog(this));
 		dialogs.put(DialogType.ADD_SKILL, new AddSkillDialog(this));
 		dialogs.put(DialogType.REMOVE_SKILL, new RemoveSkillDialog(this));
+		dialogs.put(DialogType.ADD_EVENT, new AddEventDialog(this));
 	}
 
 	private void init(UserType userType) {
@@ -597,46 +600,17 @@ public class MainWindow extends JFrame {
 		case REMOVE_SKILL:
 			dialogs.get(DialogType.REMOVE_SKILL).setVisible(true);
 			break;
+		case ADD_EVENT:
+			dialogs.get(DialogType.ADD_EVENT).setVisible(true);
+			break;
+		case REMOVE_EVENT:
+			dialogs.get(DialogType.REMOVE_EVENT).setVisible(true);
+			break;
 		}
 	}
 
 	public void hideDialog(DialogType dialog) {
-		switch (dialog) {
-		case ADD_VACANCY:
-			//TODO NEXT: remove data from all the fields when setvisible is called with the argument false
-			dialogs.get(DialogType.ADD_VACANCY).setVisible(false);
-			break;
-		case REMOVE_VACANCY:
-			dialogs.get(DialogType.REMOVE_VACANCY).setVisible(false);
-			break;
-		case ADD_ORGANISATION:
-			dialogs.get(DialogType.ADD_ORGANISATION).setVisible(false);
-			break;
-		case REMOVE_ORGANISATION:
-			dialogs.get(DialogType.REMOVE_ORGANISATION).setVisible(false);
-			break;
-		case ADD_CANDIDATE:
-			dialogs.get(DialogType.ADD_CANDIDATE).setVisible(false);
-			break;
-		case REMOVE_CANDIDATE:
-			dialogs.get(DialogType.REMOVE_CANDIDATE).setVisible(false);
-			break;
-		case ADD_CONTACT:
-			dialogs.get(DialogType.ADD_CONTACT).setVisible(false);
-			break;
-		case REMOVE_CONTACT:
-			dialogs.get(DialogType.REMOVE_CONTACT).setVisible(false);
-			break;
-		case CANDIDATE_ADD_LINKEDIN:
-			dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setVisible(false);
-			break;
-		case ADD_SKILL:
-			dialogs.get(DialogType.ADD_SKILL).setVisible(false);
-			break;
-		case REMOVE_SKILL:
-			dialogs.get(DialogType.REMOVE_SKILL).setVisible(false);
-			break;
-		}
+		dialogs.get(dialog).setVisible(false);
 	}
 
 	public void setDisplayedOrganisationsInDialog(DialogType dialog, List<Organisation> organisations) {
@@ -656,6 +630,9 @@ public class MainWindow extends JFrame {
 		case ADD_CANDIDATE:
 			dialogs.get(DialogType.ADD_CANDIDATE).setDisplayedOrganisations(organisations);
 			break;
+		case ADD_EVENT:
+			dialogs.get(DialogType.ADD_EVENT).setDisplayedOrganisations(organisations);
+			break;
 		}
 	}
 
@@ -674,6 +651,9 @@ public class MainWindow extends JFrame {
 		switch (dialog) {
 		case REMOVE_VACANCY:
 			dialogs.get(DialogType.REMOVE_VACANCY).setDisplayedVacancies(vacancies);
+			break;
+		case ADD_EVENT:
+			dialogs.get(DialogType.ADD_EVENT).setDisplayedVacancies(vacancies);
 			break;
 		}
 
@@ -771,6 +751,19 @@ public class MainWindow extends JFrame {
 		return null;
 	}
 	
+	public Organisation getEventDialogOrganisation() {
+		AddEventDialog dialog = (AddEventDialog) dialogs.get(DialogType.ADD_EVENT);
+		return dialog.getDisplayedOrganisation();
+	}
+	
+	public Event getEventDialogEvent(DialogType dialogType) {
+		if(dialogType == DialogType.ADD_EVENT) {
+			AddEventDialog dialog = (AddEventDialog) dialogs.get(DialogType.ADD_EVENT);
+			return dialog.getEvent();
+		}
+		return null;
+	}
+	
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -855,4 +848,9 @@ public class MainWindow extends JFrame {
 	public void setRemoveSkillListener(RemoveSkillListener removeSkillListener) {
 		dialogs.get(DialogType.REMOVE_SKILL).setActionListener(removeSkillListener);
 	}
+
+	public void setAddEventDialogListener(AddEventDialogListener eventDialogListener) {
+		dialogs.get(DialogType.ADD_EVENT).setActionListener(eventDialogListener);
+	}
+
 }

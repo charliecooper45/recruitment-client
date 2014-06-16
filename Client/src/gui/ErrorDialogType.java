@@ -7,7 +7,7 @@ public enum ErrorDialogType {
 	REMOVE_CONTACT_FAIL("Unable to remove contact"), ADD_LINKEDIN_FAIL("Unable to add LinkedIn profile, please check the URL"),	REMOVE_LINKEDIN_FAIL("Unable to remove LinkedIn profile"), 
 	CANDIDATE_NO_CV("No CV currently stored for this candidate"), ADD_TO_SHORTLIST_FAIL("Cannot add candidate(s) to shortlist"), REMOVE_FROM_SHORTLIST_FAIL("Unable to remove candidate from shortlist)"), 
 	CANDIDATE_UPDATE_FAIL("Unable to update candidate"), ADD_SKILL_FAIL("Unable to add skill to candidate"), REMOVE_SKILL_FAILED("Unable to remove skill from candidate"), 
-	VACANCY_UPDATE_FAIL("Unable to update vacancy"), ORGANISATION_UPDATE_FAIL("Unable to update organisation");
+	VACANCY_UPDATE_FAIL("Unable to update vacancy"), ORGANISATION_UPDATE_FAIL("Unable to update organisation"), ADD_EVENT_FAIL("Unable to add event");
 	
 	private String errorMessage;
 	

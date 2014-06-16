@@ -18,6 +18,7 @@ import database.beans.Candidate;
 import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
+import database.beans.EventType;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
@@ -536,5 +537,29 @@ public class ClientModel implements ServerInterface {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public List<Vacancy> getOrganisationVacancies(int organisationId) {
+		try {
+			return SERVER.getOrganisationVacancies(organisationId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean addEvent(Event event) {
+		try {
+			return SERVER.addEvent(event);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
