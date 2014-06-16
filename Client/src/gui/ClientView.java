@@ -12,6 +12,7 @@ import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
+import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveSkillListener;
 import gui.listeners.RemoveVacancyDialogListener;
@@ -273,6 +274,10 @@ public class ClientView {
 		mainWindow.setDisplayedSkillsInDialog(dialog, skills);
 	}
 	
+	public void setDisplayedEventsInDialog(DialogType removeEvent, List<Event> event) {
+		mainWindow.setDisplayedEventsInDialog(removeEvent, event);
+	}
+	
 	public void displayFileInDialog(DialogType menuDialogType, File file) {
 		mainWindow.displayFileInDialog(menuDialogType, file);
 	}
@@ -394,6 +399,10 @@ public class ClientView {
 		mainWindow.setAddEventDialogListener(eventDialogListener);
 	}
 	
+	public void setRemoveEventDialogListener(RemoveEventDialogListener removeEventDialogListener) {
+		mainWindow.setRemoveEventDialogListener(removeEventDialogListener);
+	}
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -405,5 +414,4 @@ public class ClientView {
 			}
 		});
 	}
-
 }

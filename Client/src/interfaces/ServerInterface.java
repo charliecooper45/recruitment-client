@@ -67,4 +67,5 @@ public interface ServerInterface extends Remote{
 	public List<Event> getCandidateEvents(int candidateId) throws RemoteException;
 	public List<Vacancy> getOrganisationVacancies(int organisationId) throws RemoteException;
 	public boolean addEvent(Event event) throws RemoteException;
+	public boolean removeEvent(int eventId) throws RemoteException;
 }

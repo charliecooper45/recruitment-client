@@ -9,6 +9,7 @@ import java.util.Date;
  * @author Charlie
  */
 public class Event implements Serializable {
+	private int eventId;
 	private EventType eventType;
 	private Candidate candidate;
 	private Date date;
@@ -33,6 +34,14 @@ public class Event implements Serializable {
 		this.userId = userId;
 		this.vacancyId = vacancyId;
 		this.vacancyName = vacancyName;
+	}
+	
+	public int getEventId() {
+		return eventId;
+	}
+	
+	public void setEventId(int eventId) {
+		this.eventId = eventId;
 	}
 
 	public EventType getEventType() {
@@ -81,5 +90,10 @@ public class Event implements Serializable {
 	
 	public String getVacancyName() {
 		return vacancyName;
+	}
+	
+	@Override
+	public String toString() {
+		return eventType + ": " + vacancyName + ": " + date + " " + time;
 	}
 }

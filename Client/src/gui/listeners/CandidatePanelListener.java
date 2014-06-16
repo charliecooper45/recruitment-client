@@ -115,7 +115,10 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 				controller.getView().showDialog(DialogType.ADD_EVENT);
 				
 			} else if (button.getText().trim().equals("Remove Event")) {
-				
+				Candidate candidate = controller.getView().getCandidatePanelCandidate();
+				List<Event> candidateEvents = controller.getModel().getCandidateEvents(candidate.getId());
+				controller.getView().setDisplayedEventsInDialog(DialogType.REMOVE_EVENT, candidateEvents);
+				controller.getView().showDialog(DialogType.REMOVE_EVENT);
 			} else if (button.getText().trim().equals("Save candidate data")) {
 				Candidate updatedCandidate = controller.getView().getUpdatedCandidate();
 				

@@ -4,7 +4,6 @@ import gui.DialogType;
 import gui.ErrorDialogType;
 import gui.MainWindow;
 import gui.MessageDialogType;
-import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import controller.ClientController;
+import database.beans.Candidate;
 import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Vacancy;
@@ -23,7 +23,6 @@ import database.beans.Vacancy;
  * @author Charlie
  */
 public class AddEventDialogListener extends ClientListener implements ActionListener {
-
 	public AddEventDialogListener(ClientController controller) {
 		super(controller);
 	}
@@ -53,6 +52,13 @@ public class AddEventDialogListener extends ClientListener implements ActionList
 				if(added) {
 					controller.getView().showMessageDialog(MessageDialogType.EVENT_ADDED);
 					controller.getView().hideDialog(DialogType.ADD_EVENT);
+					
+					// update the events from the server
+					Candidate candidate = controller.getView().getCandidatePanelCandidate();
+					List<Event> events = controller.getModel().getCandidateEvents(candidate.getId());
+
+					// update the view to display the events
+					controller.getView().updateDisplayedCandidateEvents(events);
 				} else {
 					controller.getView().showErrorDialog(ErrorDialogType.ADD_EVENT_FAIL);
 				}

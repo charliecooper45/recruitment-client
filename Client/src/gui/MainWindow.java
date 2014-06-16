@@ -11,6 +11,7 @@ import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveCandidateDialog;
 import gui.dialogs.RemoveContactDialog;
+import gui.dialogs.RemoveEventDialog;
 import gui.dialogs.RemoveOrganisationDialog;
 import gui.dialogs.RemoveSkillDialog;
 import gui.dialogs.RemoveVacancyDialog;
@@ -25,6 +26,7 @@ import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
+import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveSkillListener;
 import gui.listeners.RemoveVacancyDialogListener;
@@ -166,6 +168,7 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.ADD_SKILL, new AddSkillDialog(this));
 		dialogs.put(DialogType.REMOVE_SKILL, new RemoveSkillDialog(this));
 		dialogs.put(DialogType.ADD_EVENT, new AddEventDialog(this));
+		dialogs.put(DialogType.REMOVE_EVENT, new RemoveEventDialog(this));
 	}
 
 	private void init(UserType userType) {
@@ -566,47 +569,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public void showDialog(DialogType dialog) {
-		switch (dialog) {
-		case ADD_VACANCY:
-			dialogs.get(DialogType.ADD_VACANCY).setVisible(true);
-			break;
-		case REMOVE_VACANCY:
-			dialogs.get(DialogType.REMOVE_VACANCY).setVisible(true);
-			break;
-		case ADD_ORGANISATION:
-			dialogs.get(DialogType.ADD_ORGANISATION).setVisible(true);
-			break;
-		case REMOVE_ORGANISATION:
-			dialogs.get(DialogType.REMOVE_ORGANISATION).setVisible(true);
-			break;
-		case ADD_CANDIDATE:
-			dialogs.get(DialogType.ADD_CANDIDATE).setVisible(true);
-			break;
-		case REMOVE_CANDIDATE:
-			dialogs.get(DialogType.REMOVE_CANDIDATE).setVisible(true);
-			break;
-		case ADD_CONTACT:
-			dialogs.get(DialogType.ADD_CONTACT).setVisible(true);
-			break;
-		case REMOVE_CONTACT:
-			dialogs.get(DialogType.REMOVE_CONTACT).setVisible(true);
-			break;
-		case CANDIDATE_ADD_LINKEDIN:
-			dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setVisible(true);
-			break;
-		case ADD_SKILL:
-			dialogs.get(DialogType.ADD_SKILL).setVisible(true);
-			break;
-		case REMOVE_SKILL:
-			dialogs.get(DialogType.REMOVE_SKILL).setVisible(true);
-			break;
-		case ADD_EVENT:
-			dialogs.get(DialogType.ADD_EVENT).setVisible(true);
-			break;
-		case REMOVE_EVENT:
-			dialogs.get(DialogType.REMOVE_EVENT).setVisible(true);
-			break;
-		}
+		dialogs.get(dialog).setVisible(true);
 	}
 
 	public void hideDialog(DialogType dialog) {
@@ -614,70 +577,29 @@ public class MainWindow extends JFrame {
 	}
 
 	public void setDisplayedOrganisationsInDialog(DialogType dialog, List<Organisation> organisations) {
-		switch (dialog) {
-		case ADD_VACANCY:
-			dialogs.get(DialogType.ADD_VACANCY).setDisplayedOrganisations(organisations);
-			break;
-		case REMOVE_ORGANISATION:
-			dialogs.get(DialogType.REMOVE_ORGANISATION).setDisplayedOrganisations(organisations);
-			break;
-		case ADD_CONTACT:
-			dialogs.get(DialogType.ADD_CONTACT).setDisplayedOrganisations(organisations);
-			break;
-		case REMOVE_CONTACT:
-			dialogs.get(DialogType.REMOVE_CONTACT).setDisplayedOrganisations(organisations);
-			break;
-		case ADD_CANDIDATE:
-			dialogs.get(DialogType.ADD_CANDIDATE).setDisplayedOrganisations(organisations);
-			break;
-		case ADD_EVENT:
-			dialogs.get(DialogType.ADD_EVENT).setDisplayedOrganisations(organisations);
-			break;
-		}
+		dialogs.get(dialog).setDisplayedOrganisations(organisations);
 	}
 
 	public void setDisplayedContactsInDialog(DialogType dialog, List<Contact> contacts) {
-		switch (dialog) {
-		case ADD_VACANCY:
-			dialogs.get(DialogType.ADD_VACANCY).setDisplayedContacts(contacts);
-			break;
-		case REMOVE_CONTACT:
-			dialogs.get(DialogType.REMOVE_CONTACT).setDisplayedContacts(contacts);
-			break;
-		}
+		dialogs.get(dialog).setDisplayedContacts(contacts);
 	}
 
 	public void setDisplayedVacanciesInDialog(DialogType dialog, List<Vacancy> vacancies) {
-		switch (dialog) {
-		case REMOVE_VACANCY:
-			dialogs.get(DialogType.REMOVE_VACANCY).setDisplayedVacancies(vacancies);
-			break;
-		case ADD_EVENT:
-			dialogs.get(DialogType.ADD_EVENT).setDisplayedVacancies(vacancies);
-			break;
-		}
-
+		dialogs.get(dialog).setDisplayedVacancies(vacancies);
 	}
 
 	public void setDisplayedCandidatesInDialog(DialogType dialog, List<Candidate> candidates) {
-		switch (dialog) {
-		case REMOVE_CANDIDATE:
-			dialogs.get(DialogType.REMOVE_CANDIDATE).setDisplayedCandidates(candidates);
-			break;
-		}
+		dialogs.get(dialog).setDisplayedCandidates(candidates);
 	}
 
 	public void setDisplayedSkillsInDialog(DialogType dialog, List<Skill> skills) {
-		switch (dialog) {
-		case ADD_SKILL:
-			dialogs.get(DialogType.ADD_SKILL).setDisplayedSkills(skills);
-			break;
-		case REMOVE_SKILL:
-			dialogs.get(DialogType.REMOVE_SKILL).setDisplayedSkills(skills);
-			break;
-		}
+		dialogs.get(dialog).setDisplayedSkills(skills);
 	}
 
+	public void setDisplayedEventsInDialog(DialogType removeEvent, List<Event> events) {
+		dialogs.get(removeEvent).setDisplayedEvents(events);
+	}
+	
 	public void displayFileInDialog(DialogType menuDialog, File file) {
 		RecruitmentDialog dialog = dialogs.get(menuDialog);
 		dialog.setDisplayedFile(file);
@@ -759,6 +681,9 @@ public class MainWindow extends JFrame {
 	public Event getEventDialogEvent(DialogType dialogType) {
 		if(dialogType == DialogType.ADD_EVENT) {
 			AddEventDialog dialog = (AddEventDialog) dialogs.get(DialogType.ADD_EVENT);
+			return dialog.getEvent();
+		} else if(dialogType == DialogType.REMOVE_EVENT) {
+			RemoveEventDialog dialog = (RemoveEventDialog) dialogs.get(DialogType.REMOVE_EVENT);
 			return dialog.getEvent();
 		}
 		return null;
@@ -853,4 +778,7 @@ public class MainWindow extends JFrame {
 		dialogs.get(DialogType.ADD_EVENT).setActionListener(eventDialogListener);
 	}
 
+	public void setRemoveEventDialogListener(RemoveEventDialogListener removeEventDialogListener) {
+		dialogs.get(DialogType.REMOVE_EVENT).setActionListener(removeEventDialogListener);
+	}
 }

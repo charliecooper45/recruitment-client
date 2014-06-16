@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import database.beans.Candidate;
 import database.beans.Contact;
+import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Skill;
 import database.beans.Vacancy;
@@ -58,5 +59,10 @@ public abstract class RecruitmentDialog extends JDialog{
 		// by default this does nothing, can be overriden in appropriate dialogs
 	}
 	
+	public void setDisplayedEvents(List<Event> events) {
+		// by default this does nothing, can be overriden in appropriate dialogs
+	}
+	
 	public abstract void setActionListener(ActionListener actionListener);
+
 }
