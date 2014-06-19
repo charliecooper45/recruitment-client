@@ -144,6 +144,16 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 				}
 				controller.getView().setDisplayedSkillsInDialog(DialogType.REMOVE_SKILL, skills);
 				controller.getView().showDialog(DialogType.REMOVE_SKILL);
+			} else if (button.getText().trim().equals("Save Notes")) {
+				String notes = controller.getView().getCandidatePanelNotes();
+				Candidate selectedCandidate = controller.getView().getCandidatePanelCandidate();
+				boolean updated = controller.getModel().saveCandidateNotes(selectedCandidate.getId(), notes);
+				
+				if(updated) {
+					controller.getView().showMessageDialog(MessageDialogType.CANDIDATE_NOTES_SAVED);
+				} else {
+					controller.getView().showErrorDialog(ErrorDialogType.CANDIDATE_SAVE_NOTES_FAIL);
+				}
 			}
 		}
 	}

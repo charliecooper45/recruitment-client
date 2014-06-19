@@ -18,7 +18,6 @@ import database.beans.Candidate;
 import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
-import database.beans.EventType;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
@@ -567,6 +566,18 @@ public class ClientModel implements ServerInterface {
 	public boolean removeEvent(int eventId) {
 		try {
 			return SERVER.removeEvent(eventId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean saveCandidateNotes(int candidateId, String notes) {
+		try {
+			return SERVER.saveCandidateNotes(candidateId, notes);
 		} catch (RemoteException e) {
 			//TODO NEXT: Deal with this exception - possible propogate it?
 			//TODO NEXT: if null is returned handle this

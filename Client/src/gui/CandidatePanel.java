@@ -90,6 +90,10 @@ public class CandidatePanel extends JPanel {
 	private JPanel eventsPanel;
 	private JTable eventsTbl;
 	private JScrollPane eventsScrl;
+	private JPanel notesPanel;
+	private JTextArea notesTxtArea;
+	private JScrollPane notesScrlPane;
+	private JButton saveNotesBtn;
 
 	// the displayed candidate
 	private Candidate candidate;
@@ -364,12 +368,23 @@ public class CandidatePanel extends JPanel {
 		eventsScrl.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		eventsPanel.add(eventsScrl, BorderLayout.CENTER);
 
+		// setup the notes panel
+		notesPanel = new JPanel(new BorderLayout());
+		notesTxtArea = new JTextArea();
+		notesTxtArea.setLineWrap(true);
+		notesScrlPane = new JScrollPane(notesTxtArea);
+		notesScrlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		notesScrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		notesPanel.add(notesScrlPane, BorderLayout.CENTER);
+		saveNotesBtn = new JButton("Save Notes");
+		notesPanel.add(saveNotesBtn, BorderLayout.SOUTH);
+		
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("LinkedIn Profile", linkedInPanel);
 		tabbedPane.addTab("CV", candidateCvPanel);
 		tabbedPane.addTab("Key Skills", skillsPanel);
 		tabbedPane.addTab("Events", eventsPanel);
-		tabbedPane.addTab("Notes", new JPanel());
+		tabbedPane.addTab("Notes", notesPanel);
 		Utils.setGBC(rightPanelGbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		rightPanel.add(tabbedPane, rightPanelGbc);
 
@@ -500,6 +515,10 @@ public class CandidatePanel extends JPanel {
 		return candidate;
 	}
 
+	public String getCandidateNotes() {
+		return notesTxtArea.getText();
+	}
+	
 	public Candidate getUpdatedCandidate() {
 		String jobTitle = titleTxtFld.getText().trim();
 		Organisation organisation = (Organisation) orgCmbBox.getSelectedItem();
@@ -563,7 +582,7 @@ public class CandidatePanel extends JPanel {
 		removeSkillBtn.addActionListener(listener);
 		addEventBtn.addActionListener(listener);
 		removeEventBtn.addActionListener(listener);
+		saveNotesBtn.addActionListener(listener);
 		tabbedPane.addMouseListener(listener);
 	}
-
 }

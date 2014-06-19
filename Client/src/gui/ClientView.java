@@ -208,6 +208,10 @@ public class ClientView {
 		return mainWindow.getCandidatePanelCandidate();
 	}
 	
+	public String getCandidatePanelNotes() {
+		return mainWindow.getCandidatePanelNotes();
+	}
+	
 	public Candidate getUpdatedCandidate() {
 		return mainWindow.getUpdatedCandidate();
 	}

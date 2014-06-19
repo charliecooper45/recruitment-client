@@ -425,6 +425,11 @@ public class MainWindow extends JFrame {
 		return panel.getSelectedCandidate();
 	}
 
+	public String getCandidatePanelNotes() {
+		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
+		return panel.getCandidateNotes();
+	}
+	
 	public Candidate getUpdatedCandidate() {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		return panel.getUpdatedCandidate();
