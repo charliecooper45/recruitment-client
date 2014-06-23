@@ -64,7 +64,8 @@ public class TopMenuPanel extends JPanel {
 		}
 		
 		for(MenuPanel menuPanel : menuOptions) {
-			menuPanel.addMouseListener(topMenuListener);
+			if(menuPanel != null) 
+				menuPanel.addMouseListener(topMenuListener);
 		}
 	}
 

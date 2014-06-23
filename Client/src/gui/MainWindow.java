@@ -32,6 +32,7 @@ import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveSkillListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
+import gui.listeners.TaskListPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
 import gui.listeners.VacancyPanelListener;
@@ -69,6 +70,7 @@ import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
+import database.beans.Task;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -85,7 +87,7 @@ public class MainWindow extends JFrame {
 
 	// JPanels that form the static elements of the GUI
 	private TopMenuPanel topMenuPanel;
-	private JPanel taskListPanel;
+	private TaskListPanel taskListPanel;
 
 	// the menu items displayed in the menu
 	private JMenuItem[] menuItems;
@@ -154,6 +156,9 @@ public class MainWindow extends JFrame {
 
 		// create the top menu panel
 		topMenuPanel = new TopMenuPanel();
+		
+		// create the task list panel
+		taskListPanel = new TaskListPanel();
 
 		// create the dialogs
 		dialogs = new EnumMap<>(DialogType.class);
@@ -172,14 +177,14 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.REMOVE_EVENT, new RemoveEventDialog(this));
 	}
 
-	private void init(UserType userType) {
+	private void init(UserType userType, List<Task> tasks) {
 		borderLayout = new BorderLayout();
 		setLayout(borderLayout);
 
 		// initialize the TopMenuPanel according to the user type
 		topMenuPanel.setUserType(userType);
 		add(topMenuPanel, BorderLayout.NORTH);
-		taskListPanel = new TaskListPanel();
+		taskListPanel.updateTasks(tasks);
 		add(taskListPanel, BorderLayout.EAST);
 	}
 
@@ -189,9 +194,9 @@ public class MainWindow extends JFrame {
 			remove(centreComponent);
 	}
 
-	public void setVisible(String userId, boolean visible, UserType userType, List<Vacancy> vacancies, List<User> users) {
+	public void setVisible(String userId, boolean visible, UserType userType, List<Vacancy> vacancies, List<User> users, List<Task> tasks) {
 		USER_ID = userId;
-		init(userType);
+		init(userType, tasks);
 		if (visible) {
 			showVacanciesPanel(vacancies, users);
 		}
@@ -407,6 +412,11 @@ public class MainWindow extends JFrame {
 	public boolean[] getCandidatePipelinePanelOptions() {
 		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
 		return panel.getOptions();
+	}
+	
+	public void updateCandidatePipelinePanel(List<Event> events) {
+		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
+		panel.updateDisplayedEvents(events);
 	}
 	
 	// CandidatePanel methods
@@ -746,9 +756,9 @@ public class MainWindow extends JFrame {
 		panel.setCandidatePipelinePanelListener(candidatePipelineListener);
 	}
 	
-	public void updateCandidatePipelinePanel(List<Event> events) {
-		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
-		panel.updateDisplayedEvents(events);
+	public void setTaskListPanelListener(TaskListPanelListener taskListPanelListener) {
+		TaskListPanel panel = taskListPanel;
+		panel.setTaskListPanelListener(taskListPanelListener);
 	}
 	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
@@ -802,6 +812,4 @@ public class MainWindow extends JFrame {
 	public void setRemoveEventDialogListener(RemoveEventDialogListener removeEventDialogListener) {
 		dialogs.get(DialogType.REMOVE_EVENT).setActionListener(removeEventDialogListener);
 	}
-
-
 }

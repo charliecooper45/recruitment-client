@@ -1,10 +1,8 @@
 package gui.listeners;
 
-import gui.CandidatePanel;
-import gui.MessageDialogType;
-import gui.ErrorDialogType;
 import gui.DialogType;
-import gui.PanelType;
+import gui.ErrorDialogType;
+import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.List;
 
 import javax.swing.JButton;
 
@@ -21,7 +18,6 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
 import database.beans.Candidate;
-import database.beans.Vacancy;
 
 /**
  * Listener for events on the add candidate dialog.

@@ -18,6 +18,7 @@ import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveSkillListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
+import gui.listeners.TaskListPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.VacanciesPanelListener;
 import gui.listeners.VacancyPanelListener;
@@ -41,6 +42,7 @@ import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
+import database.beans.Task;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -72,8 +74,8 @@ public class ClientView {
 		loginWindow.showErrorMessage(message);
 	}
 
-	public void displayMainWindow(UserType userType, List<Vacancy> vacancies, List<User> users) {
-		mainWindow.setVisible(loginWindow.getUserId(), true, userType, vacancies, users);
+	public void displayMainWindow(UserType userType, List<Vacancy> vacancies, List<User> users, List<Task> tasks) {
+		mainWindow.setVisible(loginWindow.getUserId(), true, userType, vacancies, users, tasks);
 		loginWindow.dispose();
 	}
 
@@ -420,6 +422,10 @@ public class ClientView {
 		mainWindow.setRemoveEventDialogListener(removeEventDialogListener);
 	}
 	
+	public void setTaskListPanelListener(TaskListPanelListener taskListPanelListener) {
+		mainWindow.setTaskListPanelListener(taskListPanelListener);
+	}
+
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -431,6 +437,4 @@ public class ClientView {
 			}
 		});
 	}
-
-
 }

@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -18,7 +20,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import database.beans.Event;
-import database.beans.Vacancy;
 
 /**
  * Displays the pipeline (current user or everyones) to the user
@@ -183,8 +184,19 @@ public class CandidatePipelinePanel extends JPanel {
 	}
 	
 	public void updateDisplayedEvents(List<Event> events) {
-		//TODO NEXT: sort these by date, most recent events should be seen first
 		this.events = events;
+
+		Collections.sort(events, new Comparator<Event>() {
+			@Override
+			public int compare(Event event1, Event event2) {
+				int compare = event2.getDate().compareTo(event1.getDate());
+				
+				if(compare == 0) {
+					compare = event2.getTime().compareTo(event1.getTime());
+				}
+				return compare;
+			}
+		});
 		DefaultTableModel model = (DefaultTableModel) pipelineTbl.getModel();
 		model.fireTableDataChanged();
 	}

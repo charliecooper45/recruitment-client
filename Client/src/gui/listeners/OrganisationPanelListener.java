@@ -1,7 +1,7 @@
 package gui.listeners;
 
-import gui.ErrorDialogType;
 import gui.ConfirmDialogType;
+import gui.ErrorDialogType;
 import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
@@ -21,7 +21,6 @@ import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import controller.ClientController;
-import database.beans.Candidate;
 import database.beans.Organisation;
 
 /**

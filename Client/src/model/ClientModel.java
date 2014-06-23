@@ -21,6 +21,7 @@ import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Search;
 import database.beans.Skill;
+import database.beans.Task;
 import database.beans.User;
 import database.beans.Vacancy;
 
@@ -590,6 +591,18 @@ public class ClientModel implements ServerInterface {
 	public List<Event> getEvents(boolean shortlist, boolean cvSent, boolean interview, boolean placement, boolean user, String userId) {
 		try {
 			return SERVER.getEvents(shortlist, cvSent, interview, placement, user, userId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Task> getTasks(String userId) {
+		try {
+			return SERVER.getTasks(userId);
 		} catch (RemoteException e) {
 			//TODO NEXT: Deal with this exception - possible propogate it?
 			//TODO NEXT: if null is returned handle this
