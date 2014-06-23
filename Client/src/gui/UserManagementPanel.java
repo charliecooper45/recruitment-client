@@ -147,7 +147,7 @@ public class UserManagementPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
-					//TODO NEXT B: Implement this - show the users`s activty report
+					//TODO NEXT B: Implement this - show the users`s activity report
 				}
 			}
 		});

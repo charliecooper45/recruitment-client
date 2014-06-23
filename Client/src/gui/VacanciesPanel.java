@@ -129,7 +129,7 @@ public class VacanciesPanel extends JPanel {
 						}
 					}
 				}
-				return "test data";
+				return "";
 			}
 			
 			@Override

@@ -8,6 +8,7 @@ import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
 import gui.listeners.CandidatePanelListener;
+import gui.listeners.CandidatePipelinePanelListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
@@ -195,6 +196,14 @@ public class ClientView {
 		mainWindow.showCandidatePipeline();
 	}
 	
+	public boolean[] getCandidatePipelinePanelOptions() {
+		return mainWindow.getCandidatePipelinePanelOptions();
+	}
+	
+	public void updateCandidatePipelinePanel(List<Event> events) {
+		mainWindow.updateCandidatePipelinePanel(events);
+	}
+	
 	// CandidatePanel methods
 	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
 		mainWindow.showCandidatePanel(updatedCandidate, tempFile, organisations);
@@ -355,6 +364,10 @@ public class ClientView {
 		mainWindow.setCandidatePanelListener(candidatePanelListener);
 	}
 	
+	public void setCandidatePipelinePanelListener(CandidatePipelinePanelListener candidatePipelineListener) {
+		mainWindow.setCandidatePipelinePanelListener(candidatePipelineListener);
+	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		mainWindow.setAddVacancyDialogListener(actionListener);
 	}
@@ -418,4 +431,6 @@ public class ClientView {
 			}
 		});
 	}
+
+
 }

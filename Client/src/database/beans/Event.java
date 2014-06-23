@@ -15,25 +15,15 @@ public class Event implements Serializable {
 	private Date date;
 	private Time time;
 	private String userId;
-	private int vacancyId;
-	private String vacancyName;
+	private Vacancy vacancy;
 	
-	public Event(EventType eventType, Candidate candidate, Date date, String userId, int vacancyId) {
-		this.eventType = eventType;
-		this.candidate = candidate;
-		this.date = date;
-		this.userId = userId;
-		this.vacancyId = vacancyId;
-	}
-	
-	public Event(EventType eventType, Candidate candidate, Date date, Time time, String userId, int vacancyId, String vacancyName) {
+	public Event(EventType eventType, Candidate candidate, Date date, Time time, String userId, Vacancy vacancy) {
 		this.eventType = eventType;
 		this.candidate = candidate;
 		this.date = date;
 		this.time = time;
 		this.userId = userId;
-		this.vacancyId = vacancyId;
-		this.vacancyName = vacancyName;
+		this.vacancy = vacancy;
 	}
 	
 	public int getEventId() {
@@ -77,23 +67,23 @@ public class Event implements Serializable {
 	}
 
 	public int getVacancyId() {
-		return vacancyId;
+		return vacancy.getVacancyId();
 	}
 
-	public void setVacancyId(int vacancyId) {
-		this.vacancyId = vacancyId;
-	}
-	
 	public Time getTime() {
 		return time;
 	}
 	
 	public String getVacancyName() {
-		return vacancyName;
+		return vacancy.getName();
+	}
+	
+	public String getVacancyOrganisation() {
+		return vacancy.getOrganisationName();
 	}
 	
 	@Override
 	public String toString() {
-		return eventType + ": " + vacancyName + ": " + date + " " + time;
+		return eventType + ": " + vacancy.getName() + ": " + date + " " + time;
 	}
 }

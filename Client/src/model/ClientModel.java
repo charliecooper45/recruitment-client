@@ -585,4 +585,16 @@ public class ClientModel implements ServerInterface {
 		}
 		return false;
 	}
+
+	@Override
+	public List<Event> getEvents(boolean shortlist, boolean cvSent, boolean interview, boolean placement, boolean user, String userId) {
+		try {
+			return SERVER.getEvents(shortlist, cvSent, interview, placement, user, userId);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

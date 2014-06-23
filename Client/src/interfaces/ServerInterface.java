@@ -69,4 +69,5 @@ public interface ServerInterface extends Remote{
 	public boolean addEvent(Event event) throws RemoteException;
 	public boolean removeEvent(int eventId) throws RemoteException;
 	public boolean saveCandidateNotes(int candidateId, String notes) throws RemoteException;
+	public List<Event> getEvents(boolean shortlist, boolean cvSent, boolean interview, boolean placement, boolean user, String userId) throws RemoteException;
 }

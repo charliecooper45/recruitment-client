@@ -166,7 +166,7 @@ public class AddEventDialog extends RecruitmentDialog {
 		Vacancy vacancy = (Vacancy) vacanciesCmbBx.getSelectedItem();
 		Date date = dateChooser.getDate();
 		Time time = new Time(timeChooser.getDateWithTime(date).getTime());
-		Event event = new Event(type, null, date, time, null, vacancy.getVacancyId(), vacancy.getName());
+		Event event = new Event(type, null, date, time, null, new Vacancy(vacancy.getVacancyId(), vacancy.getName()));
 		return event;
 	}
 	

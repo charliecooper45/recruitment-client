@@ -1,12 +1,13 @@
 package gui;
 
+import gui.listeners.CandidatePipelinePanelListener;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -16,6 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import database.beans.Event;
+import database.beans.Vacancy;
+
 /**
  * Displays the pipeline (current user or everyones) to the user
  * @author Charlie
@@ -24,6 +28,9 @@ public class CandidatePipelinePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private GridBagConstraints gbc;
+	
+	// list of events to be displayed
+	private List<Event> events;
 	
 	// components - topPanel
 	private JPanel topPanel;
@@ -83,6 +90,7 @@ public class CandidatePipelinePanel extends JPanel {
 		// right JPanel
 		group = new ButtonGroup();
 		myPipelineRdBtn = new JRadioButton("My Pipeline");
+		myPipelineRdBtn.setSelected(true);
 		companyPipelineRdBtn = new JRadioButton("Company Pipeline");
 		group.add(myPipelineRdBtn);
 		rightJPanel.add(myPipelineRdBtn);
@@ -106,13 +114,36 @@ public class CandidatePipelinePanel extends JPanel {
 			private String[] columns = {"Candidate", "Event", "Job Title", "Organisation", "Date", "User"};
 
 			@Override
-			public Object getValueAt(int arg0, int arg1) {
-				return "Test Data";
+			public Object getValueAt(int row, int column) {
+				Event event; 
+				
+				if(events != null) {
+					event = events.get(row);
+					switch(column) {
+					case 0:
+						return event.getCandidate();
+					case 1:
+						return event.getEventType();
+					case 2:
+						return event.getVacancyName();
+					case 3:
+						return event.getVacancyOrganisation();
+					case 4:
+						return event.getDate();
+					case 5:
+						return event.getUserId();
+					}
+				}
+				return "";
 			}
 			
 			@Override
 			public int getRowCount() {
-				return 5;
+				if(events != null) {
+					return events.size();
+				} else { 
+					return 0;
+				}
 			}
 			
 			@Override
@@ -138,5 +169,32 @@ public class CandidatePipelinePanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 		
 		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	public boolean[] getOptions() {
+		boolean[] options = new boolean[5];
+		options[0] = shortlistedChckBox.isSelected();
+		options[1] = cvsChckBox.isSelected();
+		options[2] = interviewsChckBox.isSelected();
+		options[3] = placementsChckBox.isSelected();
+		options[4] = myPipelineRdBtn.isSelected();
+		
+		return options;
+	}
+	
+	public void updateDisplayedEvents(List<Event> events) {
+		//TODO NEXT: sort these by date, most recent events should be seen first
+		this.events = events;
+		DefaultTableModel model = (DefaultTableModel) pipelineTbl.getModel();
+		model.fireTableDataChanged();
+	}
+	
+	public void setCandidatePipelinePanelListener(CandidatePipelinePanelListener candidatePipelineListener) {
+		shortlistedChckBox.addActionListener(candidatePipelineListener);
+		cvsChckBox.addActionListener(candidatePipelineListener);
+		interviewsChckBox.addActionListener(candidatePipelineListener);
+		placementsChckBox.addActionListener(candidatePipelineListener);
+		myPipelineRdBtn.addActionListener(candidatePipelineListener);
+		companyPipelineRdBtn.addActionListener(candidatePipelineListener);
 	}
 }

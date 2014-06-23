@@ -22,6 +22,11 @@ public class Vacancy implements Serializable, Comparable<Vacancy> {
 	private String contactName;
 	private String contactPhoneNumber;
 
+	public Vacancy(int vacancyId, String name) {
+		this.vacancyId = vacancyId;
+		this.name = name;
+	}
+	
 	public Vacancy(int vacancyId, boolean status, String name, Date vacancyDate, String text, String profile, int organisationId, String organisationName, String userId, int contactId, String contactName, String contactPhoneNumber) {
 		this.vacancyId = vacancyId;
 		this.status = status;

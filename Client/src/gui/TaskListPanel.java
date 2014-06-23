@@ -60,11 +60,8 @@ public class TaskListPanel extends JPanel {
 		tasksGbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		tasksGbc.weightx = 1;
 		tasksGbc.weighty = 1;
-		
-		for(int i = 1; i < 20; i++) {
-			Utils.setGBC(tasksGbc, 1, i, 1, 1, GridBagConstraints.HORIZONTAL);
-			tasksPanel.add(new Task("Dummy task " + i, new GregorianCalendar()), tasksGbc);
-		}
+		Utils.setGBC(tasksGbc, 1, 1, 1, 1, GridBagConstraints.HORIZONTAL);
+		tasksPanel.add(new Task("Call Microsoft", new GregorianCalendar()), tasksGbc);
 		
 		tasksScrl = new JScrollPane(tasksPanel);
 		tasksScrl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

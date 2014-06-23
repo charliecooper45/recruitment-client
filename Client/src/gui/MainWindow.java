@@ -22,6 +22,7 @@ import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
 import gui.listeners.CandidatePanelListener;
+import gui.listeners.CandidatePipelinePanelListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
@@ -403,6 +404,11 @@ public class MainWindow extends JFrame {
 		repaint();
 	}
 
+	public boolean[] getCandidatePipelinePanelOptions() {
+		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
+		return panel.getOptions();
+	}
+	
 	// CandidatePanel methods
 	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
 		removeCentreComponent();
@@ -735,6 +741,16 @@ public class MainWindow extends JFrame {
 		panel.setCandidatePanelListener(candidatePanelListener);
 	}
 
+	public void setCandidatePipelinePanelListener(CandidatePipelinePanelListener candidatePipelineListener) {
+		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
+		panel.setCandidatePipelinePanelListener(candidatePipelineListener);
+	}
+	
+	public void updateCandidatePipelinePanel(List<Event> events) {
+		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
+		panel.updateDisplayedEvents(events);
+	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(DialogType.ADD_VACANCY).setActionListener(actionListener);
 	}
@@ -786,4 +802,6 @@ public class MainWindow extends JFrame {
 	public void setRemoveEventDialogListener(RemoveEventDialogListener removeEventDialogListener) {
 		dialogs.get(DialogType.REMOVE_EVENT).setActionListener(removeEventDialogListener);
 	}
+
+
 }
