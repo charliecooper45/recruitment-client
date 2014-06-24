@@ -7,6 +7,7 @@ import gui.dialogs.AddEventDialog;
 import gui.dialogs.AddLinkedInDialog;
 import gui.dialogs.AddOrganisationDialog;
 import gui.dialogs.AddSkillDialog;
+import gui.dialogs.AddTaskDialog;
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveCandidateDialog;
@@ -21,6 +22,7 @@ import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
+import gui.listeners.AddTaskDialogListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
 import gui.listeners.OrganisationPanelListener;
@@ -175,6 +177,7 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.REMOVE_SKILL, new RemoveSkillDialog(this));
 		dialogs.put(DialogType.ADD_EVENT, new AddEventDialog(this));
 		dialogs.put(DialogType.REMOVE_EVENT, new RemoveEventDialog(this));
+		dialogs.put(DialogType.ADD_TASK, new AddTaskDialog(this));
 	}
 
 	private void init(UserType userType, List<Task> tasks) {
@@ -710,6 +713,11 @@ public class MainWindow extends JFrame {
 		return null;
 	}
 	
+	public Task getTaskDialogTask() {
+		AddTaskDialog dialog = (AddTaskDialog) dialogs.get(DialogType.ADD_TASK);
+		return dialog.getTask();
+	}
+	
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -811,5 +819,9 @@ public class MainWindow extends JFrame {
 
 	public void setRemoveEventDialogListener(RemoveEventDialogListener removeEventDialogListener) {
 		dialogs.get(DialogType.REMOVE_EVENT).setActionListener(removeEventDialogListener);
+	}
+
+	public void setAddTaskDialogListener(AddTaskDialogListener addTaskDialogListener) {
+		dialogs.get(DialogType.ADD_TASK).setActionListener(addTaskDialogListener);
 	}
 }

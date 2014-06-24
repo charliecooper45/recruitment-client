@@ -7,6 +7,7 @@ import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
+import gui.listeners.AddTaskDialogListener;
 import gui.listeners.AddVacancyDialogListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
@@ -72,6 +73,7 @@ public class ClientController {
 	private RemoveSkillListener removeSkillListener;
 	private AddEventDialogListener addEventDialogListener;
 	private RemoveEventDialogListener removeEventDialogListener;
+	private AddTaskDialogListener addTaskDialogListener;
 	
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
@@ -103,6 +105,7 @@ public class ClientController {
 		removeSkillListener = new RemoveSkillListener(this);
 		addEventDialogListener = new AddEventDialogListener(this);
 		removeEventDialogListener = new RemoveEventDialogListener(this);
+		addTaskDialogListener = new AddTaskDialogListener(this);
 
 		setListenersAndShowGUI();
 	}
@@ -141,6 +144,7 @@ public class ClientController {
 		view.setRemoveSkillListener(removeSkillListener);
 		view.setAddEventDialogListener(addEventDialogListener);
 		view.setRemoveEventDialogListener(removeEventDialogListener);
+		view.setAddTaskDialogListener(addTaskDialogListener);
 	}
 
 	public Path storeTempFile(InputStream inStream, String name) {

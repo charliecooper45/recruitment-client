@@ -1,5 +1,7 @@
 package gui.listeners;
 
+import gui.DialogType;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,7 +17,7 @@ public class TaskListPanelListener extends ClientListener implements ActionListe
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		System.err.println("Add task button pressed!");
+	public void actionPerformed(ActionEvent event) {
+		controller.getView().showDialog(DialogType.ADD_TASK);
 	}
 }

@@ -7,6 +7,7 @@ import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
+import gui.listeners.AddTaskDialogListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
 import gui.listeners.OrganisationPanelListener;
@@ -329,6 +330,10 @@ public class ClientView {
 		return mainWindow.getEventDialogEvent(dialogType);
 	}
 	
+	public Task getTaskDialogTask() {
+		return mainWindow.getTaskDialogTask();
+	}
+	
 	// methods to set listeners and controller
 	public void setController(ClientController controller) {
 		this.controller = controller;
@@ -424,6 +429,10 @@ public class ClientView {
 	
 	public void setTaskListPanelListener(TaskListPanelListener taskListPanelListener) {
 		mainWindow.setTaskListPanelListener(taskListPanelListener);
+	}
+	
+	public void setAddTaskDialogListener(AddTaskDialogListener addTaskDialogListener) {
+		mainWindow.setAddTaskDialogListener(addTaskDialogListener);
 	}
 
 	// main method
