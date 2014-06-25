@@ -1,9 +1,12 @@
 package gui.listeners;
 
 import gui.DialogType;
+import gui.ErrorDialogType;
+import gui.MainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 
@@ -32,8 +35,15 @@ public class AddTaskDialogListener extends ClientListener implements ActionListe
 				Task task = controller.getView().getTaskDialogTask();
 				
 				if(task != null) {
-					//TODO NEXT: send a message to the server here to add the task to the list of tasks then update the lists shown
-					controller.getView().hideDialog(DialogType.ADD_TASK);
+					boolean taskAdded = controller.getModel().addTask(task);
+					
+					if(taskAdded) {
+						List<Task> tasks = controller.getModel().getTasks(MainWindow.USER_ID);
+						controller.getView().updateDisplayedTasks(tasks);
+						controller.getView().hideDialog(DialogType.ADD_TASK);
+					} else {
+						controller.getView().showErrorDialog(ErrorDialogType.ADD_TASK_FAIL);
+					}
 				}
 				break;
 			case "Cancel ":

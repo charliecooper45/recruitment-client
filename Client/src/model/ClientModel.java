@@ -610,4 +610,28 @@ public class ClientModel implements ServerInterface {
 		}
 		return null;
 	}
+
+	@Override
+	public boolean addTask(Task task) {
+		try {
+			return SERVER.addTask(task);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeTask(Task task) {
+		try {
+			return SERVER.removeTask(task);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

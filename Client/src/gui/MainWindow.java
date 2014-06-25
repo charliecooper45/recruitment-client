@@ -475,6 +475,20 @@ public class MainWindow extends JFrame {
 		repaint();
 	}
 
+	// TaskListPanel methods
+	public void updateDisplayedTasks(List<Task> tasks) {
+		TaskListPanel panel = taskListPanel;
+		panel.updateTasks(tasks);		
+	}
+	
+	public Task getTaskListPanelTask() {
+		return taskListPanel.getSelectedTask();
+	}
+	
+	public void uncheckAllTaskListPanelTasks() {
+		taskListPanel.uncheckAllTasks();
+	}
+	
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(final String title) {
 		JFileChooser fc = new JFileChooser();
@@ -574,6 +588,13 @@ public class MainWindow extends JFrame {
 			}
 			break;
 		case REMOVE_FROM_SHORTLIST:
+			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.REMOVE_FROM_SHORTLIST.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if (response == 0) {
+				return true;
+			}
+			break;
+		case REMOVE_TASK:
 			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
 			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.REMOVE_FROM_SHORTLIST.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
 			if (response == 0) {
@@ -824,4 +845,6 @@ public class MainWindow extends JFrame {
 	public void setAddTaskDialogListener(AddTaskDialogListener addTaskDialogListener) {
 		dialogs.get(DialogType.ADD_TASK).setActionListener(addTaskDialogListener);
 	}
+
+
 }

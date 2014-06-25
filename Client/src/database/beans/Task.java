@@ -1,18 +1,28 @@
 package database.beans;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
 
 /**
  * Bean that represents an instance of the entity Task in the recruitment database. 
  * @author Charlie
  */
-public class Task implements Serializable{
+public class Task implements Serializable, Comparable<Task> {
 	private int taskId;
 	private Date date;
 	private Date time;
 	private String description;
 	private String userId;
+	
+	public Task(int taskId, Date date, Date time, String description, String userId) {
+		super();
+		this.taskId = taskId;
+		this.date = date;
+		this.time = time;
+		this.description = description;
+		this.userId = userId;
+	}
 	
 	public Task(Date date, Date time, String description, String userId) {
 		super();
@@ -56,5 +66,15 @@ public class Task implements Serializable{
 	
 	public int getTaskId() {
 		return taskId;
+	}
+
+	@Override
+	public int compareTo(Task task) {
+		int compare = this.date.compareTo(task.date);
+		
+		if(compare == 0) {
+			compare = this.time.compareTo(task.time);
+		}
+		return compare;
 	}
 }

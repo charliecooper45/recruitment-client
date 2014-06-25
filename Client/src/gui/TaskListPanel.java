@@ -8,7 +8,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -31,9 +34,9 @@ public class TaskListPanel extends JPanel {
 
 	private GridBagConstraints gbc;
 
-	// holds the tasks to be displayed
-	private List<Task> tasks;
-
+	// TaskPanels that are displayed
+	private List<TaskPanel> taskPanels = new ArrayList<>();;
+	
 	// components
 	private JLabel taskLbl;
 	private JPanel tasksPanel;
@@ -87,16 +90,38 @@ public class TaskListPanel extends JPanel {
 	}
 
 	public void updateTasks(List<Task> tasks) {
-		this.tasks = tasks;
-
+		taskPanels.clear();
+		Collections.sort(tasks);
 		tasksPanel.removeAll();
 
 		if (tasks != null) {
 			for(int i = 0; i < tasks.size(); i++) {
 				Utils.setGBC(tasksGbc, 0, i, 1, 1, GridBagConstraints.HORIZONTAL);
 				Task task = tasks.get(i);
-				// tasksPanel.add(new TaskPanel(task.getDescription(), task.getDate(), task.getTime()), tasksGbc);
-				tasksPanel.add(new TaskPanel(task.getDescription(), task.getDate(), task.getTime()));
+				TaskPanel taskPanel = new TaskPanel(task);
+				taskPanel.setActionListener(addTaskBtn.getActionListeners()[0]);
+				tasksPanel.add(taskPanel);
+				taskPanels.add(taskPanel);
+			}
+		}
+		
+		tasksPanel.revalidate();
+		tasksPanel.repaint();
+	}
+	
+	public Task getSelectedTask() {
+		for(TaskPanel taskPanel : taskPanels) {
+			if(taskPanel.isSelected()) {
+				return taskPanel.getTask();
+			}
+		}
+		return null;
+	}
+	
+	public void uncheckAllTasks() {
+		for(TaskPanel taskPanel : taskPanels) {
+			if(taskPanel.isSelected()) {
+				taskPanel.setSelected(false);
 			}
 		}
 	}
@@ -111,6 +136,8 @@ public class TaskListPanel extends JPanel {
 	private class TaskPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
+		private Task task;
+		
 		private GridBagConstraints gbc;
 		private final SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd'th' MMM");
 		private final SimpleDateFormat timeFormat = new SimpleDateFormat("hh':'mm aa");
@@ -118,23 +145,16 @@ public class TaskListPanel extends JPanel {
 		// components
 		private JCheckBox completedBox;
 
-		//TODO NEXT: maximum size of subject needs to be maintained
-		private String subject;
-		private Date date;
-		private Date time;
-
-		public TaskPanel(String subject, Date date, Date time) {
+		public TaskPanel(Task task) {
 			//TODO NEXT: Bring up a page to edit the task on double click
-			this.subject = subject;
-			this.date = date;
-			this.time = time;
+			this.task = task;
 
 			setSize(new Dimension(200, 50));
 			setBorder(BorderFactory.createLineBorder(Color.BLACK));
-			init();
+			init(task.getDescription(), task.getDate(), task.getTime());
 		}
 
-		private void init() {
+		private void init(String description, Date date, Date time) {
 			setLayout(new GridBagLayout());
 			setMaximumSize(new Dimension(5000, 75));
 			gbc = new GridBagConstraints();
@@ -146,7 +166,7 @@ public class TaskListPanel extends JPanel {
 			add(new JLabel(dateFormat.format(date.getTime())), gbc);
 
 			Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.BOTH);
-			add(new JLabel(subject), gbc);
+			add(new JLabel(description), gbc);
 
 			gbc.anchor = GridBagConstraints.LINE_END;
 			gbc.weightx = 1;
@@ -155,6 +175,22 @@ public class TaskListPanel extends JPanel {
 			completedBox = new JCheckBox();
 			Utils.setGBC(gbc, 2, 2, 1, 1, GridBagConstraints.NONE);
 			add(completedBox, gbc);
+		}
+	
+		private boolean isSelected() {
+			return completedBox.isSelected();
+		}
+		
+		private void setSelected(boolean selected) {
+			completedBox.setSelected(selected);
+		}
+		
+		private Task getTask() {
+			return task;
+		}
+		
+		private void setActionListener(ActionListener actionListener) {
+			completedBox.addActionListener(actionListener);
 		}
 	}
 }

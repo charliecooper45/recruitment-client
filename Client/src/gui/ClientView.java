@@ -241,6 +241,19 @@ public class ClientView {
 		mainWindow.showAdminPanel();
 	}
 	
+	// TaskListPanel methods
+	public void updateDisplayedTasks(List<Task> tasks) {
+		mainWindow.updateDisplayedTasks(tasks);
+	}
+	
+	public Task getTaskListPanelTask() {
+		return mainWindow.getTaskListPanelTask();
+	}
+	
+	public void uncheckAllTaskListPanelTasks() {
+		mainWindow.uncheckAllTaskListPanelTasks();
+	}
+	
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(String title) {
 		return mainWindow.showFileChooser(title);
@@ -446,4 +459,5 @@ public class ClientView {
 			}
 		});
 	}
+
 }
