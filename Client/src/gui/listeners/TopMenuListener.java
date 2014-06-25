@@ -25,6 +25,7 @@ public class TopMenuListener extends ClientListener {
 		Object source = e.getSource();
 		
 		if(source instanceof MenuPanel) {
+			List<User> users = null;
 			MenuPanel panel = (MenuPanel) source;
 			
 			// set the selected menu panel
@@ -35,7 +36,8 @@ public class TopMenuListener extends ClientListener {
 			
 			switch (type) {
 			case ADMIN:
-				controller.getView().showAdminPanel();
+				users = controller.getModel().getUsers(null, false);
+				controller.getView().showAdminPanel(users);
 				break;
 			case ORGANISATIONS:
 				List<Organisation> organisations = controller.getModel().getOrganisations();
@@ -52,7 +54,7 @@ public class TopMenuListener extends ClientListener {
 			case VACANCIES:
 				// update the vacancies panel and then show it
 				vacancies = controller.getModel().getVacancies(true, null);
-				List<User> users = controller.getModel().getUsers(null, true);
+				users = controller.getModel().getUsers(null, true);
 				controller.getView().showVacanciesPanel(vacancies, users);
 				break;
 			default:

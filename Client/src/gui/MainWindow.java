@@ -23,6 +23,7 @@ import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
 import gui.listeners.AddTaskDialogListener;
+import gui.listeners.AdminPanelListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
 import gui.listeners.OrganisationPanelListener;
@@ -36,6 +37,7 @@ import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TaskListPanelListener;
 import gui.listeners.TopMenuListener;
+import gui.listeners.UserManagementPanelListener;
 import gui.listeners.VacanciesPanelListener;
 import gui.listeners.VacancyPanelListener;
 import interfaces.UserType;
@@ -465,10 +467,11 @@ public class MainWindow extends JFrame {
 	}
 	
 	// AdminPanel methods
-	public void showAdminPanel() {
+	public void showAdminPanel(List<User> users) {
 		removeCentreComponent();
 
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		panel.updateDisplayedUsers(users);
 		add(panel);
 
 		revalidate();
@@ -790,6 +793,11 @@ public class MainWindow extends JFrame {
 		panel.setTaskListPanelListener(taskListPanelListener);
 	}
 	
+	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userManagementPanelListener) {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		panel.setAdminPanelListener(adminPanelListener, userManagementPanelListener);
+	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(DialogType.ADD_VACANCY).setActionListener(actionListener);
 	}
@@ -845,6 +853,4 @@ public class MainWindow extends JFrame {
 	public void setAddTaskDialogListener(AddTaskDialogListener addTaskDialogListener) {
 		dialogs.get(DialogType.ADD_TASK).setActionListener(addTaskDialogListener);
 	}
-
-
 }

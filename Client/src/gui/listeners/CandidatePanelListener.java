@@ -29,7 +29,6 @@ import controller.ClientController;
 import database.beans.Candidate;
 import database.beans.CandidateSkill;
 import database.beans.Event;
-import database.beans.EventType;
 import database.beans.Organisation;
 import database.beans.Skill;
 

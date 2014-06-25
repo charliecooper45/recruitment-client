@@ -42,7 +42,11 @@ public class TopMenuPanel extends JPanel {
 
 		// menu options
 		menuPanelsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		menuOptions = new MenuPanel[5];
+		if(userType == UserType.STANDARD) {
+			menuOptions = new MenuPanel[4];
+		} else if(userType == UserType.ADMINISTRATOR) {
+			menuOptions = new MenuPanel[5];
+		}
 		menuOptions[0] = new MenuPanel("Vacancies", PanelType.VACANCIES);
 		menuOptions[0].setSelected(true);
 		menuOptions[1] = new MenuPanel("My Candidate Pipeline", PanelType.PIPELINE);

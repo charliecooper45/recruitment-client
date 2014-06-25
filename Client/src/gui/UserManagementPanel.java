@@ -1,11 +1,15 @@
 package gui;
 
+import gui.listeners.UserManagementPanelListener;
+import interfaces.UserType;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,10 +22,15 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import database.beans.User;
+
 public class UserManagementPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GridBagConstraints gbc;
+
+	// list of users to be displayed
+	private List<User> users;
 
 	// components - topPanel
 	private JPanel topPanel;
@@ -30,8 +39,7 @@ public class UserManagementPanel extends JPanel {
 	private JButton addUserBtn;
 	private JButton userActBtn;
 	private JButton delUserBtn;
-	private JButton resetPasswordBtn;
-	private JButton changeActStsBtn;
+	private JButton editUserBtn;
 
 	// components - mainPanel
 	private JPanel mainPanel;
@@ -57,19 +65,22 @@ public class UserManagementPanel extends JPanel {
 		gbc.insets = new Insets(20, 0, 20, 5);
 		gbc.anchor = GridBagConstraints.LINE_END;
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.NONE);
-		topPanel.add(new JLabel("Account Status:"), gbc);
+		topPanel.add(new JLabel("Status:"), gbc);
 
 		gbc.insets = new Insets(10, 0, 10, 0);
 		gbc.anchor = GridBagConstraints.LINE_START;
 		userTypeCmbBox = new JComboBox<>();
+		userTypeCmbBox.addItem("Administrators");
+		userTypeCmbBox.addItem("Standard Users");
+		userTypeCmbBox.addItem("All Users");
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL);
 		topPanel.add(userTypeCmbBox, gbc);
-		
+
 		gbc.insets = new Insets(20, 0, 20, 5);
 		gbc.anchor = GridBagConstraints.LINE_END;
 		Utils.setGBC(gbc, 3, 1, 1, 1, GridBagConstraints.NONE);
-		topPanel.add(new JLabel("Account Type:"), gbc);
-		
+		topPanel.add(new JLabel("Type:"), gbc);
+
 		gbc.insets = new Insets(10, 0, 10, 0);
 		gbc.anchor = GridBagConstraints.LINE_START;
 		userStatusCmbBox = new JComboBox<>();
@@ -86,18 +97,14 @@ public class UserManagementPanel extends JPanel {
 		Utils.setGBC(gbc, 6, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(delUserBtn, gbc);
 
-		userActBtn = new JButton("View User Activity");
+		editUserBtn = new JButton("Edit User");
 		Utils.setGBC(gbc, 7, 1, 1, 1, GridBagConstraints.NONE);
-		topPanel.add(userActBtn, gbc);
+		topPanel.add(editUserBtn, gbc);
 		
-		resetPasswordBtn = new JButton("Reset Password");
+		userActBtn = new JButton("View User Activity");
 		Utils.setGBC(gbc, 8, 1, 1, 1, GridBagConstraints.NONE);
-		topPanel.add(resetPasswordBtn, gbc);
-		
-		changeActStsBtn = new JButton("Change Status");
-		Utils.setGBC(gbc, 9, 1, 1, 1, GridBagConstraints.NONE);
-		topPanel.add(changeActStsBtn, gbc);
-		
+		topPanel.add(userActBtn, gbc);
+
 		add(topPanel, BorderLayout.NORTH);
 	}
 
@@ -109,16 +116,45 @@ public class UserManagementPanel extends JPanel {
 		gbc.insets = new Insets(0, 20, 10, 20);
 		usersTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = { "UserID", "First Name", "Surname", "Email address", "Phone number", "Account status", "Account Type" };
+			private String[] columns = { "UserID", "First Name", "Surname", "Email address", "Phone number", "Account Type", "Account status" };
 
 			@Override
 			public Object getValueAt(int row, int col) {
-				return "Test Data";
+				User user;
+
+				if (users != null) {
+					user = users.get(row);
+					switch (col) {
+					case 0:
+						return user.getUserId();
+					case 1:
+						return user.getFirstName();
+					case 2:
+						return user.getSurname();
+					case 3:
+						return user.getEmailAddress();
+					case 4:
+						return user.getPhoneNumber();
+					case 5:
+						return user.getAccountType();
+					case 6:
+						if (user.getAccountStatus() == true) {
+							return "Active";
+						} else {
+							return "Closed";
+						}
+					}
+				}
+				return "";
 			}
 
 			@Override
 			public int getRowCount() {
-				return 7;
+				if (users != null) {
+					return users.size();
+				} else {
+					return 0;
+				}
 			}
 
 			@Override
@@ -158,5 +194,15 @@ public class UserManagementPanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 
 		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	public void updateDisplayedUsers(List<User> users) {
+		this.users = users;
+		DefaultTableModel model = (DefaultTableModel) usersTbl.getModel();
+		model.fireTableDataChanged();
+	}
+
+	public void setUserManagementPanelListener(UserManagementPanelListener listener) {
+		userTypeCmbBox.addActionListener(listener);
 	}
 }

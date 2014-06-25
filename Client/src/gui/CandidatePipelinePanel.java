@@ -27,12 +27,12 @@ import database.beans.Event;
  */
 public class CandidatePipelinePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
+
 	private GridBagConstraints gbc;
-	
+
 	// list of events to be displayed
 	private List<Event> events;
-	
+
 	// components - topPanel
 	private JPanel topPanel;
 	private JCheckBox[] chckBoxes;
@@ -43,34 +43,34 @@ public class CandidatePipelinePanel extends JPanel {
 	private ButtonGroup group;
 	private JRadioButton myPipelineRdBtn;
 	private JRadioButton companyPipelineRdBtn;
-	
+
 	// components - mainPanel
 	private JPanel mainPanel;
 	private JTable pipelineTbl;
 	private JScrollPane tableScrll;
-	
+
 	public CandidatePipelinePanel() {
 		setLayout(new BorderLayout());
 		init();
 	}
-	
+
 	private void init() {
 		initTopPanel();
 		initMainPanel();
 	}
-	
+
 	private void initTopPanel() {
 		JPanel leftJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JPanel rightJPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		Insets leftInsets = new Insets(30, 20, 0, 0);
 		Insets rightInsets = new Insets(30, 0, 0, 20);
-		
+
 		topPanel = new JPanel();
 		topPanel.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints();
 		gbc.weightx = 1;
 		gbc.weighty = 1;
-		
+
 		// left JPanel
 		shortlistedChckBox = new JCheckBox("Shortlisted Candidates");
 		cvsChckBox = new JCheckBox("CVs Sent");
@@ -81,13 +81,13 @@ public class CandidatePipelinePanel extends JPanel {
 		chckBoxes[1] = cvsChckBox;
 		chckBoxes[2] = interviewsChckBox;
 		chckBoxes[3] = placementsChckBox;
-		for(JCheckBox box : chckBoxes) {
+		for (JCheckBox box : chckBoxes) {
 			leftJPanel.add(box);
 		}
 		gbc.insets = leftInsets;
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.HORIZONTAL);
 		topPanel.add(leftJPanel, gbc);
-		
+
 		// right JPanel
 		group = new ButtonGroup();
 		myPipelineRdBtn = new JRadioButton("My Pipeline");
@@ -100,10 +100,10 @@ public class CandidatePipelinePanel extends JPanel {
 		gbc.insets = rightInsets;
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL);
 		topPanel.add(rightJPanel, gbc);
-		
+
 		add(topPanel, BorderLayout.NORTH);
 	}
-	
+
 	private void initMainPanel() {
 		mainPanel = new JPanel(new GridBagLayout());
 		gbc = new GridBagConstraints();
@@ -112,15 +112,15 @@ public class CandidatePipelinePanel extends JPanel {
 		gbc.insets = new Insets(30, 20, 30, 20);
 		pipelineTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = {"Candidate", "Event", "Job Title", "Organisation", "Date", "User"};
+			private String[] columns = { "Candidate", "Event", "Job Title", "Organisation", "Date", "User" };
 
 			@Override
 			public Object getValueAt(int row, int column) {
-				Event event; 
-				
-				if(events != null) {
+				Event event;
+
+				if (events != null) {
 					event = events.get(row);
-					switch(column) {
+					switch (column) {
 					case 0:
 						return event.getCandidate();
 					case 1:
@@ -137,16 +137,16 @@ public class CandidatePipelinePanel extends JPanel {
 				}
 				return "";
 			}
-			
+
 			@Override
 			public int getRowCount() {
-				if(events != null) {
+				if (events != null) {
 					return events.size();
-				} else { 
+				} else {
 					return 0;
 				}
 			}
-			
+
 			@Override
 			public int getColumnCount() {
 				return 6;
@@ -156,7 +156,7 @@ public class CandidatePipelinePanel extends JPanel {
 			public String getColumnName(int index) {
 				return columns[index];
 			}
-		
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -168,7 +168,7 @@ public class CandidatePipelinePanel extends JPanel {
 		tableScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		mainPanel.add(tableScrll, gbc);
-		
+
 		add(mainPanel, BorderLayout.CENTER);
 	}
 
@@ -179,10 +179,10 @@ public class CandidatePipelinePanel extends JPanel {
 		options[2] = interviewsChckBox.isSelected();
 		options[3] = placementsChckBox.isSelected();
 		options[4] = myPipelineRdBtn.isSelected();
-		
+
 		return options;
 	}
-	
+
 	public void updateDisplayedEvents(List<Event> events) {
 		this.events = events;
 
@@ -190,9 +190,11 @@ public class CandidatePipelinePanel extends JPanel {
 			@Override
 			public int compare(Event event1, Event event2) {
 				int compare = event2.getDate().compareTo(event1.getDate());
-				
-				if(compare == 0) {
-					compare = event2.getTime().compareTo(event1.getTime());
+
+				if (compare == 0) {
+					if(event1.getTime() != null && event2.getTime() != null) {
+						compare = event2.getTime().compareTo(event1.getTime());
+					}
 				}
 				return compare;
 			}
@@ -200,7 +202,7 @@ public class CandidatePipelinePanel extends JPanel {
 		DefaultTableModel model = (DefaultTableModel) pipelineTbl.getModel();
 		model.fireTableDataChanged();
 	}
-	
+
 	public void setCandidatePipelinePanelListener(CandidatePipelinePanelListener candidatePipelineListener) {
 		shortlistedChckBox.addActionListener(candidatePipelineListener);
 		cvsChckBox.addActionListener(candidatePipelineListener);

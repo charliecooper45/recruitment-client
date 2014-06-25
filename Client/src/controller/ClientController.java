@@ -9,6 +9,7 @@ import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
 import gui.listeners.AddTaskDialogListener;
 import gui.listeners.AddVacancyDialogListener;
+import gui.listeners.AdminPanelListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
 import gui.listeners.LoginListener;
@@ -24,6 +25,7 @@ import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TaskListPanelListener;
 import gui.listeners.TopMenuListener;
+import gui.listeners.UserManagementPanelListener;
 import gui.listeners.VacanciesPanelListener;
 import gui.listeners.VacancyPanelListener;
 
@@ -54,6 +56,8 @@ public class ClientController {
 	private CandidatePanelListener candidatePanelListener;
 	private CandidatePipelinePanelListener candidatePipelineListener;
 	private TaskListPanelListener taskListPanelListener;
+	private AdminPanelListener adminPanelListener;
+	private UserManagementPanelListener userManagementPanelListener;
 	
 	// top panel listener
 	private TopMenuListener topMenuListener;
@@ -92,6 +96,8 @@ public class ClientController {
 		candidatePanelListener = new CandidatePanelListener(this);
 		candidatePipelineListener = new CandidatePipelinePanelListener(this);
 		taskListPanelListener = new TaskListPanelListener(this);
+		adminPanelListener = new AdminPanelListener(this);
+		userManagementPanelListener = new UserManagementPanelListener(this);
 		addVacancyDialogListener = new AddVacancyDialogListener(this);
 		removeVacancyDialogListener = new RemoveVacancyDialogListener(this);
 		addOrganisationDialogListener = new AddOrganisationDialogListener(this);
@@ -129,6 +135,7 @@ public class ClientController {
 		view.setCandidatePanelListener(candidatePanelListener);
 		view.setCandidatePipelinePanelListener(candidatePipelineListener);
 		view.setTaskListPanelListener(taskListPanelListener);
+		view.setAdminPanelListener(adminPanelListener, userManagementPanelListener);
 		
 		// dialog listeners
 		view.setAddVacancyDialogListener(addVacancyDialogListener);

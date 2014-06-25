@@ -8,6 +8,7 @@ import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
 import gui.listeners.AddTaskDialogListener;
+import gui.listeners.AdminPanelListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
 import gui.listeners.OrganisationPanelListener;
@@ -21,6 +22,7 @@ import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TaskListPanelListener;
 import gui.listeners.TopMenuListener;
+import gui.listeners.UserManagementPanelListener;
 import gui.listeners.VacanciesPanelListener;
 import gui.listeners.VacancyPanelListener;
 import interfaces.UserType;
@@ -237,8 +239,8 @@ public class ClientView {
 	}
 	
 	// AdminPanel methods
-	public void showAdminPanel() {
-		mainWindow.showAdminPanel();
+	public void showAdminPanel(List<User> users) {
+		mainWindow.showAdminPanel(users);
 	}
 	
 	// TaskListPanel methods
@@ -388,6 +390,14 @@ public class ClientView {
 		mainWindow.setCandidatePipelinePanelListener(candidatePipelineListener);
 	}
 	
+	public void setTaskListPanelListener(TaskListPanelListener taskListPanelListener) {
+		mainWindow.setTaskListPanelListener(taskListPanelListener);
+	}
+	
+	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userManagementPanelListener) {
+		mainWindow.setAdminPanelListener(adminPanelListener, userManagementPanelListener);
+	}
+	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		mainWindow.setAddVacancyDialogListener(actionListener);
 	}
@@ -440,14 +450,10 @@ public class ClientView {
 		mainWindow.setRemoveEventDialogListener(removeEventDialogListener);
 	}
 	
-	public void setTaskListPanelListener(TaskListPanelListener taskListPanelListener) {
-		mainWindow.setTaskListPanelListener(taskListPanelListener);
-	}
-	
 	public void setAddTaskDialogListener(AddTaskDialogListener addTaskDialogListener) {
 		mainWindow.setAddTaskDialogListener(addTaskDialogListener);
 	}
-
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -459,5 +465,6 @@ public class ClientView {
 			}
 		});
 	}
+
 
 }
