@@ -57,6 +57,10 @@ public class User implements Serializable, Comparable<User> {
 		return accountStatus;
 	}
 	
+	public String getPassword() {
+		return password;
+	}
+	
 	@Override
 	public String toString() {
 		if(userId == null) {

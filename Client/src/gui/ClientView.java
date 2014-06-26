@@ -8,6 +8,7 @@ import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
 import gui.listeners.AddTaskDialogListener;
+import gui.listeners.AddUserDialogListener;
 import gui.listeners.AdminPanelListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
@@ -243,6 +244,10 @@ public class ClientView {
 		mainWindow.showAdminPanel(users);
 	}
 	
+	public void updateAdminPanelUsers(List<User> users) {
+		mainWindow.updateAdminPanelUsers(users);
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		mainWindow.updateDisplayedTasks(tasks);
@@ -347,6 +352,10 @@ public class ClientView {
 	
 	public Task getTaskDialogTask() {
 		return mainWindow.getTaskDialogTask();
+	}
+	
+	public User getUserDialogUser() {
+		return mainWindow.getUserDialogUser();
 	}
 	
 	// methods to set listeners and controller
@@ -454,6 +463,10 @@ public class ClientView {
 		mainWindow.setAddTaskDialogListener(addTaskDialogListener);
 	}
 	
+	public void setAddUserDialogListener(AddUserDialogListener addUserDialogListener) {
+		mainWindow.setAddUserDialogListener(addUserDialogListener);
+	}
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -465,6 +478,4 @@ public class ClientView {
 			}
 		});
 	}
-
-
 }

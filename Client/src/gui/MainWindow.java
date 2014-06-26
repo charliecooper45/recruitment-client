@@ -8,6 +8,7 @@ import gui.dialogs.AddLinkedInDialog;
 import gui.dialogs.AddOrganisationDialog;
 import gui.dialogs.AddSkillDialog;
 import gui.dialogs.AddTaskDialog;
+import gui.dialogs.AddUserDialog;
 import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveCandidateDialog;
@@ -23,6 +24,7 @@ import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
 import gui.listeners.AddSkillListener;
 import gui.listeners.AddTaskDialogListener;
+import gui.listeners.AddUserDialogListener;
 import gui.listeners.AdminPanelListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
@@ -180,6 +182,7 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.ADD_EVENT, new AddEventDialog(this));
 		dialogs.put(DialogType.REMOVE_EVENT, new RemoveEventDialog(this));
 		dialogs.put(DialogType.ADD_TASK, new AddTaskDialog(this));
+		dialogs.put(DialogType.ADD_USER, new AddUserDialog(this));
 	}
 
 	private void init(UserType userType, List<Task> tasks) {
@@ -478,6 +481,11 @@ public class MainWindow extends JFrame {
 		repaint();
 	}
 
+	public void updateAdminPanelUsers(List<User> users) {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		panel.updateDisplayedUsers(users);
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		TaskListPanel panel = taskListPanel;
@@ -742,6 +750,11 @@ public class MainWindow extends JFrame {
 		return dialog.getTask();
 	}
 	
+	public User getUserDialogUser() {
+		AddUserDialog dialog = (AddUserDialog) dialogs.get(DialogType.ADD_USER);
+		return dialog.getUser();
+	}
+	
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -852,5 +865,9 @@ public class MainWindow extends JFrame {
 
 	public void setAddTaskDialogListener(AddTaskDialogListener addTaskDialogListener) {
 		dialogs.get(DialogType.ADD_TASK).setActionListener(addTaskDialogListener);
+	}
+
+	public void setAddUserDialogListener(AddUserDialogListener addUserDialogListener) {
+		dialogs.get(DialogType.ADD_USER).setActionListener(addUserDialogListener);
 	}
 }

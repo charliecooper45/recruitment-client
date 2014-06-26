@@ -218,5 +218,4 @@ public class AddCandidateDialog extends RecruitmentDialog {
 		confirmButton.addActionListener(actionListener);
 		cancelButton.addActionListener(actionListener);
 	}
-
 }

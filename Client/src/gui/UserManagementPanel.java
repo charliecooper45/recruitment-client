@@ -1,7 +1,6 @@
 package gui;
 
 import gui.listeners.UserManagementPanelListener;
-import interfaces.UserType;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -69,12 +68,11 @@ public class UserManagementPanel extends JPanel {
 
 		gbc.insets = new Insets(10, 0, 10, 0);
 		gbc.anchor = GridBagConstraints.LINE_START;
-		userTypeCmbBox = new JComboBox<>();
-		userTypeCmbBox.addItem("Administrators");
-		userTypeCmbBox.addItem("Standard Users");
-		userTypeCmbBox.addItem("All Users");
+		userStatusCmbBox = new JComboBox<>();
+		userStatusCmbBox.addItem("Any");
+		userStatusCmbBox.addItem("Active");
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL);
-		topPanel.add(userTypeCmbBox, gbc);
+		topPanel.add(userStatusCmbBox, gbc);
 
 		gbc.insets = new Insets(20, 0, 20, 5);
 		gbc.anchor = GridBagConstraints.LINE_END;
@@ -83,9 +81,12 @@ public class UserManagementPanel extends JPanel {
 
 		gbc.insets = new Insets(10, 0, 10, 0);
 		gbc.anchor = GridBagConstraints.LINE_START;
-		userStatusCmbBox = new JComboBox<>();
+		userTypeCmbBox = new JComboBox<>();
+		userTypeCmbBox.addItem("All Users");
+		userTypeCmbBox.addItem("Administrators");
+		userTypeCmbBox.addItem("Standard Users");
 		Utils.setGBC(gbc, 4, 1, 1, 1, GridBagConstraints.HORIZONTAL);
-		topPanel.add(userStatusCmbBox, gbc);
+		topPanel.add(userTypeCmbBox, gbc);
 
 		gbc.insets = new Insets(10, 40, 10, 0);
 		gbc.anchor = GridBagConstraints.CENTER;
@@ -204,5 +205,7 @@ public class UserManagementPanel extends JPanel {
 
 	public void setUserManagementPanelListener(UserManagementPanelListener listener) {
 		userTypeCmbBox.addActionListener(listener);
+		userStatusCmbBox.addActionListener(listener);
+		addUserBtn.addActionListener(listener);
 	}
 }
