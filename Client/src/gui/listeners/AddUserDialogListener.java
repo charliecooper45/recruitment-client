@@ -29,7 +29,7 @@ public class AddUserDialogListener extends ClientListener implements ActionListe
 
 		switch (button.getText()) {
 		case "Confirm":
-			User user = controller.getView().getUserDialogUser();
+			User user = controller.getView().getUserDialogUser(DialogType.ADD_USER);
 			
 			boolean added = controller.getModel().addUser(user);
 			
@@ -41,7 +41,7 @@ public class AddUserDialogListener extends ClientListener implements ActionListe
 				boolean userStatus = controller.getUserManagementPanelListener().getDisplayedUserStatus();
 				UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
 				List<User> users = controller.getModel().getUsers(userType, userStatus);
-				controller.getView().updateAdminPanelUsers(users);
+				controller.getView().updateDisplayedUsers(users);
 			} else {
 				controller.getView().showErrorDialog(ErrorDialogType.ADD_USER_FAIL);
 			}

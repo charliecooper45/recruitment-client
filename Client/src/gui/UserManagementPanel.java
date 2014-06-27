@@ -37,7 +37,7 @@ public class UserManagementPanel extends JPanel {
 	private JComboBox<String> userStatusCmbBox;
 	private JButton addUserBtn;
 	private JButton userActBtn;
-	private JButton delUserBtn;
+	private JButton removeUserBtn;
 	private JButton editUserBtn;
 
 	// components - mainPanel
@@ -94,9 +94,9 @@ public class UserManagementPanel extends JPanel {
 		Utils.setGBC(gbc, 5, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(addUserBtn, gbc);
 
-		delUserBtn = new JButton("Delete User");
+		removeUserBtn = new JButton("Remove User");
 		Utils.setGBC(gbc, 6, 1, 1, 1, GridBagConstraints.NONE);
-		topPanel.add(delUserBtn, gbc);
+		topPanel.add(removeUserBtn, gbc);
 
 		editUserBtn = new JButton("Edit User");
 		Utils.setGBC(gbc, 7, 1, 1, 1, GridBagConstraints.NONE);
@@ -207,5 +207,6 @@ public class UserManagementPanel extends JPanel {
 		userTypeCmbBox.addActionListener(listener);
 		userStatusCmbBox.addActionListener(listener);
 		addUserBtn.addActionListener(listener);
+		removeUserBtn.addActionListener(listener);
 	}
 }

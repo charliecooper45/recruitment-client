@@ -19,6 +19,7 @@ import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveSkillListener;
+import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TaskListPanelListener;
@@ -244,8 +245,8 @@ public class ClientView {
 		mainWindow.showAdminPanel(users);
 	}
 	
-	public void updateAdminPanelUsers(List<User> users) {
-		mainWindow.updateAdminPanelUsers(users);
+	public void updateDisplayedUsers(List<User> users) {
+		mainWindow.updateDisplayedUsers(users);
 	}
 	
 	// TaskListPanel methods
@@ -310,10 +311,13 @@ public class ClientView {
 		mainWindow.setDisplayedSkillsInDialog(dialog, skills);
 	}
 	
-	public void setDisplayedEventsInDialog(DialogType removeEvent, List<Event> event) {
-		mainWindow.setDisplayedEventsInDialog(removeEvent, event);
+	public void setDisplayedEventsInDialog(DialogType dialog, List<Event> event) {
+		mainWindow.setDisplayedEventsInDialog(dialog, event);
 	}
 	
+	public void setDisplayedUsersInDialog(DialogType dialog, List<User> users) {
+		mainWindow.setDisplayedUsersInDialog(dialog, users);
+	}
 	public void displayFileInDialog(DialogType menuDialogType, File file) {
 		mainWindow.displayFileInDialog(menuDialogType, file);
 	}
@@ -354,8 +358,8 @@ public class ClientView {
 		return mainWindow.getTaskDialogTask();
 	}
 	
-	public User getUserDialogUser() {
-		return mainWindow.getUserDialogUser();
+	public User getUserDialogUser(DialogType dialogType) {
+		return mainWindow.getUserDialogUser(dialogType);
 	}
 	
 	// methods to set listeners and controller
@@ -465,6 +469,10 @@ public class ClientView {
 	
 	public void setAddUserDialogListener(AddUserDialogListener addUserDialogListener) {
 		mainWindow.setAddUserDialogListener(addUserDialogListener);
+	}
+	
+	public void setRemoveUserDialogListener(RemoveUserDialogListener removeUserDialogListener) {
+		mainWindow.setRemoveUserDialogListener(removeUserDialogListener);
 	}
 	
 	// main method

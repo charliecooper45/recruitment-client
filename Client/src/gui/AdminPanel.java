@@ -56,5 +56,4 @@ public class AdminPanel extends JPanel {
 		
 		userManagementPanel.setUserManagementPanelListener(userManagementPanelListener);
 	}
-
 }

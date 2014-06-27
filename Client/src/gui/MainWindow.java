@@ -16,6 +16,7 @@ import gui.dialogs.RemoveContactDialog;
 import gui.dialogs.RemoveEventDialog;
 import gui.dialogs.RemoveOrganisationDialog;
 import gui.dialogs.RemoveSkillDialog;
+import gui.dialogs.RemoveUserDialog;
 import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
@@ -35,6 +36,7 @@ import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveSkillListener;
+import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TaskListPanelListener;
@@ -162,7 +164,7 @@ public class MainWindow extends JFrame {
 
 		// create the top menu panel
 		topMenuPanel = new TopMenuPanel();
-		
+
 		// create the task list panel
 		taskListPanel = new TaskListPanel();
 
@@ -183,6 +185,7 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.REMOVE_EVENT, new RemoveEventDialog(this));
 		dialogs.put(DialogType.ADD_TASK, new AddTaskDialog(this));
 		dialogs.put(DialogType.ADD_USER, new AddUserDialog(this));
+		dialogs.put(DialogType.REMOVE_USER, new RemoveUserDialog(this));
 	}
 
 	private void init(UserType userType, List<Task> tasks) {
@@ -280,12 +283,12 @@ public class MainWindow extends JFrame {
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
 		return panel.getUpdatedVacancy();
 	}
-	
+
 	public void updateDisplayedVacancy(Vacancy vacancy, List<Contact> contacts) {
 		VacancyPanel panel = (VacancyPanel) centrePanels.get(PanelType.VACANCY);
 		panel.updateDisplayedVacancy(vacancy, contacts);
 	}
-	
+
 	// OrganisationsPanel methods
 	public void showOrganisationsPanel(List<Organisation> organisations) {
 		removeCentreComponent();
@@ -347,7 +350,7 @@ public class MainWindow extends JFrame {
 		OrganisationPanel panel = (OrganisationPanel) centrePanels.get(PanelType.ORGANISATION);
 		return panel.getUpdatedOrganisation();
 	}
-	
+
 	// SearchPanel methods
 	public void showSearchPanel(List<Skill> skills, List<Vacancy> vacancies) {
 		Component centreComponent = borderLayout.getLayoutComponent(BorderLayout.CENTER);
@@ -421,12 +424,12 @@ public class MainWindow extends JFrame {
 		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
 		return panel.getOptions();
 	}
-	
+
 	public void updateCandidatePipelinePanel(List<Event> events) {
 		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
 		panel.updateDisplayedEvents(events);
 	}
-	
+
 	// CandidatePanel methods
 	public void showCandidatePanel(Candidate updatedCandidate, Path tempFile, List<Organisation> organisations) {
 		removeCentreComponent();
@@ -453,7 +456,7 @@ public class MainWindow extends JFrame {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		return panel.getCandidateNotes();
 	}
-	
+
 	public Candidate getUpdatedCandidate() {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
 		return panel.getUpdatedCandidate();
@@ -466,9 +469,9 @@ public class MainWindow extends JFrame {
 
 	public void updateDisplayedCandidateEvents(List<Event> events) {
 		CandidatePanel panel = (CandidatePanel) centrePanels.get(PanelType.CANDIDATE);
-		panel.updateDisplayedCandidateEvents(events);		
+		panel.updateDisplayedCandidateEvents(events);
 	}
-	
+
 	// AdminPanel methods
 	public void showAdminPanel(List<User> users) {
 		removeCentreComponent();
@@ -481,25 +484,25 @@ public class MainWindow extends JFrame {
 		repaint();
 	}
 
-	public void updateAdminPanelUsers(List<User> users) {
+	public void updateDisplayedUsers(List<User> users) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
 		panel.updateDisplayedUsers(users);
 	}
-	
+
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		TaskListPanel panel = taskListPanel;
-		panel.updateTasks(tasks);		
+		panel.updateTasks(tasks);
 	}
-	
+
 	public Task getTaskListPanelTask() {
 		return taskListPanel.getSelectedTask();
 	}
-	
+
 	public void uncheckAllTaskListPanelTasks() {
 		taskListPanel.uncheckAllTasks();
 	}
-	
+
 	// Generic methods (dialogs, file choosers)
 	public File showFileChooser(final String title) {
 		JFileChooser fc = new JFileChooser();
@@ -652,10 +655,14 @@ public class MainWindow extends JFrame {
 		dialogs.get(dialog).setDisplayedSkills(skills);
 	}
 
-	public void setDisplayedEventsInDialog(DialogType removeEvent, List<Event> events) {
-		dialogs.get(removeEvent).setDisplayedEvents(events);
+	public void setDisplayedEventsInDialog(DialogType event, List<Event> events) {
+		dialogs.get(event).setDisplayedEvents(events);
 	}
-	
+
+	public void setDisplayedUsersInDialog(DialogType dialog, List<User> users) {
+		dialogs.get(dialog).setDisplayedUsers(users);
+	}
+
 	public void displayFileInDialog(DialogType menuDialog, File file) {
 		RecruitmentDialog dialog = dialogs.get(menuDialog);
 		dialog.setDisplayedFile(file);
@@ -718,7 +725,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public Skill getSkillDialogSkill(DialogType dialog) {
-		switch(dialog) {
+		switch (dialog) {
 		case ADD_SKILL:
 			AddSkillDialog addSkillDialog = (AddSkillDialog) dialogs.get(DialogType.ADD_SKILL);
 			return addSkillDialog.getSelectedSkill();
@@ -728,33 +735,39 @@ public class MainWindow extends JFrame {
 		}
 		return null;
 	}
-	
+
 	public Organisation getEventDialogOrganisation() {
 		AddEventDialog dialog = (AddEventDialog) dialogs.get(DialogType.ADD_EVENT);
 		return dialog.getDisplayedOrganisation();
 	}
-	
+
 	public Event getEventDialogEvent(DialogType dialogType) {
-		if(dialogType == DialogType.ADD_EVENT) {
+		if (dialogType == DialogType.ADD_EVENT) {
 			AddEventDialog dialog = (AddEventDialog) dialogs.get(DialogType.ADD_EVENT);
 			return dialog.getEvent();
-		} else if(dialogType == DialogType.REMOVE_EVENT) {
+		} else if (dialogType == DialogType.REMOVE_EVENT) {
 			RemoveEventDialog dialog = (RemoveEventDialog) dialogs.get(DialogType.REMOVE_EVENT);
 			return dialog.getEvent();
 		}
 		return null;
 	}
-	
+
 	public Task getTaskDialogTask() {
 		AddTaskDialog dialog = (AddTaskDialog) dialogs.get(DialogType.ADD_TASK);
 		return dialog.getTask();
 	}
-	
-	public User getUserDialogUser() {
-		AddUserDialog dialog = (AddUserDialog) dialogs.get(DialogType.ADD_USER);
-		return dialog.getUser();
+
+	public User getUserDialogUser(DialogType dialogType) {
+		if (dialogType == DialogType.ADD_USER) {
+			AddUserDialog dialog = (AddUserDialog) dialogs.get(DialogType.ADD_USER);
+			return dialog.getUser();
+		} else if (dialogType == DialogType.REMOVE_USER) {
+			RemoveUserDialog dialog = (RemoveUserDialog) dialogs.get(DialogType.REMOVE_USER);
+			return dialog.getUser();
+		}
+		return null;
 	}
-	
+
 	// methods to set listeners
 	public void setMenuListener(ActionListener actionListener) {
 		for (JMenuItem menuItem : menuItems) {
@@ -800,17 +813,17 @@ public class MainWindow extends JFrame {
 		CandidatePipelinePanel panel = (CandidatePipelinePanel) centrePanels.get(PanelType.PIPELINE);
 		panel.setCandidatePipelinePanelListener(candidatePipelineListener);
 	}
-	
+
 	public void setTaskListPanelListener(TaskListPanelListener taskListPanelListener) {
 		TaskListPanel panel = taskListPanel;
 		panel.setTaskListPanelListener(taskListPanelListener);
 	}
-	
+
 	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userManagementPanelListener) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
 		panel.setAdminPanelListener(adminPanelListener, userManagementPanelListener);
 	}
-	
+
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
 		dialogs.get(DialogType.ADD_VACANCY).setActionListener(actionListener);
 	}
@@ -869,5 +882,9 @@ public class MainWindow extends JFrame {
 
 	public void setAddUserDialogListener(AddUserDialogListener addUserDialogListener) {
 		dialogs.get(DialogType.ADD_USER).setActionListener(addUserDialogListener);
+	}
+
+	public void setRemoveUserDialogListener(RemoveUserDialogListener removeUserDialogListener) {
+		dialogs.get(DialogType.REMOVE_USER).setActionListener(removeUserDialogListener);
 	}
 }

@@ -22,6 +22,7 @@ import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveSkillListener;
+import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.TaskListPanelListener;
@@ -80,6 +81,7 @@ public class ClientController {
 	private RemoveEventDialogListener removeEventDialogListener;
 	private AddTaskDialogListener addTaskDialogListener;
 	private AddUserDialogListener addUserDialogListener;
+	private RemoveUserDialogListener removeUserDialogListener;
 	
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
@@ -115,6 +117,7 @@ public class ClientController {
 		removeEventDialogListener = new RemoveEventDialogListener(this);
 		addTaskDialogListener = new AddTaskDialogListener(this);
 		addUserDialogListener = new AddUserDialogListener(this);
+		removeUserDialogListener = new RemoveUserDialogListener(this);
 
 		setListenersAndShowGUI();
 	}
@@ -156,6 +159,7 @@ public class ClientController {
 		view.setRemoveEventDialogListener(removeEventDialogListener);
 		view.setAddTaskDialogListener(addTaskDialogListener);
 		view.setAddUserDialogListener(addUserDialogListener);
+		view.setRemoveUserDialogListener(removeUserDialogListener);
 	}
 
 	public Path storeTempFile(InputStream inStream, String name) {

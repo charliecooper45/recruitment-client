@@ -75,4 +75,5 @@ public interface ServerInterface extends Remote{
 	public boolean addTask(Task task) throws RemoteException;
 	public boolean removeTask(Task task) throws RemoteException;
 	public boolean addUser(User user) throws RemoteException;
+	public boolean removeUser(User user) throws RemoteException;
 }

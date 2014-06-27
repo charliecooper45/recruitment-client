@@ -15,6 +15,7 @@ import database.beans.Contact;
 import database.beans.Event;
 import database.beans.Organisation;
 import database.beans.Skill;
+import database.beans.User;
 import database.beans.Vacancy;
 
 public abstract class RecruitmentDialog extends JDialog{
@@ -60,6 +61,10 @@ public abstract class RecruitmentDialog extends JDialog{
 	}
 	
 	public void setDisplayedEvents(List<Event> events) {
+		// by default this does nothing, can be overriden in appropriate dialogs
+	}
+	
+	public void setDisplayedUsers(List<User> users) {
 		// by default this does nothing, can be overriden in appropriate dialogs
 	}
 	
