@@ -51,6 +51,10 @@ public class AdminPanel extends JPanel {
 		userManagementPanel.updateDisplayedUsers(users);
 	}
 	
+	public User getSelectedUser() {
+		return userManagementPanel.getSelectedUser();
+	}
+	
 	public void setAdminPanelListener(AdminPanelListener listener, UserManagementPanelListener userManagementPanelListener) {
 		tabbedPane.addMouseListener(listener);
 		

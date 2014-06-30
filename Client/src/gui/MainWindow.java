@@ -10,6 +10,7 @@ import gui.dialogs.AddSkillDialog;
 import gui.dialogs.AddTaskDialog;
 import gui.dialogs.AddUserDialog;
 import gui.dialogs.AddVacancyDialog;
+import gui.dialogs.EditUserDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveCandidateDialog;
 import gui.dialogs.RemoveContactDialog;
@@ -29,6 +30,7 @@ import gui.listeners.AddUserDialogListener;
 import gui.listeners.AdminPanelListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
+import gui.listeners.EditUserDialogListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
@@ -186,6 +188,7 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.ADD_TASK, new AddTaskDialog(this));
 		dialogs.put(DialogType.ADD_USER, new AddUserDialog(this));
 		dialogs.put(DialogType.REMOVE_USER, new RemoveUserDialog(this));
+		dialogs.put(DialogType.EDIT_USER, new EditUserDialog(this));
 	}
 
 	private void init(UserType userType, List<Task> tasks) {
@@ -489,6 +492,11 @@ public class MainWindow extends JFrame {
 		panel.updateDisplayedUsers(users);
 	}
 
+	public User getAdminPanelUser() {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		return panel.getSelectedUser();
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		TaskListPanel panel = taskListPanel;
@@ -663,6 +671,10 @@ public class MainWindow extends JFrame {
 		dialogs.get(dialog).setDisplayedUsers(users);
 	}
 
+	public void setDisplayedUserInDialog(DialogType dialog, User user) {
+		dialogs.get(dialog).setDisplayedUser(user);
+	}
+	
 	public void displayFileInDialog(DialogType menuDialog, File file) {
 		RecruitmentDialog dialog = dialogs.get(menuDialog);
 		dialog.setDisplayedFile(file);
@@ -763,6 +775,9 @@ public class MainWindow extends JFrame {
 			return dialog.getUser();
 		} else if (dialogType == DialogType.REMOVE_USER) {
 			RemoveUserDialog dialog = (RemoveUserDialog) dialogs.get(DialogType.REMOVE_USER);
+			return dialog.getUser();
+		} else if (dialogType == DialogType.EDIT_USER) {
+			EditUserDialog dialog = (EditUserDialog) dialogs.get(DialogType.EDIT_USER);
 			return dialog.getUser();
 		}
 		return null;
@@ -887,4 +902,9 @@ public class MainWindow extends JFrame {
 	public void setRemoveUserDialogListener(RemoveUserDialogListener removeUserDialogListener) {
 		dialogs.get(DialogType.REMOVE_USER).setActionListener(removeUserDialogListener);
 	}
+
+	public void setEditUserDialogListener(EditUserDialogListener editUserDialogListener) {
+		dialogs.get(DialogType.EDIT_USER).setActionListener(editUserDialogListener);
+	}
+
 }

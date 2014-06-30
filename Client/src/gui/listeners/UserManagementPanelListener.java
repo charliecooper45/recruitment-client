@@ -66,6 +66,17 @@ public class UserManagementPanelListener extends ClientListener implements Actio
 				List<User> users = controller.getModel().getUsers(userType, status);
 				controller.getView().setDisplayedUsersInDialog(DialogType.REMOVE_USER, users);
 				controller.getView().showDialog(DialogType.REMOVE_USER);
+			} else if(text.equals("Edit User")) {
+				User user = controller.getView().getAdminPanelUser();
+				
+				// update the user if there is one selected in the GUI
+				if(user != null)
+					user = controller.getModel().getUser(user.getUserId());
+				
+				if(user != null) {
+					controller.getView().setDisplayedUserInDialog(DialogType.EDIT_USER, user);
+					controller.getView().showDialog(DialogType.EDIT_USER);
+				}
 			}
 		}
 	}

@@ -9,7 +9,7 @@ public enum ErrorDialogType {
 	CANDIDATE_UPDATE_FAIL("Unable to update candidate"), ADD_SKILL_FAIL("Unable to add skill to candidate"), REMOVE_SKILL_FAILED("Unable to remove skill from candidate"), 
 	VACANCY_UPDATE_FAIL("Unable to update vacancy"), ORGANISATION_UPDATE_FAIL("Unable to update organisation"), ADD_EVENT_FAIL("Unable to add event"), 
 	REMOVE_EVENT_FAIL("Unable to remove event"), CANDIDATE_SAVE_NOTES_FAIL("Unable to save notes"), ADD_TASK_FAIL("Unable to add task"), REMOVE_TASK_FAIL("Unable to remove task"), 
-	ADD_USER_FAIL("Unable to add user"), REMOVE_USER_FAILED("Unable to remove user");
+	ADD_USER_FAIL("Unable to add user"), REMOVE_USER_FAILED("Unable to remove user"), USER_UPDATE_FAIL("Unable to update user");
 	
 	private String errorMessage;
 	

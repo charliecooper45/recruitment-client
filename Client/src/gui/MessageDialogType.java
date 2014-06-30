@@ -6,7 +6,7 @@ public enum MessageDialogType {
 	LINKEDIN_PROFILE_ADDED("LinkedIn profile added"), LINKEDIN_PROFILE_REMOVED("LinkedIn profile removed"), ADD_TO_SHORTLIST("Candidate(s) added to shortlist"), 
 	REMOVED_FROM_SHORTLIST("Candidate removed from shortlist"), CANDIDATE_UPDATED("Candidate updated"), SKILL_ADDED("Skill added to candidate"), 
 	SKILL_REMOVED("Skill removed from candidate"), VACANCY_UPDATED("Vacancy updated"), ORGANISATION_UPDATED("Organisation updated"), EVENT_ADDED("Event added"), 
-	EVENT_REMOVED("Event removed"), CANDIDATE_NOTES_SAVED("Candidate notes saved"), USER_ADDED("User added"), USER_REMOVED("User removed");
+	EVENT_REMOVED("Event removed"), CANDIDATE_NOTES_SAVED("Candidate notes saved"), USER_ADDED("User added"), USER_REMOVED("User removed"), USER_UPDATED("User updated");
 	
 	private String confirmMessage;
 	

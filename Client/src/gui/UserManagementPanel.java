@@ -101,7 +101,7 @@ public class UserManagementPanel extends JPanel {
 		editUserBtn = new JButton("Edit User");
 		Utils.setGBC(gbc, 7, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(editUserBtn, gbc);
-		
+
 		userActBtn = new JButton("View User Activity");
 		Utils.setGBC(gbc, 8, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(userActBtn, gbc);
@@ -203,10 +203,20 @@ public class UserManagementPanel extends JPanel {
 		model.fireTableDataChanged();
 	}
 
+	public User getSelectedUser() {
+		if (usersTbl.getSelectedRow() == -1) {
+			return null;
+		} else {
+			return users.get(usersTbl.getSelectedRow());
+		}
+	}
+
 	public void setUserManagementPanelListener(UserManagementPanelListener listener) {
 		userTypeCmbBox.addActionListener(listener);
 		userStatusCmbBox.addActionListener(listener);
 		addUserBtn.addActionListener(listener);
 		removeUserBtn.addActionListener(listener);
+		editUserBtn.addActionListener(listener);
 	}
+
 }

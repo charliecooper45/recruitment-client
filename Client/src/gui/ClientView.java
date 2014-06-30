@@ -12,6 +12,7 @@ import gui.listeners.AddUserDialogListener;
 import gui.listeners.AdminPanelListener;
 import gui.listeners.CandidatePanelListener;
 import gui.listeners.CandidatePipelinePanelListener;
+import gui.listeners.EditUserDialogListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
@@ -249,6 +250,10 @@ public class ClientView {
 		mainWindow.updateDisplayedUsers(users);
 	}
 	
+	public User getAdminPanelUser() {
+		return mainWindow.getAdminPanelUser();
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		mainWindow.updateDisplayedTasks(tasks);
@@ -318,6 +323,11 @@ public class ClientView {
 	public void setDisplayedUsersInDialog(DialogType dialog, List<User> users) {
 		mainWindow.setDisplayedUsersInDialog(dialog, users);
 	}
+
+	public void setDisplayedUserInDialog(DialogType dialog, User user) {
+		mainWindow.setDisplayedUserInDialog(dialog, user);
+	}
+	
 	public void displayFileInDialog(DialogType menuDialogType, File file) {
 		mainWindow.displayFileInDialog(menuDialogType, file);
 	}
@@ -475,6 +485,10 @@ public class ClientView {
 		mainWindow.setRemoveUserDialogListener(removeUserDialogListener);
 	}
 	
+	public void setEditUserDialogListener(EditUserDialogListener editUserDialogListener) {
+		mainWindow.setEditUserDialogListener(editUserDialogListener);
+	}
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -486,4 +500,6 @@ public class ClientView {
 			}
 		});
 	}
+
+
 }

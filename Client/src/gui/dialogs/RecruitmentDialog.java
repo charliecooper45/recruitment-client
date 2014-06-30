@@ -68,6 +68,9 @@ public abstract class RecruitmentDialog extends JDialog{
 		// by default this does nothing, can be overriden in appropriate dialogs
 	}
 	
+	public void setDisplayedUser(User user) {
+		// by default this does nothing, can be overriden in appropriate dialogs
+	}
+	
 	public abstract void setActionListener(ActionListener actionListener);
-
 }
