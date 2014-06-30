@@ -131,8 +131,8 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 				}
 			} else if (button.getText().trim().equals("Add Skill")) {
 				List<Skill> skills = controller.getModel().getSkills();
-				controller.getView().setDisplayedSkillsInDialog(DialogType.ADD_SKILL, skills);
-				controller.getView().showDialog(DialogType.ADD_SKILL);
+				controller.getView().setDisplayedSkillsInDialog(DialogType.ADD_CANDIDATE_SKILL, skills);
+				controller.getView().showDialog(DialogType.ADD_CANDIDATE_SKILL);
 			} else if (button.getText().trim().equals("Remove Skill")) {
 				Candidate candidate = controller.getView().getCandidatePanelCandidate();
 				List<CandidateSkill> candidateSkills = controller.getModel().getCandidateSkills(candidate.getId());
@@ -141,8 +141,8 @@ public class CandidatePanelListener extends ClientListener implements ActionList
 				for(CandidateSkill candidateSkill : candidateSkills) {
 					skills.add(new Skill(candidateSkill.getSkillName(), null));
 				}
-				controller.getView().setDisplayedSkillsInDialog(DialogType.REMOVE_SKILL, skills);
-				controller.getView().showDialog(DialogType.REMOVE_SKILL);
+				controller.getView().setDisplayedSkillsInDialog(DialogType.REMOVE_CANDIDATE_SKILL, skills);
+				controller.getView().showDialog(DialogType.REMOVE_CANDIDATE_SKILL);
 			} else if (button.getText().trim().equals("Save Notes")) {
 				String notes = controller.getView().getCandidatePanelNotes();
 				Candidate selectedCandidate = controller.getView().getCandidatePanelCandidate();

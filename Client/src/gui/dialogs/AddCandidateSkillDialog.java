@@ -1,35 +1,34 @@
 package gui.dialogs;
 
-import gui.MainWindow;
 import gui.Utils;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import database.beans.Skill;
 
 /**
- * Dialog that allows the user to add a skill.
+ * Dialog that allows the user to add a skill to a candidate.
  * @author Charlie
  */
-public class AddSkillDialog extends RecruitmentDialog {
+public class AddCandidateSkillDialog extends RecruitmentDialog {
 	private static final long serialVersionUID = 1L;
 	
-	// components
-	private JTextField skillNameTxtField;
+	private JComboBox<Skill> skillCmbBox;
 	private JButton confirmButton;
 	private JButton cancelButton;
 	
-	public AddSkillDialog(JFrame frame) {
+	public AddCandidateSkillDialog(JFrame frame) {
 		super(frame, "Add Skill");
-		setSize(400, 100);
+		setSize(400, 200);
 		init();
 	}
 	
@@ -38,18 +37,14 @@ public class AddSkillDialog extends RecruitmentDialog {
 		gbc.weighty = 1;
 		
 		// labels
-		gbc.insets = new Insets(10, 10, 0, 10);
-		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
-		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.NONE);
-		panel.add(new JLabel("Skill Name: "), gbc);
+		gbc.insets = new Insets(0, 10, 0, 10);
+		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
+		panel.add(new JLabel("Please select the skill to add below:"), gbc);
 		
 		// components
-		gbc.insets = new Insets(10, 0, 0, 20);
-		gbc.weightx = 15;
-		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		skillNameTxtField = new JTextField();
-		Utils.setGBC(gbc, 2, 1, 2, 1, GridBagConstraints.HORIZONTAL);
-		panel.add(skillNameTxtField, gbc);
+		skillCmbBox = new JComboBox<Skill>();
+		Utils.setGBC(gbc, 1, 2, 1, 1, GridBagConstraints.HORIZONTAL);
+		panel.add(skillCmbBox, gbc);
 		
 		// buttons
 		JPanel buttonsPanel = new JPanel();
@@ -58,17 +53,22 @@ public class AddSkillDialog extends RecruitmentDialog {
 		cancelButton = new JButton("Cancel ");
 		buttonsPanel.add(cancelButton);
 		gbc.anchor = GridBagConstraints.CENTER;
-		Utils.setGBC(gbc, 1, 12, 3, 1, GridBagConstraints.HORIZONTAL);
+		Utils.setGBC(gbc, 1, 3, 1, 1, GridBagConstraints.HORIZONTAL);
 		panel.add(buttonsPanel, gbc);
 		
 		add(panel);
 	}
 	
 	public Skill getSelectedSkill() {
-		if(skillNameTxtField.getText().trim().isEmpty()) {
-			return null;
-		} else {
-			return new Skill(skillNameTxtField.getText(), MainWindow.USER_ID);
+		return (Skill) skillCmbBox.getSelectedItem();
+	}
+	
+	@Override
+	public void setDisplayedSkills(List<Skill> skills) {
+		skillCmbBox.removeAllItems();
+		
+		for(Skill skill : skills) {
+			skillCmbBox.addItem(skill);
 		}
 	}
 

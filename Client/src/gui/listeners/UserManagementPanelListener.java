@@ -27,7 +27,6 @@ public class UserManagementPanelListener extends ClientListener implements Actio
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//TODO NEXT: if the source is the combo box with user types in it then update the displayed users to only show these user types
 		Object source = e.getSource();
 		
 		if(source instanceof JComboBox<?>) {

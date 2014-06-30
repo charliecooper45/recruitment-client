@@ -6,6 +6,7 @@ import gui.dialogs.AddContactDialog;
 import gui.dialogs.AddEventDialog;
 import gui.dialogs.AddLinkedInDialog;
 import gui.dialogs.AddOrganisationDialog;
+import gui.dialogs.AddCandidateSkillDialog;
 import gui.dialogs.AddSkillDialog;
 import gui.dialogs.AddTaskDialog;
 import gui.dialogs.AddUserDialog;
@@ -24,7 +25,8 @@ import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
-import gui.listeners.AddSkillListener;
+import gui.listeners.AddCandidateSkillDialogListener;
+import gui.listeners.AddSkillDialogListener;
 import gui.listeners.AddTaskDialogListener;
 import gui.listeners.AddUserDialogListener;
 import gui.listeners.AdminPanelListener;
@@ -37,10 +39,11 @@ import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
-import gui.listeners.RemoveSkillListener;
+import gui.listeners.RemoveCandidateSkillDialogListener;
 import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
+import gui.listeners.SkillsManagementPanelListener;
 import gui.listeners.TaskListPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.UserManagementPanelListener;
@@ -181,14 +184,15 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.ADD_CONTACT, new AddContactDialog(this));
 		dialogs.put(DialogType.REMOVE_CONTACT, new RemoveContactDialog(this));
 		dialogs.put(DialogType.CANDIDATE_ADD_LINKEDIN, new AddLinkedInDialog(this));
-		dialogs.put(DialogType.ADD_SKILL, new AddSkillDialog(this));
-		dialogs.put(DialogType.REMOVE_SKILL, new RemoveSkillDialog(this));
+		dialogs.put(DialogType.ADD_CANDIDATE_SKILL, new AddCandidateSkillDialog(this));
+		dialogs.put(DialogType.REMOVE_CANDIDATE_SKILL, new RemoveSkillDialog(this));
 		dialogs.put(DialogType.ADD_EVENT, new AddEventDialog(this));
 		dialogs.put(DialogType.REMOVE_EVENT, new RemoveEventDialog(this));
 		dialogs.put(DialogType.ADD_TASK, new AddTaskDialog(this));
 		dialogs.put(DialogType.ADD_USER, new AddUserDialog(this));
 		dialogs.put(DialogType.REMOVE_USER, new RemoveUserDialog(this));
 		dialogs.put(DialogType.EDIT_USER, new EditUserDialog(this));
+		dialogs.put(DialogType.ADD_SKILL, new AddSkillDialog(this));
 	}
 
 	private void init(UserType userType, List<Task> tasks) {
@@ -497,6 +501,11 @@ public class MainWindow extends JFrame {
 		return panel.getSelectedUser();
 	}
 	
+	public void updateDisplayedSkills(List<Skill> skills) {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		panel.updateDisplayedSkills(skills);
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		TaskListPanel panel = taskListPanel;
@@ -738,12 +747,15 @@ public class MainWindow extends JFrame {
 
 	public Skill getSkillDialogSkill(DialogType dialog) {
 		switch (dialog) {
+		case ADD_CANDIDATE_SKILL:
+			AddCandidateSkillDialog addCandidateSkillDialog = (AddCandidateSkillDialog) dialogs.get(DialogType.ADD_CANDIDATE_SKILL);
+			return addCandidateSkillDialog.getSelectedSkill();
+		case REMOVE_CANDIDATE_SKILL:
+			RemoveSkillDialog removeCandidateSkillDialog = (RemoveSkillDialog) dialogs.get(DialogType.REMOVE_CANDIDATE_SKILL);
+			return removeCandidateSkillDialog.getSelectedSkill();
 		case ADD_SKILL:
 			AddSkillDialog addSkillDialog = (AddSkillDialog) dialogs.get(DialogType.ADD_SKILL);
 			return addSkillDialog.getSelectedSkill();
-		case REMOVE_SKILL:
-			RemoveSkillDialog removeSkillDialog = (RemoveSkillDialog) dialogs.get(DialogType.REMOVE_SKILL);
-			return removeSkillDialog.getSelectedSkill();
 		}
 		return null;
 	}
@@ -834,9 +846,9 @@ public class MainWindow extends JFrame {
 		panel.setTaskListPanelListener(taskListPanelListener);
 	}
 
-	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userManagementPanelListener) {
+	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userListener, SkillsManagementPanelListener skillListener) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
-		panel.setAdminPanelListener(adminPanelListener, userManagementPanelListener);
+		panel.setAdminPanelListener(adminPanelListener, userListener, skillListener);
 	}
 
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
@@ -875,12 +887,12 @@ public class MainWindow extends JFrame {
 		dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN).setActionListener(addLinkedInProfileListener);
 	}
 
-	public void setAddSkillListener(AddSkillListener addSkillListener) {
-		dialogs.get(DialogType.ADD_SKILL).setActionListener(addSkillListener);
+	public void setAddCandidateSkillDialogListener(AddCandidateSkillDialogListener addSkillListener) {
+		dialogs.get(DialogType.ADD_CANDIDATE_SKILL).setActionListener(addSkillListener);
 	}
 
-	public void setRemoveSkillListener(RemoveSkillListener removeSkillListener) {
-		dialogs.get(DialogType.REMOVE_SKILL).setActionListener(removeSkillListener);
+	public void setRemoveCandidateSkillDialogListener(RemoveCandidateSkillDialogListener removeSkillListener) {
+		dialogs.get(DialogType.REMOVE_CANDIDATE_SKILL).setActionListener(removeSkillListener);
 	}
 
 	public void setAddEventDialogListener(AddEventDialogListener eventDialogListener) {
@@ -907,4 +919,7 @@ public class MainWindow extends JFrame {
 		dialogs.get(DialogType.EDIT_USER).setActionListener(editUserDialogListener);
 	}
 
+	public void setAddSkillDialogListener(AddSkillDialogListener addSkillDialogListener) {
+		dialogs.get(DialogType.ADD_SKILL).setActionListener(addSkillDialogListener);
+	}
 }

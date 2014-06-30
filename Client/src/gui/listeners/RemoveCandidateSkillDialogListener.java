@@ -1,9 +1,7 @@
 package gui.listeners;
 
-import gui.ClientView;
 import gui.DialogType;
 import gui.ErrorDialogType;
-import gui.MainWindow;
 import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
@@ -15,13 +13,9 @@ import controller.ClientController;
 import database.beans.Candidate;
 import database.beans.Skill;
 
-/**
- * Listens for events on the add skill to candidate dialog. 
- * @author Charlie
- */
-public class AddSkillListener extends ClientListener implements ActionListener {
+public class RemoveCandidateSkillDialogListener extends ClientListener implements ActionListener {
 
-	public AddSkillListener(ClientController controller) {
+	public RemoveCandidateSkillDialogListener(ClientController controller) {
 		super(controller);
 	}
 
@@ -36,21 +30,21 @@ public class AddSkillListener extends ClientListener implements ActionListener {
 			switch (text) {
 			case "Confirm":
 				Candidate candidate = controller.getView().getCandidatePanelCandidate();
-				Skill skill = controller.getView().getSkillDialogSkill(DialogType.ADD_SKILL);
-				boolean added = controller.getModel().addSkillToCandidate(skill, candidate, MainWindow.USER_ID);
+				Skill skill = controller.getView().getSkillDialogSkill(DialogType.REMOVE_CANDIDATE_SKILL);
+				boolean added = controller.getModel().removeSkillFromCandidate(skill, candidate);
 				
 				if(added) {
-					controller.getView().showMessageDialog(MessageDialogType.SKILL_ADDED);
+					controller.getView().showMessageDialog(MessageDialogType.CANDIDATE_SKILL_REMOVED);
 					
 					// update the skills displayed for the candidate
 					controller.getView().updateDisplayedCandidateSkills(controller.getModel().getCandidateSkills(candidate.getId()));
 				} else {
-					controller.getView().showErrorDialog(ErrorDialogType.ADD_SKILL_FAIL);
+					controller.getView().showErrorDialog(ErrorDialogType.CANDIDATE_REMOVE_SKILL_FAIL);
 				}
-				controller.getView().hideDialog(DialogType.ADD_SKILL);
+				controller.getView().hideDialog(DialogType.REMOVE_CANDIDATE_SKILL);
 				break;
 			case "Cancel ":
-				controller.getView().hideDialog(DialogType.ADD_SKILL);
+				controller.getView().hideDialog(DialogType.REMOVE_CANDIDATE_SKILL);
 				break;
 			}
 		}

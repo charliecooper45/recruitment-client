@@ -6,7 +6,8 @@ import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
-import gui.listeners.AddSkillListener;
+import gui.listeners.AddCandidateSkillDialogListener;
+import gui.listeners.AddSkillDialogListener;
 import gui.listeners.AddTaskDialogListener;
 import gui.listeners.AddUserDialogListener;
 import gui.listeners.AdminPanelListener;
@@ -19,10 +20,11 @@ import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
-import gui.listeners.RemoveSkillListener;
+import gui.listeners.RemoveCandidateSkillDialogListener;
 import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
+import gui.listeners.SkillsManagementPanelListener;
 import gui.listeners.TaskListPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.UserManagementPanelListener;
@@ -254,6 +256,10 @@ public class ClientView {
 		return mainWindow.getAdminPanelUser();
 	}
 	
+	public void updateDisplayedSkills(List<Skill> skills) {
+		mainWindow.updateDisplayedSkills(skills);
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		mainWindow.updateDisplayedTasks(tasks);
@@ -417,8 +423,8 @@ public class ClientView {
 		mainWindow.setTaskListPanelListener(taskListPanelListener);
 	}
 	
-	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userManagementPanelListener) {
-		mainWindow.setAdminPanelListener(adminPanelListener, userManagementPanelListener);
+	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userListener, SkillsManagementPanelListener skillListener) {
+		mainWindow.setAdminPanelListener(adminPanelListener, userListener, skillListener);
 	}
 	
 	public void setAddVacancyDialogListener(ActionListener actionListener) {
@@ -457,12 +463,12 @@ public class ClientView {
 		mainWindow.setAddLinkedInProfileLister(addLinkedInProfileListener);
 	}
 	
-	public void setAddSkillListener(AddSkillListener addSkillListener) {
-		mainWindow.setAddSkillListener(addSkillListener);
+	public void setAddCandidateSkillDialogListener(AddCandidateSkillDialogListener addSkillListener) {
+		mainWindow.setAddCandidateSkillDialogListener(addSkillListener);
 	}
 	
-	public void setRemoveSkillListener(RemoveSkillListener removeSkillListener) {
-		mainWindow.setRemoveSkillListener(removeSkillListener);
+	public void setRemoveCandidateSkillDialogListener(RemoveCandidateSkillDialogListener removeSkillListener) {
+		mainWindow.setRemoveCandidateSkillDialogListener(removeSkillListener);
 	}
 	
 	public void setAddEventDialogListener(AddEventDialogListener eventDialogListener) {
@@ -489,6 +495,10 @@ public class ClientView {
 		mainWindow.setEditUserDialogListener(editUserDialogListener);
 	}
 	
+	public void setAddSkillDialogListener(AddSkillDialogListener addSkillDialogListener) {
+		mainWindow.setAddSkillDialogListener(addSkillDialogListener);
+	}
+	
 	// main method
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -500,6 +510,7 @@ public class ClientView {
 			}
 		});
 	}
+
 
 
 }

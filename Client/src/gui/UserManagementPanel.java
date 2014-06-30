@@ -217,6 +217,7 @@ public class UserManagementPanel extends JPanel {
 		addUserBtn.addActionListener(listener);
 		removeUserBtn.addActionListener(listener);
 		editUserBtn.addActionListener(listener);
+		
+		//TODO NEXT: implement the show user activity report button
 	}
-
 }

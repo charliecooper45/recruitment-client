@@ -1,10 +1,13 @@
 package gui;
 
+import gui.listeners.SkillsManagementPanelListener;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,15 +18,20 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import database.beans.Skill;
+
 public class SkillsManagementPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GridBagConstraints gbc;
 	
+	// list of skills to be displayed
+	private List<Skill> skills;
+	
 	// components - topPanel
 	private JPanel topPanel;
 	private JButton addSkillBtn;
-	private JButton delSkillBtn;
+	private JButton removeSkillBtn;
 
 	// components - mainPanel
 	private JPanel mainPanel;
@@ -44,9 +52,9 @@ public class SkillsManagementPanel extends JPanel {
 		topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
 		
 		addSkillBtn = new JButton("Add Skill");
-		delSkillBtn = new JButton("Delete Skill");
+		removeSkillBtn = new JButton("Remove Skill");
 		topPanel.add(addSkillBtn);
-		topPanel.add(delSkillBtn);
+		topPanel.add(removeSkillBtn);
 
 		add(topPanel, BorderLayout.NORTH);
 	}
@@ -63,12 +71,29 @@ public class SkillsManagementPanel extends JPanel {
 
 			@Override
 			public Object getValueAt(int row, int col) {
-				return "Test Data";
+				Skill skill;
+
+				if (skills != null) {
+					skill = skills.get(row);
+					switch (col) {
+					case 0:
+						return skill.getSkillName();
+					case 1:
+						return skill.getUsage();
+					case 2:
+						return skill.getUserId();
+					}
+				}
+				return "";
 			}
 
 			@Override
 			public int getRowCount() {
-				return 5;
+				if (skills != null) {
+					return skills.size();
+				} else {
+					return 0;
+				}
 			}
 
 			@Override
@@ -100,5 +125,16 @@ public class SkillsManagementPanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 
 		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	public void updateDisplayedSkills(List<Skill> skills) {
+		this.skills = skills;
+		DefaultTableModel model = (DefaultTableModel) skillsTbl.getModel();
+		model.fireTableDataChanged();
+	}
+
+	public void setSkillsManagementPanelListener(SkillsManagementPanelListener listener) {
+		addSkillBtn.addActionListener(listener);
+		removeSkillBtn.addActionListener(listener);
 	}
 }

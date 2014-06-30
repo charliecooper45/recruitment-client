@@ -6,7 +6,8 @@ import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
-import gui.listeners.AddSkillListener;
+import gui.listeners.AddCandidateSkillDialogListener;
+import gui.listeners.AddSkillDialogListener;
 import gui.listeners.AddTaskDialogListener;
 import gui.listeners.AddUserDialogListener;
 import gui.listeners.AddVacancyDialogListener;
@@ -22,10 +23,11 @@ import gui.listeners.RemoveCandidateDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
-import gui.listeners.RemoveSkillListener;
+import gui.listeners.RemoveCandidateSkillDialogListener;
 import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
+import gui.listeners.SkillsManagementPanelListener;
 import gui.listeners.TaskListPanelListener;
 import gui.listeners.TopMenuListener;
 import gui.listeners.UserManagementPanelListener;
@@ -61,6 +63,7 @@ public class ClientController {
 	private TaskListPanelListener taskListPanelListener;
 	private AdminPanelListener adminPanelListener;
 	private UserManagementPanelListener userManagementPanelListener;
+	private SkillsManagementPanelListener skillsManagementPanelListener;
 	
 	// top panel listener
 	private TopMenuListener topMenuListener;
@@ -76,14 +79,15 @@ public class ClientController {
 	private AddContactDialogListener addContactDialogListener;
 	private RemoveContactDialogListener removeContactDialogListener;
 	private AddLinkedInProfileListener addLinkedInProfileListener;
-	private AddSkillListener addSkillListener;
-	private RemoveSkillListener removeSkillListener;
+	private AddCandidateSkillDialogListener addCandidateSkillDialogListener;
+	private RemoveCandidateSkillDialogListener removeCandidateSkillDialogListener;
 	private AddEventDialogListener addEventDialogListener;
 	private RemoveEventDialogListener removeEventDialogListener;
 	private AddTaskDialogListener addTaskDialogListener;
 	private AddUserDialogListener addUserDialogListener;
 	private RemoveUserDialogListener removeUserDialogListener;
 	private EditUserDialogListener editUserDialogListener;
+	private AddSkillDialogListener addSkillDialogListener;
 	
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
@@ -104,6 +108,7 @@ public class ClientController {
 		taskListPanelListener = new TaskListPanelListener(this);
 		adminPanelListener = new AdminPanelListener(this);
 		userManagementPanelListener = new UserManagementPanelListener(this);
+		skillsManagementPanelListener = new SkillsManagementPanelListener(this);
 		addVacancyDialogListener = new AddVacancyDialogListener(this);
 		removeVacancyDialogListener = new RemoveVacancyDialogListener(this);
 		addOrganisationDialogListener = new AddOrganisationDialogListener(this);
@@ -113,14 +118,15 @@ public class ClientController {
 		addContactDialogListener = new AddContactDialogListener(this);
 		removeContactDialogListener = new RemoveContactDialogListener(this);
 		addLinkedInProfileListener = new AddLinkedInProfileListener(this);
-		addSkillListener = new AddSkillListener(this);
-		removeSkillListener = new RemoveSkillListener(this);
+		addCandidateSkillDialogListener = new AddCandidateSkillDialogListener(this);
+		removeCandidateSkillDialogListener = new RemoveCandidateSkillDialogListener(this);
 		addEventDialogListener = new AddEventDialogListener(this);
 		removeEventDialogListener = new RemoveEventDialogListener(this);
 		addTaskDialogListener = new AddTaskDialogListener(this);
 		addUserDialogListener = new AddUserDialogListener(this);
 		removeUserDialogListener = new RemoveUserDialogListener(this);
 		editUserDialogListener = new EditUserDialogListener(this);
+		addSkillDialogListener = new AddSkillDialogListener(this);
 
 		setListenersAndShowGUI();
 	}
@@ -144,7 +150,7 @@ public class ClientController {
 		view.setCandidatePanelListener(candidatePanelListener);
 		view.setCandidatePipelinePanelListener(candidatePipelineListener);
 		view.setTaskListPanelListener(taskListPanelListener);
-		view.setAdminPanelListener(adminPanelListener, userManagementPanelListener);
+		view.setAdminPanelListener(adminPanelListener, userManagementPanelListener, skillsManagementPanelListener);
 		
 		// dialog listeners
 		view.setAddVacancyDialogListener(addVacancyDialogListener);
@@ -156,14 +162,15 @@ public class ClientController {
 		view.setAddContactDialogListener(addContactDialogListener);
 		view.setRemoveContactDialogListener(removeContactDialogListener);
 		view.setAddLinkedInProfileListener(addLinkedInProfileListener);
-		view.setAddSkillListener(addSkillListener);
-		view.setRemoveSkillListener(removeSkillListener);
+		view.setAddCandidateSkillDialogListener(addCandidateSkillDialogListener);
+		view.setRemoveCandidateSkillDialogListener(removeCandidateSkillDialogListener);
 		view.setAddEventDialogListener(addEventDialogListener);
 		view.setRemoveEventDialogListener(removeEventDialogListener);
 		view.setAddTaskDialogListener(addTaskDialogListener);
 		view.setAddUserDialogListener(addUserDialogListener);
 		view.setRemoveUserDialogListener(removeUserDialogListener);
 		view.setEditUserDialogListener(editUserDialogListener);
+		view.setAddSkillDialogListener(addSkillDialogListener);
 	}
 
 	public Path storeTempFile(InputStream inStream, String name) {

@@ -1,6 +1,7 @@
 package gui;
 
 import gui.listeners.AdminPanelListener;
+import gui.listeners.SkillsManagementPanelListener;
 import gui.listeners.UserManagementPanelListener;
 
 import java.awt.Font;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import database.beans.Skill;
 import database.beans.User;
 
 public class AdminPanel extends JPanel {
@@ -22,6 +24,7 @@ public class AdminPanel extends JPanel {
 	// components
 	private JTabbedPane tabbedPane;
 	private UserManagementPanel userManagementPanel;
+	private SkillsManagementPanel skillsManagementPanel;
 	
 	public AdminPanel() {
 		init();
@@ -37,10 +40,10 @@ public class AdminPanel extends JPanel {
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
 		userManagementPanel = new UserManagementPanel();
+		skillsManagementPanel = new SkillsManagementPanel();
 		tabbedPane.addTab("User management", userManagementPanel);
-		tabbedPane.addTab("Skills management", new SkillsManagementPanel());
+		tabbedPane.addTab("Skills management", skillsManagementPanel);
 		tabbedPane.addTab("Activity report", new ReportPanel());
-		tabbedPane.addTab("Upload candidates", new JPanel());
 		
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 		add(tabbedPane, gbc);
@@ -51,13 +54,18 @@ public class AdminPanel extends JPanel {
 		userManagementPanel.updateDisplayedUsers(users);
 	}
 	
+	public void updateDisplayedSkills(List<Skill> skills) {
+		tabbedPane.setSelectedIndex(1);		
+		skillsManagementPanel.updateDisplayedSkills(skills);
+	}
+	
 	public User getSelectedUser() {
 		return userManagementPanel.getSelectedUser();
 	}
 	
-	public void setAdminPanelListener(AdminPanelListener listener, UserManagementPanelListener userManagementPanelListener) {
+	public void setAdminPanelListener(AdminPanelListener listener, UserManagementPanelListener userListener, SkillsManagementPanelListener skillListener) {
 		tabbedPane.addMouseListener(listener);
-		
-		userManagementPanel.setUserManagementPanelListener(userManagementPanelListener);
+		userManagementPanel.setUserManagementPanelListener(userListener);
+		skillsManagementPanel.setSkillsManagementPanelListener(skillListener);
 	}
 }
