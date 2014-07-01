@@ -24,10 +24,10 @@ public class SkillsManagementPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GridBagConstraints gbc;
-	
+
 	// list of skills to be displayed
 	private List<Skill> skills;
-	
+
 	// components - topPanel
 	private JPanel topPanel;
 	private JButton addSkillBtn;
@@ -37,7 +37,7 @@ public class SkillsManagementPanel extends JPanel {
 	private JPanel mainPanel;
 	private JTable skillsTbl;
 	private JScrollPane tableScrll;
-	
+
 	public SkillsManagementPanel() {
 		setLayout(new BorderLayout());
 		init();
@@ -47,10 +47,10 @@ public class SkillsManagementPanel extends JPanel {
 		initTopPanel();
 		initBottomPanel();
 	}
-	
+
 	private void initTopPanel() {
 		topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-		
+
 		addSkillBtn = new JButton("Add Skill");
 		removeSkillBtn = new JButton("Remove Skill");
 		topPanel.add(addSkillBtn);
@@ -58,7 +58,7 @@ public class SkillsManagementPanel extends JPanel {
 
 		add(topPanel, BorderLayout.NORTH);
 	}
-	
+
 	private void initBottomPanel() {
 		mainPanel = new JPanel(new GridBagLayout());
 		gbc = new GridBagConstraints();
@@ -67,7 +67,7 @@ public class SkillsManagementPanel extends JPanel {
 		gbc.insets = new Insets(0, 20, 10, 20);
 		skillsTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = { "Skill", "Usage", "Owner"};
+			private String[] columns = { "Skill", "Usage", "Owner" };
 
 			@Override
 			public Object getValueAt(int row, int col) {
@@ -125,6 +125,14 @@ public class SkillsManagementPanel extends JPanel {
 		mainPanel.add(tableScrll, gbc);
 
 		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	public Skill getSelectedSkill() {
+		if (skillsTbl.getSelectedRow() == -1) {
+			return null;
+		} else {
+			return skills.get(skillsTbl.getSelectedRow());
+		}
 	}
 
 	public void updateDisplayedSkills(List<Skill> skills) {

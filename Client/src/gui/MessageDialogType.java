@@ -7,7 +7,7 @@ public enum MessageDialogType {
 	REMOVED_FROM_SHORTLIST("Candidate removed from shortlist"), CANDIDATE_UPDATED("Candidate updated"), CANDIDATE_SKILL_ADDED("Skill added to candidate"), 
 	CANDIDATE_SKILL_REMOVED("Skill removed from candidate"), VACANCY_UPDATED("Vacancy updated"), ORGANISATION_UPDATED("Organisation updated"), EVENT_ADDED("Event added"), 
 	EVENT_REMOVED("Event removed"), CANDIDATE_NOTES_SAVED("Candidate notes saved"), USER_ADDED("User added"), USER_REMOVED("User removed"), USER_UPDATED("User updated"), 
-	SKILL_ADDED("Skill added");
+	SKILL_ADDED("Skill added"), SKILL_REMOVED("Skill removed");
 	
 	private String confirmMessage;
 	

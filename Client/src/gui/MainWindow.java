@@ -2,11 +2,11 @@ package gui;
 
 import gui.TopMenuPanel.MenuPanel;
 import gui.dialogs.AddCandidateDialog;
+import gui.dialogs.AddCandidateSkillDialog;
 import gui.dialogs.AddContactDialog;
 import gui.dialogs.AddEventDialog;
 import gui.dialogs.AddLinkedInDialog;
 import gui.dialogs.AddOrganisationDialog;
-import gui.dialogs.AddCandidateSkillDialog;
 import gui.dialogs.AddSkillDialog;
 import gui.dialogs.AddTaskDialog;
 import gui.dialogs.AddUserDialog;
@@ -14,18 +14,18 @@ import gui.dialogs.AddVacancyDialog;
 import gui.dialogs.EditUserDialog;
 import gui.dialogs.RecruitmentDialog;
 import gui.dialogs.RemoveCandidateDialog;
+import gui.dialogs.RemoveCandidateSkillDialog;
 import gui.dialogs.RemoveContactDialog;
 import gui.dialogs.RemoveEventDialog;
 import gui.dialogs.RemoveOrganisationDialog;
-import gui.dialogs.RemoveSkillDialog;
 import gui.dialogs.RemoveUserDialog;
 import gui.dialogs.RemoveVacancyDialog;
 import gui.listeners.AddCandidateDialogListener;
+import gui.listeners.AddCandidateSkillDialogListener;
 import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddEventDialogListener;
 import gui.listeners.AddLinkedInProfileListener;
 import gui.listeners.AddOrganisationDialogListener;
-import gui.listeners.AddCandidateSkillDialogListener;
 import gui.listeners.AddSkillDialogListener;
 import gui.listeners.AddTaskDialogListener;
 import gui.listeners.AddUserDialogListener;
@@ -36,10 +36,10 @@ import gui.listeners.EditUserDialogListener;
 import gui.listeners.OrganisationPanelListener;
 import gui.listeners.OrganisationsPanelListener;
 import gui.listeners.RemoveCandidateDialogListener;
+import gui.listeners.RemoveCandidateSkillDialogListener;
 import gui.listeners.RemoveContactDialogListener;
 import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
-import gui.listeners.RemoveCandidateSkillDialogListener;
 import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
 import gui.listeners.SearchPanelListener;
@@ -185,7 +185,7 @@ public class MainWindow extends JFrame {
 		dialogs.put(DialogType.REMOVE_CONTACT, new RemoveContactDialog(this));
 		dialogs.put(DialogType.CANDIDATE_ADD_LINKEDIN, new AddLinkedInDialog(this));
 		dialogs.put(DialogType.ADD_CANDIDATE_SKILL, new AddCandidateSkillDialog(this));
-		dialogs.put(DialogType.REMOVE_CANDIDATE_SKILL, new RemoveSkillDialog(this));
+		dialogs.put(DialogType.REMOVE_CANDIDATE_SKILL, new RemoveCandidateSkillDialog(this));
 		dialogs.put(DialogType.ADD_EVENT, new AddEventDialog(this));
 		dialogs.put(DialogType.REMOVE_EVENT, new RemoveEventDialog(this));
 		dialogs.put(DialogType.ADD_TASK, new AddTaskDialog(this));
@@ -506,6 +506,11 @@ public class MainWindow extends JFrame {
 		panel.updateDisplayedSkills(skills);
 	}
 	
+	public Skill getSkillPanelSkill() {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		return panel.getSelectedSkill();
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		TaskListPanel panel = taskListPanel;
@@ -632,6 +637,14 @@ public class MainWindow extends JFrame {
 				return true;
 			}
 			break;
+		case REMOVE_SKILL:
+			panel = (JPanel) borderLayout.getLayoutComponent(BorderLayout.CENTER);
+			response = JOptionPane.showConfirmDialog(panel, ConfirmDialogType.REMOVE_SKILL.getMessage(), "Confirm.", JOptionPane.YES_NO_OPTION);
+			if (response == 0) {
+				return true;
+			}
+			break;
+			
 		}
 		return false;
 	}
@@ -751,7 +764,7 @@ public class MainWindow extends JFrame {
 			AddCandidateSkillDialog addCandidateSkillDialog = (AddCandidateSkillDialog) dialogs.get(DialogType.ADD_CANDIDATE_SKILL);
 			return addCandidateSkillDialog.getSelectedSkill();
 		case REMOVE_CANDIDATE_SKILL:
-			RemoveSkillDialog removeCandidateSkillDialog = (RemoveSkillDialog) dialogs.get(DialogType.REMOVE_CANDIDATE_SKILL);
+			RemoveCandidateSkillDialog removeCandidateSkillDialog = (RemoveCandidateSkillDialog) dialogs.get(DialogType.REMOVE_CANDIDATE_SKILL);
 			return removeCandidateSkillDialog.getSelectedSkill();
 		case ADD_SKILL:
 			AddSkillDialog addSkillDialog = (AddSkillDialog) dialogs.get(DialogType.ADD_SKILL);

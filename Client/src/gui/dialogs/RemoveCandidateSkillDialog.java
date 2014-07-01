@@ -15,14 +15,18 @@ import javax.swing.JPanel;
 
 import database.beans.Skill;
 
-public class RemoveSkillDialog extends RecruitmentDialog {
+/**
+ * Dialog that allows the user to remove a skill from a candidate.
+ * @author Charlie
+ */
+public class RemoveCandidateSkillDialog extends RecruitmentDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private JComboBox<Skill> skillCmbBox;
 	private JButton confirmButton;
 	private JButton cancelButton;
 	
-	public RemoveSkillDialog(JFrame frame) {
+	public RemoveCandidateSkillDialog(JFrame frame) {
 		super(frame, "Remove Skill");
 		setSize(400, 200);
 		init();

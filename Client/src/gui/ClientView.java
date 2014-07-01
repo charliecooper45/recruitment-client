@@ -260,6 +260,10 @@ public class ClientView {
 		mainWindow.updateDisplayedSkills(skills);
 	}
 	
+	public Skill getSkillPanelSkill() {
+		return mainWindow.getSkillPanelSkill();
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		mainWindow.updateDisplayedTasks(tasks);
@@ -510,7 +514,4 @@ public class ClientView {
 			}
 		});
 	}
-
-
-
 }

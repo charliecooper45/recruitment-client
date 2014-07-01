@@ -63,9 +63,15 @@ public class AdminPanel extends JPanel {
 		return userManagementPanel.getSelectedUser();
 	}
 	
+	public Skill getSelectedSkill() {
+		return skillsManagementPanel.getSelectedSkill();
+	}
+	
 	public void setAdminPanelListener(AdminPanelListener listener, UserManagementPanelListener userListener, SkillsManagementPanelListener skillListener) {
 		tabbedPane.addMouseListener(listener);
 		userManagementPanel.setUserManagementPanelListener(userListener);
 		skillsManagementPanel.setSkillsManagementPanelListener(skillListener);
 	}
+
+
 }
