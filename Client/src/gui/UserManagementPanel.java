@@ -36,7 +36,6 @@ public class UserManagementPanel extends JPanel {
 	private JComboBox<String> userTypeCmbBox;
 	private JComboBox<String> userStatusCmbBox;
 	private JButton addUserBtn;
-	private JButton userActBtn;
 	private JButton removeUserBtn;
 	private JButton editUserBtn;
 
@@ -101,10 +100,6 @@ public class UserManagementPanel extends JPanel {
 		editUserBtn = new JButton("Edit User");
 		Utils.setGBC(gbc, 7, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(editUserBtn, gbc);
-
-		userActBtn = new JButton("View User Activity");
-		Utils.setGBC(gbc, 8, 1, 1, 1, GridBagConstraints.NONE);
-		topPanel.add(userActBtn, gbc);
 
 		add(topPanel, BorderLayout.NORTH);
 	}

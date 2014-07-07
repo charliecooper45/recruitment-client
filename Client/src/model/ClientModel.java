@@ -11,6 +11,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 
@@ -18,7 +19,9 @@ import database.beans.Candidate;
 import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
+import database.beans.EventType;
 import database.beans.Organisation;
+import database.beans.Report;
 import database.beans.Search;
 import database.beans.Skill;
 import database.beans.Task;
@@ -705,5 +708,17 @@ public class ClientModel implements ServerInterface {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public Map<User, Map<EventType, Integer>> getUserReport(Report report) {
+		try {
+			return SERVER.getUserReport(report);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -42,6 +42,7 @@ import gui.listeners.RemoveEventDialogListener;
 import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
+import gui.listeners.ReportPanelListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.SkillsManagementPanelListener;
 import gui.listeners.TaskListPanelListener;
@@ -80,7 +81,9 @@ import database.beans.Candidate;
 import database.beans.CandidateSkill;
 import database.beans.Contact;
 import database.beans.Event;
+import database.beans.EventType;
 import database.beans.Organisation;
+import database.beans.Report;
 import database.beans.Search;
 import database.beans.Skill;
 import database.beans.Task;
@@ -511,6 +514,16 @@ public class MainWindow extends JFrame {
 		return panel.getSelectedSkill();
 	}
 	
+	public Report getReportPanelReport() {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		return panel.getReport();
+	}
+	
+	public void updateDisplayedReport(Map<User, Map<EventType, Integer>> results) {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		panel.updateDisplayedReport(results);		
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		TaskListPanel panel = taskListPanel;
@@ -859,9 +872,9 @@ public class MainWindow extends JFrame {
 		panel.setTaskListPanelListener(taskListPanelListener);
 	}
 
-	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userListener, SkillsManagementPanelListener skillListener) {
+	public void setAdminPanelListener(AdminPanelListener adminPanelListener, UserManagementPanelListener userListener, SkillsManagementPanelListener skillListener, ReportPanelListener reportListener) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
-		panel.setAdminPanelListener(adminPanelListener, userListener, skillListener);
+		panel.setAdminPanelListener(adminPanelListener, userListener, skillListener, reportListener);
 	}
 
 	public void setAddVacancyDialogListener(ActionListener actionListener) {

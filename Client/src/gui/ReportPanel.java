@@ -1,15 +1,22 @@
 package gui;
 
+import gui.listeners.ReportPanelListener;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -20,22 +27,30 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import database.beans.EventType;
+import database.beans.Report;
+import database.beans.ReportType;
+import database.beans.User;
+
 public class ReportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	private Map<User, Map<EventType, Integer>> userResults;
+	private List<User> users;
+	
 	private GridBagConstraints gbc;
 	
 	// components - topPanel
 	private JPanel topPanel;
-	private JComboBox<String> reportTypeCmbBox;
+	private JComboBox<ReportType> reportTypeCmbBox;
 	private JDateChooser fromDateChooser;
 	private JDateChooser toDateChooser;
 	private JButton getReportBtn;
 
 	// components - mainPanel
 	private JPanel mainPanel;
-	private JTable consultantTbl;
-	private JScrollPane consultantTblScrll;
+	private JTable userTbl;
+	private JScrollPane userTblScrll;
 	private JTable vacancyTbl;
 	private JScrollPane vacancyTblScrll;
 	private JTable orgTbl;
@@ -64,9 +79,9 @@ public class ReportPanel extends JPanel {
 		
 		gbc.anchor = GridBagConstraints.LINE_START;
 		reportTypeCmbBox = new JComboBox<>();
-		reportTypeCmbBox.addItem("CONSULTANT");
-		reportTypeCmbBox.addItem("VACANCY");
-		reportTypeCmbBox.addItem("ORGANISATION");
+		reportTypeCmbBox.addItem(ReportType.CONSULTANT);
+		reportTypeCmbBox.addItem(ReportType.VACANCY);
+		reportTypeCmbBox.addItem(ReportType.ORGANISATION);
 		Utils.setGBC(gbc, 2, 1, 1, 1, GridBagConstraints.NONE);
 		topPanel.add(reportTypeCmbBox, gbc);
 		
@@ -92,17 +107,17 @@ public class ReportPanel extends JPanel {
 				Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
 				
 				// change the panel that is shown according to the selected item
-				String selectedItem = (String) reportTypeCmbBox.getSelectedItem();
+				ReportType selectedItem = (ReportType) reportTypeCmbBox.getSelectedItem();
 				switch(selectedItem) {
-				case "CANDIDATE":
+				case CONSULTANT:
 					mainPanel.removeAll();
-					mainPanel.add(consultantTblScrll, gbc);
+					mainPanel.add(userTblScrll, gbc);
 					break;
-				case "VACANCY":
+				case VACANCY:
 					mainPanel.removeAll();
 					mainPanel.add(vacancyTblScrll, gbc);
 					break;
-				case "ORGANISATION":
+				case ORGANISATION:
 					mainPanel.removeAll();
 					mainPanel.add(orgTblScrll, gbc);
 					break;
@@ -132,20 +147,32 @@ public class ReportPanel extends JPanel {
 		
 		// by default show the CONSULTANT table
 		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
-		mainPanel.add(consultantTblScrll, gbc);
+		mainPanel.add(userTblScrll, gbc);
 
 		add(mainPanel, BorderLayout.CENTER);
 	}
 	
 	private void initConsultantTbl() {
-		consultantTbl = new JTable(new DefaultTableModel() {
+		userTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = { "Consultant ID", "Consultant Name", "CVs Sent", "1st Interviews", "2nd Interviews", "3rd Interviews", "Final Interviews",
-					"Placements", "Candidates Created", "Vacancies Created", "Organisations Created"};
+			private String[] columns = { "Consultant ID", "Consultant Name", "CVs Sent", "Interviews", "Placements"};
 
 			@Override
 			public Object getValueAt(int row, int col) {
-				return "Test Data";
+				User user;
+				
+				if(userResults != null) {
+					user = users.get(row);
+					switch(col) {
+					case 0:
+						return user.getUserId();
+					case 1:
+						return user.getFirstName() + " " + user.getSurname();
+					case 2: 
+						return userResults.get(user).get(EventType.CV_SENT);
+					}
+				}
+				return null;
 			}
 
 			@Override
@@ -155,7 +182,7 @@ public class ReportPanel extends JPanel {
 
 			@Override
 			public int getColumnCount() {
-				return 11;
+				return 5;
 			}
 
 			@Override
@@ -168,16 +195,16 @@ public class ReportPanel extends JPanel {
 				return false;
 			}
 		});
-		consultantTbl.setRowHeight(30);
-		consultantTbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		userTbl.setRowHeight(30);
+		userTbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-		for (int i = 0; i < consultantTbl.getColumnCount(); i++) {
-			consultantTbl.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		for (int i = 0; i < userTbl.getColumnCount(); i++) {
+			userTbl.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
-		consultantTblScrll = new JScrollPane(consultantTbl);
-		consultantTblScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		consultantTblScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		userTblScrll = new JScrollPane(userTbl);
+		userTblScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		userTblScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	}
 	
 	private void initVacancyTbl() {
@@ -262,5 +289,35 @@ public class ReportPanel extends JPanel {
 		orgTblScrll = new JScrollPane(orgTbl);
 		orgTblScrll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		orgTblScrll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	}
+
+	public Report getReport() {
+		StringBuilder errorMessage = new StringBuilder("");
+		
+		Date fromDate = fromDateChooser.getDate();
+		Date toDate = toDateChooser.getDate();
+		
+		if(fromDate == null || toDate == null) {
+			errorMessage.append("Date fields cannot be empty.\n");
+		}
+		
+		if(errorMessage.toString().trim().equals("")) {
+			return new Report((ReportType) reportTypeCmbBox.getSelectedItem(), fromDateChooser.getDate(), toDateChooser.getDate());
+		} else {
+			// display an error message to the user
+			JOptionPane.showMessageDialog(this, errorMessage.toString(), "Cannot get report", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+	}
+	
+	public void updateDisplayedReport(Map<User, Map<EventType, Integer>> results) {
+		this.userResults = results;
+		this.users = new ArrayList<>(results.keySet());
+		DefaultTableModel model = (DefaultTableModel) userTbl.getModel();
+		model.fireTableDataChanged();
+	}
+	
+	public void setReportPanelListener(ReportPanelListener listener) {
+		getReportBtn.addActionListener(listener);
 	}
 }

@@ -26,6 +26,7 @@ import gui.listeners.RemoveOrganisationDialogListener;
 import gui.listeners.RemoveCandidateSkillDialogListener;
 import gui.listeners.RemoveUserDialogListener;
 import gui.listeners.RemoveVacancyDialogListener;
+import gui.listeners.ReportPanelListener;
 import gui.listeners.SearchPanelListener;
 import gui.listeners.SkillsManagementPanelListener;
 import gui.listeners.TaskListPanelListener;
@@ -64,6 +65,7 @@ public class ClientController {
 	private AdminPanelListener adminPanelListener;
 	private UserManagementPanelListener userManagementPanelListener;
 	private SkillsManagementPanelListener skillsManagementPanelListener;
+	private ReportPanelListener reportPanelListener;
 	
 	// top panel listener
 	private TopMenuListener topMenuListener;
@@ -109,6 +111,7 @@ public class ClientController {
 		adminPanelListener = new AdminPanelListener(this);
 		userManagementPanelListener = new UserManagementPanelListener(this);
 		skillsManagementPanelListener = new SkillsManagementPanelListener(this);
+		reportPanelListener = new ReportPanelListener(this);
 		addVacancyDialogListener = new AddVacancyDialogListener(this);
 		removeVacancyDialogListener = new RemoveVacancyDialogListener(this);
 		addOrganisationDialogListener = new AddOrganisationDialogListener(this);
@@ -150,7 +153,7 @@ public class ClientController {
 		view.setCandidatePanelListener(candidatePanelListener);
 		view.setCandidatePipelinePanelListener(candidatePipelineListener);
 		view.setTaskListPanelListener(taskListPanelListener);
-		view.setAdminPanelListener(adminPanelListener, userManagementPanelListener, skillsManagementPanelListener);
+		view.setAdminPanelListener(adminPanelListener, userManagementPanelListener, skillsManagementPanelListener, reportPanelListener);
 		
 		// dialog listeners
 		view.setAddVacancyDialogListener(addVacancyDialogListener);
