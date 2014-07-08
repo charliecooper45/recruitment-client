@@ -9,7 +9,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ public class ReportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private Map<User, Map<EventType, Integer>> userResults;
-	private List<User> users;
+	private List<User> users = new ArrayList<>();
 	
 	private GridBagConstraints gbc;
 	
@@ -155,7 +157,7 @@ public class ReportPanel extends JPanel {
 	private void initConsultantTbl() {
 		userTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = { "Consultant ID", "Consultant Name", "CVs Sent", "Interviews", "Placements"};
+			private String[] columns = { "Consultant ID", "Consultant Name", "Shortlists", "CVs Sent", "Phone Interviews", "Interviews", "Placements"};
 
 			@Override
 			public Object getValueAt(int row, int col) {
@@ -169,7 +171,21 @@ public class ReportPanel extends JPanel {
 					case 1:
 						return user.getFirstName() + " " + user.getSurname();
 					case 2: 
+						return userResults.get(user).get(EventType.SHORTLIST);
+					case 3: 
 						return userResults.get(user).get(EventType.CV_SENT);
+					case 4:
+						return userResults.get(user).get(EventType.PHONE_INTERVIEW);
+					case 5:
+						int totalInterviews = 0;
+						totalInterviews += userResults.get(user).get(EventType.INTERVIEW_1);
+						totalInterviews += userResults.get(user).get(EventType.INTERVIEW_2);
+						totalInterviews += userResults.get(user).get(EventType.INTERVIEW_3);
+						totalInterviews += userResults.get(user).get(EventType.INTERVIEW_4);
+						totalInterviews += userResults.get(user).get(EventType.FINAL_INTERVIEW);
+						return totalInterviews;
+					case 6:
+						return userResults.get(user).get(EventType.PLACEMENT);
 					}
 				}
 				return null;
@@ -177,12 +193,12 @@ public class ReportPanel extends JPanel {
 
 			@Override
 			public int getRowCount() {
-				return 5;
+				return users.size();
 			}
 
 			@Override
 			public int getColumnCount() {
-				return 5;
+				return columns.length;
 			}
 
 			@Override
@@ -313,6 +329,7 @@ public class ReportPanel extends JPanel {
 	public void updateDisplayedReport(Map<User, Map<EventType, Integer>> results) {
 		this.userResults = results;
 		this.users = new ArrayList<>(results.keySet());
+		Collections.sort(users);
 		DefaultTableModel model = (DefaultTableModel) userTbl.getModel();
 		model.fireTableDataChanged();
 	}

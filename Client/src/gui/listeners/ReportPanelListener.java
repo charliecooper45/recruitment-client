@@ -25,16 +25,18 @@ public class ReportPanelListener extends ClientListener implements ActionListene
 		if (source instanceof JButton) {
 			JButton button = (JButton) source;
 			String text = button.getText();
-			
+
 			if (text.equals("Get Report")) {
 				Report report = controller.getView().getReportPanelReport();
-				
-				Map<User, Map<EventType, Integer>> results = controller.getModel().getUserReport(report);
-				
-				if(report != null) {
-					controller.getView().updateDisplayedReport(results);
-				} else {
-					controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
+
+				if (report != null) {
+					Map<User, Map<EventType, Integer>> results = controller.getModel().getUserReport(report);
+
+					if (results != null) {
+						controller.getView().updateDisplayedReport(results);
+					} else {
+						controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
+					}
 				}
 			}
 		}
