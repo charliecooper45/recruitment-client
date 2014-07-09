@@ -84,6 +84,7 @@ import database.beans.Event;
 import database.beans.EventType;
 import database.beans.Organisation;
 import database.beans.Report;
+import database.beans.ReportType;
 import database.beans.Search;
 import database.beans.Skill;
 import database.beans.Task;
@@ -519,9 +520,19 @@ public class MainWindow extends JFrame {
 		return panel.getReport();
 	}
 	
-	public void updateDisplayedReport(Map<User, Map<EventType, Integer>> results) {
+	public void changeDisplayedReportTable(ReportType reportType) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
-		panel.updateDisplayedReport(results);		
+		panel.changeDisplayedTable(reportType);		
+	}
+	
+	public void updateDisplayedUserReport(Map<User, Map<EventType, Integer>> results) {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		panel.updateDisplayedUserReport(results);		
+	}
+	
+	public void updateDisplayedVacancyReport(Map<Vacancy, Map<EventType, Integer>> results) {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		panel.updateDisplayedVacancyReport(results);		
 	}
 	
 	// TaskListPanel methods

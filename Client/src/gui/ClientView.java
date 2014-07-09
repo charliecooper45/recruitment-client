@@ -52,6 +52,7 @@ import database.beans.Event;
 import database.beans.EventType;
 import database.beans.Organisation;
 import database.beans.Report;
+import database.beans.ReportType;
 import database.beans.Search;
 import database.beans.Skill;
 import database.beans.Task;
@@ -272,8 +273,16 @@ public class ClientView {
 		return mainWindow.getReportPanelReport();
 	}
 	
-	public void updateDisplayedReport(Map<User, Map<EventType, Integer>> results) {
-		mainWindow.updateDisplayedReport(results);
+	public void changeDisplayedReportTable(ReportType reportType) {
+		mainWindow.changeDisplayedReportTable(reportType);
+	}
+	
+	public void updateDisplayedUserReport(Map<User, Map<EventType, Integer>> results) {
+		mainWindow.updateDisplayedUserReport(results);
+	}
+	
+	public void updateDisplayedVacancyReport(Map<Vacancy, Map<EventType, Integer>> results) {
+		mainWindow.updateDisplayedVacancyReport(results);
 	}
 	
 	// TaskListPanel methods

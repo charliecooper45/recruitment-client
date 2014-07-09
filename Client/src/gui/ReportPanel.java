@@ -33,12 +33,16 @@ import database.beans.EventType;
 import database.beans.Report;
 import database.beans.ReportType;
 import database.beans.User;
+import database.beans.Vacancy;
 
 public class ReportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	// results for the different report types
 	private Map<User, Map<EventType, Integer>> userResults;
 	private List<User> users = new ArrayList<>();
+	private Map<Vacancy, Map<EventType, Integer>> vacancyResults = new HashMap<>();
+	private List<Vacancy> vacancies = new ArrayList<>();
 	
 	private GridBagConstraints gbc;
 	
@@ -226,21 +230,54 @@ public class ReportPanel extends JPanel {
 	private void initVacancyTbl() {
 		vacancyTbl = new JTable(new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
-			private String[] columns = {"Vacancy Name", "Organisation", "CVs Sent", "1st Interviews", "2nd Interviews", "3rd Interviews", "Final Interviews", "Status"};
+			private String[] columns = {"Vacancy Name", "Organisation", "Shortlists", "CVs Sent", "1st Interviews", "2nd Interviews", "3rd Interviews", "Final Interviews", "Placements", "Status"};
 
 			@Override
 			public Object getValueAt(int row, int col) {
-				return "Test Data";
+				Vacancy vacancy;
+				
+				if(vacancyResults.size() != 0) {
+					vacancy = vacancies.get(row);
+					switch(col) {
+					case 0:
+						return vacancy.getName();
+					case 1:
+						return vacancy.getOrganisationName();
+					case 2:
+						return vacancyResults.get(vacancy).get(EventType.SHORTLIST);
+					case 3:
+						return vacancyResults.get(vacancy).get(EventType.CV_SENT);
+					case 4:
+						return vacancyResults.get(vacancy).get(EventType.INTERVIEW_1);
+					case 5:
+						return vacancyResults.get(vacancy).get(EventType.INTERVIEW_2);
+					case 6:
+						return vacancyResults.get(vacancy).get(EventType.INTERVIEW_3);
+					case 7:
+						return vacancyResults.get(vacancy).get(EventType.FINAL_INTERVIEW);
+					case 8:
+						return vacancyResults.get(vacancy).get(EventType.PLACEMENT);
+					case 9:
+						boolean status = vacancy.getStatus();
+						
+						if(status) {
+							return "Open";
+						} else {
+							return "Closed";
+						}
+					}
+				}
+				return null;
 			}
 
 			@Override
 			public int getRowCount() {
-				return 5;
+				return vacancyResults.size();
 			}
 
 			@Override
 			public int getColumnCount() {
-				return 8;
+				return columns.length;
 			}
 
 			@Override
@@ -326,7 +363,7 @@ public class ReportPanel extends JPanel {
 		}
 	}
 	
-	public void updateDisplayedReport(Map<User, Map<EventType, Integer>> results) {
+	public void updateUserReport(Map<User, Map<EventType, Integer>> results) {
 		this.userResults = results;
 		this.users = new ArrayList<>(results.keySet());
 		Collections.sort(users);
@@ -334,7 +371,36 @@ public class ReportPanel extends JPanel {
 		model.fireTableDataChanged();
 	}
 	
+	public void updateVacancyReport(Map<Vacancy, Map<EventType, Integer>> results) {
+		this.vacancyResults = results;
+		this.vacancies = new ArrayList<>(results.keySet());
+		Collections.sort(vacancies);
+		DefaultTableModel model = (DefaultTableModel) vacancyTbl.getModel();
+		model.fireTableDataChanged();
+	}
+	
+	public void changeDisplayedTable(ReportType reportType) {
+		Utils.setGBC(gbc, 1, 1, 1, 1, GridBagConstraints.BOTH);
+		mainPanel.removeAll();
+		
+		switch(reportType) {
+		case CONSULTANT:
+			mainPanel.add(userTblScrll, gbc);
+			break;
+		case ORGANISATION:
+			mainPanel.add(orgTblScrll, gbc);
+			break;
+		case VACANCY:
+			mainPanel.add(vacancyTblScrll, gbc);
+			break;
+		}
+		
+		mainPanel.revalidate();
+		mainPanel.repaint();
+	}
+	
 	public void setReportPanelListener(ReportPanelListener listener) {
 		getReportBtn.addActionListener(listener);
+		reportTypeCmbBox.addActionListener(listener);
 	}
 }

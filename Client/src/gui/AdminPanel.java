@@ -17,8 +17,10 @@ import javax.swing.JTabbedPane;
 
 import database.beans.EventType;
 import database.beans.Report;
+import database.beans.ReportType;
 import database.beans.Skill;
 import database.beans.User;
+import database.beans.Vacancy;
 
 public class AdminPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -65,9 +67,14 @@ public class AdminPanel extends JPanel {
 		skillsManagementPanel.updateDisplayedSkills(skills);
 	}
 	
-	public void updateDisplayedReport(Map<User, Map<EventType, Integer>> results) {
+	public void updateDisplayedUserReport(Map<User, Map<EventType, Integer>> results) {
 		tabbedPane.setSelectedIndex(2);
-		reportPanel.updateDisplayedReport(results);
+		reportPanel.updateUserReport(results);
+	}
+	
+	public void updateDisplayedVacancyReport(Map<Vacancy, Map<EventType, Integer>> results) {
+		tabbedPane.setSelectedIndex(2);
+		reportPanel.updateVacancyReport(results);
 	}
 	
 	public User getSelectedUser() {
@@ -82,11 +89,14 @@ public class AdminPanel extends JPanel {
 		return reportPanel.getReport();
 	}
 	
+	public void changeDisplayedTable(ReportType reportType) {
+		reportPanel.changeDisplayedTable(reportType);
+	}
+	
 	public void setAdminPanelListener(AdminPanelListener listener, UserManagementPanelListener userListener, SkillsManagementPanelListener skillListener, ReportPanelListener reportListener) {
 		tabbedPane.addMouseListener(listener);
 		userManagementPanel.setUserManagementPanelListener(userListener);
 		skillsManagementPanel.setSkillsManagementPanelListener(skillListener);
 		reportPanel.setReportPanelListener(reportListener);
 	}
-
 }

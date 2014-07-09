@@ -721,4 +721,16 @@ public class ClientModel implements ServerInterface {
 		}
 		return null;
 	}
+
+	@Override
+	public Map<Vacancy, Map<EventType, Integer>> getVacancyReport(Report report) {
+		try {
+			return SERVER.getVacancyReport(report);
+		} catch (RemoteException e) {
+			//TODO NEXT: Deal with this exception - possible propogate it?
+			//TODO NEXT: if null is returned handle this
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
