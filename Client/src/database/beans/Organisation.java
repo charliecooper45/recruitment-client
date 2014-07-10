@@ -40,10 +40,6 @@ public class Organisation implements Serializable, Comparable<Organisation> {
 		return organisationName;
 	}
 
-	public int getId() {
-		return organisationId;
-	}
-	
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}

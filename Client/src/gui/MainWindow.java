@@ -535,6 +535,11 @@ public class MainWindow extends JFrame {
 		panel.updateDisplayedVacancyReport(results);		
 	}
 	
+	public void updateDisplayedOrganisationReport(Map<Organisation, Map<Boolean, Integer>> results) {
+		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
+		panel.updateDisplayedOrganisationReport(results);	
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		TaskListPanel panel = taskListPanel;

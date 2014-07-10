@@ -35,7 +35,7 @@ public class AddEventDialogListener extends ClientListener implements ActionList
 			Organisation organisation = controller.getView().getEventDialogOrganisation();
 
 			if (organisation != null) {
-				List<Vacancy> vacancies = controller.getModel().getOrganisationVacancies(organisation.getId());
+				List<Vacancy> vacancies = controller.getModel().getOrganisationVacancies(organisation.getOrganisationId());
 				controller.getView().setDisplayedVacanciesInDialog(DialogType.ADD_EVENT, vacancies);
 			}
 		} else if (source instanceof JButton) {

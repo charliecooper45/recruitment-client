@@ -285,6 +285,10 @@ public class ClientView {
 		mainWindow.updateDisplayedVacancyReport(results);
 	}
 	
+	public void updateDisplayedOrganisationReport(Map<Organisation, Map<Boolean, Integer>> results) {
+		mainWindow.updateDisplayedOrganisationReport(results);
+	}
+	
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		mainWindow.updateDisplayedTasks(tasks);

@@ -160,7 +160,7 @@ public class AddVacancyDialog extends RecruitmentDialog {
 		}
 		
 		if(errorMessage.toString().trim().equals("")) {
-			return new Vacancy(-1, statusBoolean, vacancyName, date, notes, profilePath, organisation.getId(), organisation.getOrganisationName(), 
+			return new Vacancy(-1, statusBoolean, vacancyName, date, notes, profilePath, organisation.getOrganisationId(), organisation.getOrganisationName(), 
 					MainWindow.USER_ID, contact.getId(), contact.toString(), contact.getPhoneNumber());
 		} else {
 			// display an error message to the user

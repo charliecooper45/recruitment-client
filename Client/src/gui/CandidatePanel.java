@@ -426,7 +426,7 @@ public class CandidatePanel extends JPanel {
 		for (Organisation org : organisations) {
 			orgCmbBox.addItem(org);
 
-			if (org.getId() == candidate.getOrganisationId()) {
+			if (org.getOrganisationId() == candidate.getOrganisationId()) {
 				displayedOrg = org;
 			}
 		}

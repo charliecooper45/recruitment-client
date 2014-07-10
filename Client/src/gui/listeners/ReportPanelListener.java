@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 
 import controller.ClientController;
 import database.beans.EventType;
+import database.beans.Organisation;
 import database.beans.Report;
 import database.beans.ReportType;
 import database.beans.User;
@@ -46,6 +47,14 @@ public class ReportPanelListener extends ClientListener implements ActionListene
 						
 						if (results != null) {
 							controller.getView().updateDisplayedVacancyReport(results);
+						} else {
+							controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
+						}
+					} else if (report.getReportType() == ReportType.ORGANISATION) {
+						Map<Organisation, Map<Boolean, Integer>> results = controller.getModel().getOrganisationReport(report);
+						
+						if (results != null) {
+							controller.getView().updateDisplayedOrganisationReport(results);
 						} else {
 							controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
 						}

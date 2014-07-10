@@ -194,7 +194,7 @@ public class OrganisationPanel extends JPanel {
 		
 		orgNameLbl.setText(updatedOrganisation.getOrganisationName());
 		createdByLbl.setText(updatedOrganisation.getUserId());
-		orgIdLbl.setText(String.valueOf(updatedOrganisation.getId()));
+		orgIdLbl.setText(String.valueOf(updatedOrganisation.getOrganisationId()));
 		switchboardTxtFld.setText(updatedOrganisation.getPhoneNumber());
 		emailTxtFld.setText(updatedOrganisation.getEmailAddress());
 		websiteTxtFLd.setText(updatedOrganisation.getWebsite());

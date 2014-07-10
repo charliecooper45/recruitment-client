@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import database.beans.EventType;
+import database.beans.Organisation;
 import database.beans.Report;
 import database.beans.ReportType;
 import database.beans.Skill;
@@ -75,6 +76,11 @@ public class AdminPanel extends JPanel {
 	public void updateDisplayedVacancyReport(Map<Vacancy, Map<EventType, Integer>> results) {
 		tabbedPane.setSelectedIndex(2);
 		reportPanel.updateVacancyReport(results);
+	}
+	
+	public void updateDisplayedOrganisationReport(Map<Organisation, Map<Boolean, Integer>> results) {
+		tabbedPane.setSelectedIndex(2);
+		reportPanel.updateOrganisationReport(results);
 	}
 	
 	public User getSelectedUser() {

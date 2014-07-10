@@ -151,9 +151,9 @@ public class AddCandidateDialog extends RecruitmentDialog {
 		String surname = candidateSurnameTxtField.getText().trim();
 		String jobTitle = jobTitleTxtField.getText();
 		Organisation organisation = (Organisation) orgCmbBox.getSelectedItem();
-		if(organisation.getId() != -1) {
+		if(organisation.getOrganisationId() != -1) {
 			// the user has selected an organisation
-			organisationId = organisation.getId();
+			organisationId = organisation.getOrganisationId();
 			organisationName = organisation.getOrganisationName();
 		}
 		String phoneNo = phoneNoTxtField.getText();

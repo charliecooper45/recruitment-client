@@ -84,4 +84,5 @@ public interface ServerInterface extends Remote{
 	public boolean removeSkill(Skill skill) throws RemoteException;
 	public Map<User, Map<EventType, Integer>> getUserReport(Report report) throws RemoteException;
 	public Map<Vacancy, Map<EventType, Integer>> getVacancyReport(Report report) throws RemoteException;
+	public Map<Organisation, Map<Boolean, Integer>> getOrganisationReport(Report report) throws RemoteException;
 }

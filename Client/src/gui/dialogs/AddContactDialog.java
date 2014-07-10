@@ -141,7 +141,7 @@ public class AddContactDialog extends RecruitmentDialog {
 		}
 		
 		if(errorMessage.toString().trim().equals("")) {
-			return new Contact(-1, contactFirstName, contactSurname, jobTitle, phoneNumber, email, address, notes, organisation.getId(), MainWindow.USER_ID);
+			return new Contact(-1, contactFirstName, contactSurname, jobTitle, phoneNumber, email, address, notes, organisation.getOrganisationId(), MainWindow.USER_ID);
 		} else {
 			// display an error message to the user
 			JOptionPane.showMessageDialog(this, errorMessage.toString(), "Cannot add contact", JOptionPane.ERROR_MESSAGE);
