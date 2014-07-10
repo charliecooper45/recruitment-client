@@ -30,13 +30,13 @@ public class AddUserDialogListener extends ClientListener implements ActionListe
 		switch (button.getText()) {
 		case "Confirm":
 			User user = controller.getView().getUserDialogUser(DialogType.ADD_USER);
-			
+
 			boolean added = controller.getModel().addUser(user);
-			
-			if(added) {
+
+			if (added) {
 				controller.getView().hideDialog(DialogType.ADD_USER);
 				controller.getView().showMessageDialog(MessageDialogType.USER_ADDED);
-				
+
 				// update the displayed users
 				boolean userStatus = controller.getUserManagementPanelListener().getDisplayedUserStatus();
 				UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();

@@ -2,7 +2,6 @@ package gui.listeners;
 
 import gui.DialogType;
 import gui.ErrorDialogType;
-import gui.MainWindow;
 import gui.MessageDialogType;
 import interfaces.UserType;
 
@@ -45,7 +44,6 @@ public class RemoveUserDialogListener extends ClientListener implements ActionLi
 					boolean status = controller.getUserManagementPanelListener().getDisplayedUserStatus();
 					List<User> users = controller.getModel().getUsers(userType, status);
 					controller.getView().updateDisplayedUsers(users);
-
 					controller.getView().hideDialog(DialogType.REMOVE_USER);
 				} else {
 					controller.getView().showErrorDialog(ErrorDialogType.REMOVE_USER_FAILED);

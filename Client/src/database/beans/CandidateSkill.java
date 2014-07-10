@@ -7,6 +7,8 @@ import java.io.Serializable;
  * @author Charlie
  */
 public class CandidateSkill implements Serializable {
+	private static final long serialVersionUID = -544364977549509229L;
+	
 	private int candidateId;
 	private String skillName;
 	private String userId;

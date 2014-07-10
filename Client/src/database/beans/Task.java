@@ -1,7 +1,6 @@
 package database.beans;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -9,6 +8,7 @@ import java.util.Date;
  * @author Charlie
  */
 public class Task implements Serializable, Comparable<Task> {
+	private static final long serialVersionUID = -6125534226598651393L;
 	private int taskId;
 	private Date date;
 	private Date time;

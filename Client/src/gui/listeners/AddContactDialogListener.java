@@ -1,16 +1,13 @@
 package gui.listeners;
 
+import gui.DialogType;
 import gui.ErrorDialogType;
 import gui.MessageDialogType;
-import gui.DialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.InputStream;
 
 import javax.swing.JButton;
-
-import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 
 import controller.ClientController;
 import database.beans.Contact;
@@ -34,8 +31,6 @@ public class AddContactDialogListener extends ClientListener implements ActionLi
 
 			switch (text) {
 			case "Confirm":
-				InputStream inputStream;
-				RemoteInputStreamServer profileData = null;
 				Contact contact = controller.getView().getContactDialogContact(DialogType.ADD_CONTACT);
 
 				if (contact != null) {

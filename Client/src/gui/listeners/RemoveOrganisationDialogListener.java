@@ -37,15 +37,15 @@ public class RemoveOrganisationDialogListener extends ClientListener implements 
 			switch (text) {
 			case "Confirm":
 				boolean confirmed = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_ORGANISATION);
-				
-				if(confirmed) {
+
+				if (confirmed) {
 					Organisation organisation = controller.getView().getOrganisationDialogOrganisation(DialogType.REMOVE_ORGANISATION);
 					boolean deleted = controller.getModel().removeOrganisation(organisation);
-					
+
 					if (deleted) {
 						controller.getView().hideDialog(DialogType.REMOVE_ORGANISATION);
 						controller.getView().showMessageDialog(MessageDialogType.ORGANISATION_REMOVED);
-						
+
 						// check if the organisations or vacancies panel is displayed and then update if necessary
 						//TODO NEXT: update the contacts panel
 						//TODO NEXT: update the vacancies panel
@@ -53,7 +53,7 @@ public class RemoveOrganisationDialogListener extends ClientListener implements 
 						if (shownPanel == PanelType.ORGANISATIONS) {
 							List<Organisation> organisations = controller.getModel().getOrganisations();
 							controller.getView().updateOrganisationsPanel(organisations);
-						} else if(shownPanel == PanelType.VACANCIES){
+						} else if (shownPanel == PanelType.VACANCIES) {
 							User user = controller.getVacanciesPanelListener().getSelectedUser();
 							boolean open = controller.getVacanciesPanelListener().getDisplayOpenVacancies();
 							List<Vacancy> vacancies = controller.getModel().getVacancies(open, user);

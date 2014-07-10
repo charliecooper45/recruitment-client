@@ -9,6 +9,7 @@ import java.util.Date;
  * @author Charlie
  */
 public class Event implements Serializable {
+	private static final long serialVersionUID = -4989181452444903105L;
 	private int eventId;
 	private EventType eventType;
 	private Candidate candidate;

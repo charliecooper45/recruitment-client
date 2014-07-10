@@ -2,10 +2,7 @@ package gui.listeners;
 
 import gui.DialogType;
 import gui.ErrorDialogType;
-import gui.ConfirmDialogType;
 import gui.MessageDialogType;
-
-import database.beans.Candidate;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +13,7 @@ import java.net.URL;
 import javax.swing.JButton;
 
 import controller.ClientController;
+import database.beans.Candidate;
 
 /**
  * Listener for events on the add LinkedIn profile dialog.

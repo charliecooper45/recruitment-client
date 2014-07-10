@@ -7,6 +7,7 @@ import java.io.Serializable;
  * @author Charlie
  */
 public class Skill implements Serializable, Comparable<Skill> {
+	private static final long serialVersionUID = 3093701566194834356L;
 	private String skillName;
 	private String userId;
 	private int usage;

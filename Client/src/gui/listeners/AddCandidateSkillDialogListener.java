@@ -1,6 +1,5 @@
 package gui.listeners;
 
-import gui.ClientView;
 import gui.DialogType;
 import gui.ErrorDialogType;
 import gui.MainWindow;

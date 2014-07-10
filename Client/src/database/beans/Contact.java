@@ -7,6 +7,7 @@ import java.io.Serializable;
  * @author Charlie
  */
 public class Contact implements Serializable {
+	private static final long serialVersionUID = -3638409381626549139L;
 	private int id;
 	private String firstName;
 	private String surname;

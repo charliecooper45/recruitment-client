@@ -3,7 +3,6 @@ package gui.dialogs;
 import gui.MainWindow;
 import gui.Utils;
 
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
@@ -21,7 +20,6 @@ import javax.swing.JTextField;
 
 import database.beans.Contact;
 import database.beans.Organisation;
-import database.beans.Vacancy;
 
 /**
  * Dialog that allows the user to add a contact.

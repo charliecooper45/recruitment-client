@@ -20,21 +20,21 @@ import database.beans.User;
 public class UserManagementPanelListener extends ClientListener implements ActionListener {
 	private UserType displayedUserType = null;
 	private boolean displayedUserStatus = false;
-	
+
 	public UserManagementPanelListener(ClientController controller) {
 		super(controller);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-		
-		if(source instanceof JComboBox<?>) {
+
+		if (source instanceof JComboBox<?>) {
 			List<User> users = null;
 			JComboBox<?> comboBox = (JComboBox<?>) source;
 			String selectedItem = (String) comboBox.getSelectedItem();
-			
-			switch(selectedItem) {
+
+			switch (selectedItem) {
 			case "All Users":
 				displayedUserType = null;
 				break;
@@ -51,39 +51,39 @@ public class UserManagementPanelListener extends ClientListener implements Actio
 				displayedUserStatus = true;
 				break;
 			}
-			
+
 			users = controller.getModel().getUsers(displayedUserType, displayedUserStatus);
 			controller.getView().updateDisplayedUsers(users);
-		} else if(source instanceof JButton) {
+		} else if (source instanceof JButton) {
 			JButton button = (JButton) source;
 			String text = button.getText();
-			if(text.equals("Add User")) {
+			if (text.equals("Add User")) {
 				controller.getView().showDialog(DialogType.ADD_USER);
-			} else if(text.equals("Remove User")) {
+			} else if (text.equals("Remove User")) {
 				UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
 				boolean status = controller.getUserManagementPanelListener().getDisplayedUserStatus();
 				List<User> users = controller.getModel().getUsers(userType, status);
 				controller.getView().setDisplayedUsersInDialog(DialogType.REMOVE_USER, users);
 				controller.getView().showDialog(DialogType.REMOVE_USER);
-			} else if(text.equals("Edit User")) {
+			} else if (text.equals("Edit User")) {
 				User user = controller.getView().getAdminPanelUser();
-				
+
 				// update the user if there is one selected in the GUI
-				if(user != null)
+				if (user != null)
 					user = controller.getModel().getUser(user.getUserId());
-				
-				if(user != null) {
+
+				if (user != null) {
 					controller.getView().setDisplayedUserInDialog(DialogType.EDIT_USER, user);
 					controller.getView().showDialog(DialogType.EDIT_USER);
 				}
 			}
 		}
 	}
-	
+
 	public UserType getDisplayedUserType() {
 		return displayedUserType;
 	}
-	
+
 	public boolean getDisplayedUserStatus() {
 		return displayedUserStatus;
 	}

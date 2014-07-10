@@ -1,6 +1,5 @@
 package gui;
 
-import gui.TopMenuPanel.MenuPanel;
 import gui.listeners.TopMenuListener;
 import interfaces.UserType;
 

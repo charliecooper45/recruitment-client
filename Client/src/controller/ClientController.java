@@ -94,7 +94,6 @@ public class ClientController {
 	public ClientController(ClientView view, ClientModel model) {
 		this.view = view;
 		this.model = model;
-		this.view.setController(this);
 
 		// create the listeners
 		loginListener = new LoginListener(this);

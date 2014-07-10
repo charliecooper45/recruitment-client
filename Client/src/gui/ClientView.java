@@ -64,7 +64,6 @@ import database.beans.Vacancy;
  * @author Charlie
  */
 public class ClientView {
-	private ClientController controller;
 	private LoginWindow loginWindow;
 	private MainWindow mainWindow;
 
@@ -407,11 +406,7 @@ public class ClientView {
 		return mainWindow.getUserDialogUser(dialogType);
 	}
 	
-	// methods to set listeners and controller
-	public void setController(ClientController controller) {
-		this.controller = controller;
-	}
-	
+	// methods to set listeners 
 	public void setMenuListener(ActionListener actionListener) {
 		mainWindow.setMenuListener(actionListener);
 	}
@@ -535,6 +530,7 @@ public class ClientView {
 			public void run() {
 				ClientModel model = new ClientModel();
 				ClientView view = new ClientView();
+				@SuppressWarnings("unused")
 				ClientController controller = new ClientController(view, model);
 			}
 		});

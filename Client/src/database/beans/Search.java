@@ -9,6 +9,7 @@ import java.util.Set;
  * @author Charlie
  */
 public class Search implements Serializable {
+	private static final long serialVersionUID = -2751366584954356986L;
 	private String name;
 	private String jobTitle;
 	private Set<Skill> skills = null;

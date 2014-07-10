@@ -21,7 +21,7 @@ public class MenuListener extends ClientListener implements ActionListener {
 	public MenuListener(ClientController controller) {
 		super(controller);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		List<Organisation> organisations = null;

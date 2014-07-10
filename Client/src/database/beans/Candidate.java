@@ -7,6 +7,8 @@ import java.io.Serializable;
  * @author Charlie
  */
 public class Candidate implements Serializable {
+	private static final long serialVersionUID = 6758433439445927217L;
+	
 	private int id;
 	private String firstName;
 	private String surname;

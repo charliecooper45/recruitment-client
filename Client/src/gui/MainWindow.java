@@ -91,7 +91,6 @@ import database.beans.Task;
 import database.beans.User;
 import database.beans.Vacancy;
 
-//TODO NEXT: sort out resizing/minimum size
 /**
  * Main window that displays once the user has logged in
  * @author Charlie
@@ -504,42 +503,42 @@ public class MainWindow extends JFrame {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
 		return panel.getSelectedUser();
 	}
-	
+
 	public void updateDisplayedSkills(List<Skill> skills) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
 		panel.updateDisplayedSkills(skills);
 	}
-	
+
 	public Skill getSkillPanelSkill() {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
 		return panel.getSelectedSkill();
 	}
-	
+
 	public Report getReportPanelReport() {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
 		return panel.getReport();
 	}
-	
+
 	public void changeDisplayedReportTable(ReportType reportType) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
-		panel.changeDisplayedTable(reportType);		
+		panel.changeDisplayedTable(reportType);
 	}
-	
+
 	public void updateDisplayedUserReport(Map<User, Map<EventType, Integer>> results) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
-		panel.updateDisplayedUserReport(results);		
+		panel.updateDisplayedUserReport(results);
 	}
-	
+
 	public void updateDisplayedVacancyReport(Map<Vacancy, Map<EventType, Integer>> results) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
-		panel.updateDisplayedVacancyReport(results);		
+		panel.updateDisplayedVacancyReport(results);
 	}
-	
+
 	public void updateDisplayedOrganisationReport(Map<Organisation, Map<Boolean, Integer>> results) {
 		AdminPanel panel = (AdminPanel) centrePanels.get(PanelType.ADMIN);
-		panel.updateDisplayedOrganisationReport(results);	
+		panel.updateDisplayedOrganisationReport(results);
 	}
-	
+
 	// TaskListPanel methods
 	public void updateDisplayedTasks(List<Task> tasks) {
 		TaskListPanel panel = taskListPanel;
@@ -673,7 +672,7 @@ public class MainWindow extends JFrame {
 				return true;
 			}
 			break;
-			
+
 		}
 		return false;
 	}
@@ -725,7 +724,7 @@ public class MainWindow extends JFrame {
 	public void setDisplayedUserInDialog(DialogType dialog, User user) {
 		dialogs.get(dialog).setDisplayedUser(user);
 	}
-	
+
 	public void displayFileInDialog(DialogType menuDialog, File file) {
 		RecruitmentDialog dialog = dialogs.get(menuDialog);
 		dialog.setDisplayedFile(file);
@@ -750,6 +749,8 @@ public class MainWindow extends JFrame {
 		case REMOVE_ORGANISATION:
 			RemoveOrganisationDialog removeOrgDialog = (RemoveOrganisationDialog) dialogs.get(DialogType.REMOVE_ORGANISATION);
 			return removeOrgDialog.getOrganisation();
+		default:
+			break;
 		}
 		return null;
 	}
@@ -762,6 +763,8 @@ public class MainWindow extends JFrame {
 		case REMOVE_CANDIDATE:
 			RemoveCandidateDialog removeCandidateDialog = (RemoveCandidateDialog) dialogs.get(DialogType.REMOVE_CANDIDATE);
 			return removeCandidateDialog.getCandidate();
+		default:
+			break;
 		}
 		return null;
 	}
@@ -774,17 +777,15 @@ public class MainWindow extends JFrame {
 		case REMOVE_CONTACT:
 			RemoveContactDialog removeContactDialog = (RemoveContactDialog) dialogs.get(DialogType.REMOVE_CONTACT);
 			return removeContactDialog.getContact();
+		default:
+			break;
 		}
 		return null;
 	}
 
 	public String getLinkedInProfileDialogUrl(DialogType dialog) {
-		switch (dialog) {
-		case CANDIDATE_ADD_LINKEDIN:
-			AddLinkedInDialog linkedInDialog = (AddLinkedInDialog) dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN);
-			return linkedInDialog.getProfileUrl();
-		}
-		return "";
+		AddLinkedInDialog linkedInDialog = (AddLinkedInDialog) dialogs.get(DialogType.CANDIDATE_ADD_LINKEDIN);
+		return linkedInDialog.getProfileUrl();
 	}
 
 	public Skill getSkillDialogSkill(DialogType dialog) {
@@ -798,6 +799,8 @@ public class MainWindow extends JFrame {
 		case ADD_SKILL:
 			AddSkillDialog addSkillDialog = (AddSkillDialog) dialogs.get(DialogType.ADD_SKILL);
 			return addSkillDialog.getSelectedSkill();
+		default:
+			break;
 		}
 		return null;
 	}

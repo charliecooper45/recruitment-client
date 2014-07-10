@@ -8,6 +8,7 @@ import java.util.Date;
  * @author Charlie
  */
 public class Report implements Serializable {
+	private static final long serialVersionUID = 4498045330036970956L;
 	private ReportType reportType;
 	private Date fromDate;
 	private Date toDate;

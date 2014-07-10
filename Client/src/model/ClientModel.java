@@ -56,7 +56,6 @@ public class ClientModel implements ServerInterface {
 
 	@Override
 	public List<Candidate> getCandidates() {
-		//TODO NEXT: Not currently used!
 		try {
 			return SERVER.getCandidates();
 		} catch (RemoteException e) {
@@ -73,7 +72,6 @@ public class ClientModel implements ServerInterface {
 			return vacancies;
 		} catch (RemoteException e) {
 			//TODO NEXT: Deal with this exception - possible propogate it?
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -105,8 +103,6 @@ public class ClientModel implements ServerInterface {
 			e.printStackTrace();
 			return null;
 		}
-		
-		//TODO NEXT: if null is returned the vacancy has been deleted, handle this
 	}
 
 	@Override

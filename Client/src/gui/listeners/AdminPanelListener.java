@@ -19,7 +19,7 @@ public class AdminPanelListener extends ClientListener {
 	public AdminPanelListener(ClientController controller) {
 		super(controller);
 	}
-	
+
 	@Override
 	public void mousePressed(MouseEvent event) {
 		Object source = event.getSource();
@@ -28,8 +28,8 @@ public class AdminPanelListener extends ClientListener {
 			JTabbedPane tabbedPane = (JTabbedPane) source;
 
 			int index = tabbedPane.getSelectedIndex();
-			
-			switch(index) {
+
+			switch (index) {
 			case 0:
 				UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
 				boolean status = controller.getUserManagementPanelListener().getDisplayedUserStatus();
@@ -41,7 +41,7 @@ public class AdminPanelListener extends ClientListener {
 				controller.getView().updateDisplayedSkills(skills);
 				break;
 			}
-			
+
 		}
 	}
 }

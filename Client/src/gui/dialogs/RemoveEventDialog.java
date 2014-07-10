@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import database.beans.Event;
-import database.beans.Skill;
 
 /**
  * Dialog that allows the user to remove an event.

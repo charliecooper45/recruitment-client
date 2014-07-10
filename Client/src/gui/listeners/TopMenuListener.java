@@ -4,7 +4,6 @@ import gui.PanelType;
 import gui.TopMenuPanel.MenuPanel;
 
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import controller.ClientController;
@@ -23,17 +22,17 @@ public class TopMenuListener extends ClientListener {
 	public void mouseClicked(MouseEvent e) {
 		List<Vacancy> vacancies = null;
 		Object source = e.getSource();
-		
-		if(source instanceof MenuPanel) {
+
+		if (source instanceof MenuPanel) {
 			List<User> users = null;
 			MenuPanel panel = (MenuPanel) source;
-			
+
 			// set the selected menu panel
 			controller.getView().setSelectedTopMenuPanel(panel);
-			
+
 			// update and show the correct centre panel
 			PanelType type = panel.getPanelType();
-			
+
 			switch (type) {
 			case ADMIN:
 				users = controller.getModel().getUsers(null, false);
@@ -44,7 +43,7 @@ public class TopMenuListener extends ClientListener {
 				controller.getView().showOrganisationsPanel(organisations);
 				break;
 			case PIPELINE:
-				controller.getView().showCandidatePipeline(); 
+				controller.getView().showCandidatePipeline();
 				break;
 			case SEARCH:
 				List<Skill> skills = controller.getModel().getSkills();

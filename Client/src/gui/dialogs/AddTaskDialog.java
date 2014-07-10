@@ -8,8 +8,6 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
-import javafx.scene.text.Text;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;

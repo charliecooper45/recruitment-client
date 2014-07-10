@@ -98,9 +98,6 @@ public class CandidatePanel extends JPanel {
 	// the displayed candidate
 	private Candidate candidate;
 
-	// the displayed organisations
-	private List<Organisation> organisations;
-
 	// the skills in the skillsTbl
 	private List<CandidateSkill> skills;
 
@@ -418,7 +415,6 @@ public class CandidatePanel extends JPanel {
 	}
 
 	private void setDisplayedOrganisations(List<Organisation> organisations) {
-		this.organisations = organisations;
 		Organisation displayedOrg = null;
 		orgCmbBox.removeAllItems();
 
