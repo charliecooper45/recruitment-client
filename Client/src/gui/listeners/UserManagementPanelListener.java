@@ -5,6 +5,7 @@ import interfaces.UserType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -29,54 +30,58 @@ public class UserManagementPanelListener extends ClientListener implements Actio
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 
-		if (source instanceof JComboBox<?>) {
-			List<User> users = null;
-			JComboBox<?> comboBox = (JComboBox<?>) source;
-			String selectedItem = (String) comboBox.getSelectedItem();
+		try {
+			if (source instanceof JComboBox<?>) {
+				List<User> users = null;
+				JComboBox<?> comboBox = (JComboBox<?>) source;
+				String selectedItem = (String) comboBox.getSelectedItem();
 
-			switch (selectedItem) {
-			case "All Users":
-				displayedUserType = null;
-				break;
-			case "Administrators":
-				displayedUserType = UserType.ADMINISTRATOR;
-				break;
-			case "Standard Users":
-				displayedUserType = UserType.STANDARD;
-				break;
-			case "Any":
-				displayedUserStatus = false;
-				break;
-			case "Active":
-				displayedUserStatus = true;
-				break;
-			}
+				switch (selectedItem) {
+				case "All Users":
+					displayedUserType = null;
+					break;
+				case "Administrators":
+					displayedUserType = UserType.ADMINISTRATOR;
+					break;
+				case "Standard Users":
+					displayedUserType = UserType.STANDARD;
+					break;
+				case "Any":
+					displayedUserStatus = false;
+					break;
+				case "Active":
+					displayedUserStatus = true;
+					break;
+				}
 
-			users = controller.getModel().getUsers(displayedUserType, displayedUserStatus);
-			controller.getView().updateDisplayedUsers(users);
-		} else if (source instanceof JButton) {
-			JButton button = (JButton) source;
-			String text = button.getText();
-			if (text.equals("Add User")) {
-				controller.getView().showDialog(DialogType.ADD_USER);
-			} else if (text.equals("Remove User")) {
-				UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
-				boolean status = controller.getUserManagementPanelListener().getDisplayedUserStatus();
-				List<User> users = controller.getModel().getUsers(userType, status);
-				controller.getView().setDisplayedUsersInDialog(DialogType.REMOVE_USER, users);
-				controller.getView().showDialog(DialogType.REMOVE_USER);
-			} else if (text.equals("Edit User")) {
-				User user = controller.getView().getAdminPanelUser();
+				users = controller.getModel().getUsers(displayedUserType, displayedUserStatus);
+				controller.getView().updateDisplayedUsers(users);
+			} else if (source instanceof JButton) {
+				JButton button = (JButton) source;
+				String text = button.getText();
+				if (text.equals("Add User")) {
+					controller.getView().showDialog(DialogType.ADD_USER);
+				} else if (text.equals("Remove User")) {
+					UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
+					boolean status = controller.getUserManagementPanelListener().getDisplayedUserStatus();
+					List<User> users;
+					users = controller.getModel().getUsers(userType, status);
+					controller.getView().setDisplayedUsersInDialog(DialogType.REMOVE_USER, users);
+					controller.getView().showDialog(DialogType.REMOVE_USER);
+				} else if (text.equals("Edit User")) {
+					User user = controller.getView().getAdminPanelUser();
 
-				// update the user if there is one selected in the GUI
-				if (user != null)
-					user = controller.getModel().getUser(user.getUserId());
+					// update the user if there is one selected in the GUI
 
-				if (user != null) {
-					controller.getView().setDisplayedUserInDialog(DialogType.EDIT_USER, user);
-					controller.getView().showDialog(DialogType.EDIT_USER);
+					if (user != null) {
+						user = controller.getModel().getUser(user.getUserId());
+						controller.getView().setDisplayedUserInDialog(DialogType.EDIT_USER, user);
+						controller.getView().showDialog(DialogType.EDIT_USER);
+					}
 				}
 			}
+		} catch (RemoteException ex) {
+			controller.exitApplication();
 		}
 	}
 

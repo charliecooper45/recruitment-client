@@ -7,6 +7,7 @@ import gui.ConfirmDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 
@@ -34,30 +35,33 @@ public class RemoveCandidateDialogListener extends ClientListener implements Act
 			switch (text) {
 			case "Confirm":
 				boolean confirmed = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_CANDIDATE);
-				
-				if(confirmed) {
+
+				if (confirmed) {
 					Candidate candidate = controller.getView().getCandidateDialogCandidate(DialogType.REMOVE_CANDIDATE);
-					boolean deleted = controller.getModel().removeCandidate(candidate);
-					
-					if(deleted) {
-						controller.getView().hideDialog(DialogType.REMOVE_CANDIDATE);
-						controller.getView().showMessageDialog(MessageDialogType.REMOVE_CANDIDATE);
-						
-						// Check if the candidate pipeline panel is displayed and then update if necessary
-						//TODO NEXT: implement this
-						/*
-						PanelType shownPanel = controller.getView().getDisplayedPanel();
-						if (shownPanel == PanelType.CANDIDATE) {
-							CandidatesPanelListener listener = controller.getCandidatePipelinePanelListener();
-							List<Candidate> candidates = controller.getModel().getCandidates();
-							controller.getView().updateCandidatesPanel(candidates);
+					boolean deleted;
+					try {
+						deleted = controller.getModel().removeCandidate(candidate);
+						if (deleted) {
+							controller.getView().hideDialog(DialogType.REMOVE_CANDIDATE);
+							controller.getView().showMessageDialog(MessageDialogType.REMOVE_CANDIDATE);
+
+							// Check if the candidate pipeline panel is displayed and then update if necessary
+							//TODO NEXT: implement this
+							/*
+							PanelType shownPanel = controller.getView().getDisplayedPanel();
+							if (shownPanel == PanelType.CANDIDATE) {
+								CandidatesPanelListener listener = controller.getCandidatePipelinePanelListener();
+								List<Candidate> candidates = controller.getModel().getCandidates();
+								controller.getView().updateCandidatesPanel(candidates);
+							}
+							*/
+						} else {
+							controller.getView().showErrorDialog(ErrorDialogType.REMOVE_CANDIDATE_FAIL);
 						}
-						*/
+					} catch (RemoteException e) {
+						controller.exitApplication();
 					}
-					else {
-						controller.getView().showErrorDialog(ErrorDialogType.REMOVE_CANDIDATE_FAIL);
-					}
-				} 
+				}
 				break;
 			case "Cancel ":
 				controller.getView().hideDialog(DialogType.REMOVE_CANDIDATE);

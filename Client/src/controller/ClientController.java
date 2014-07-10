@@ -1,6 +1,7 @@
 package controller;
 
 import gui.ClientView;
+import gui.ErrorDialogType;
 import gui.listeners.AddCandidateDialogListener;
 import gui.listeners.AddContactDialogListener;
 import gui.listeners.AddEventDialogListener;
@@ -175,6 +176,11 @@ public class ClientController {
 		view.setAddSkillDialogListener(addSkillDialogListener);
 	}
 
+	public void exitApplication() {
+		view.showErrorDialog(ErrorDialogType.SERVER_FAIL);
+		System.exit(1);
+	}
+	
 	public Path storeTempFile(InputStream inStream, String name) {
 		// write the file to a temp file
 		try {

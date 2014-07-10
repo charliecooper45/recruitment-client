@@ -4,6 +4,7 @@ import gui.MainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import controller.ClientController;
@@ -24,8 +25,12 @@ public class CandidatePipelinePanelListener extends ClientListener implements Ac
 		boolean[] options = controller.getView().getCandidatePipelinePanelOptions();
 		
 		// retrieve the appropriate events off the server 
-		List<Event> events = controller.getModel().getEvents(options[0], options[1], options[2], options[3], options[4], MainWindow.USER_ID);
-		
-		controller.getView().updateCandidatePipelinePanel(events);
+		List<Event> events;
+		try {
+			events = controller.getModel().getEvents(options[0], options[1], options[2], options[3], options[4], MainWindow.USER_ID);
+			controller.getView().updateCandidatePipelinePanel(events);
+		} catch (RemoteException e) {
+			controller.exitApplication();
+		}
 	}
 }

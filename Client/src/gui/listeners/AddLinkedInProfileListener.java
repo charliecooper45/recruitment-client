@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 
@@ -54,6 +55,8 @@ public class AddLinkedInProfileListener extends ClientListener implements Action
 					}
 				} catch (MalformedURLException | URISyntaxException e1) {
 					controller.getView().showErrorDialog(ErrorDialogType.ADD_LINKEDIN_FAIL);
+				} catch (RemoteException e1) {
+					controller.exitApplication();
 				}
 				break;
 			case "Cancel ":

@@ -7,6 +7,7 @@ import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -26,26 +27,30 @@ public class SkillsManagementPanelListener extends ClientListener implements Act
 			JButton button = (JButton) source;
 			String text = button.getText();
 
-			if (text.equals("Add Skill")) {
-				controller.getView().showDialog(DialogType.ADD_SKILL);
-			} else if (text.equals("Remove Skill")) {
-				Skill skill = controller.getView().getSkillPanelSkill();
+			try {
+				if (text.equals("Add Skill")) {
+					controller.getView().showDialog(DialogType.ADD_SKILL);
+				} else if (text.equals("Remove Skill")) {
+					Skill skill = controller.getView().getSkillPanelSkill();
 
-				if (skill != null) {
-					boolean remove = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_SKILL);
+					if (skill != null) {
+						boolean remove = controller.getView().showConfirmDialog(ConfirmDialogType.REMOVE_SKILL);
 
-					if (remove) {
-						boolean removed = controller.getModel().removeSkill(skill);
-						
-						if(removed) {
-							controller.getView().showMessageDialog(MessageDialogType.SKILL_REMOVED);
-							List<Skill> skills = controller.getModel().getSkills();
-							controller.getView().updateDisplayedSkills(skills);
-						} else {
-							controller.getView().showErrorDialog(ErrorDialogType.REMOVE_SKILL_FAIL);
+						if (remove) {
+							boolean removed = controller.getModel().removeSkill(skill);
+
+							if (removed) {
+								controller.getView().showMessageDialog(MessageDialogType.SKILL_REMOVED);
+								List<Skill> skills = controller.getModel().getSkills();
+								controller.getView().updateDisplayedSkills(skills);
+							} else {
+								controller.getView().showErrorDialog(ErrorDialogType.REMOVE_SKILL_FAIL);
+							}
 						}
 					}
 				}
+			} catch (RemoteException e1) {
+				controller.exitApplication();
 			}
 		}
 	}

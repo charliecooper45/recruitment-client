@@ -7,6 +7,7 @@ import interfaces.UserType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -31,25 +32,31 @@ public class RemoveUserDialogListener extends ClientListener implements ActionLi
 			JButton button = (JButton) source;
 
 			String text = button.getText();
-			if (text.equals("Confirm")) {
-				User user = controller.getView().getUserDialogUser(DialogType.REMOVE_USER);
 
-				boolean removed = controller.getModel().removeUser(user);
+			try {
+				if (text.equals("Confirm")) {
+					User user = controller.getView().getUserDialogUser(DialogType.REMOVE_USER);
 
-				if (removed) {
-					controller.getView().showMessageDialog(MessageDialogType.USER_REMOVED);
+					boolean removed = controller.getModel().removeUser(user);
 
-					// update the displayed users
-					UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
-					boolean status = controller.getUserManagementPanelListener().getDisplayedUserStatus();
-					List<User> users = controller.getModel().getUsers(userType, status);
-					controller.getView().updateDisplayedUsers(users);
+					if (removed) {
+						controller.getView().showMessageDialog(MessageDialogType.USER_REMOVED);
+
+						// update the displayed users
+						UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
+						boolean status = controller.getUserManagementPanelListener().getDisplayedUserStatus();
+						List<User> users;
+						users = controller.getModel().getUsers(userType, status);
+						controller.getView().updateDisplayedUsers(users);
+						controller.getView().hideDialog(DialogType.REMOVE_USER);
+					} else {
+						controller.getView().showErrorDialog(ErrorDialogType.REMOVE_USER_FAILED);
+					}
+				} else if (text.equals("Cancel ")) {
 					controller.getView().hideDialog(DialogType.REMOVE_USER);
-				} else {
-					controller.getView().showErrorDialog(ErrorDialogType.REMOVE_USER_FAILED);
 				}
-			} else if (text.equals("Cancel ")) {
-				controller.getView().hideDialog(DialogType.REMOVE_USER);
+			} catch (RemoteException e1) {
+				controller.exitApplication();
 			}
 		}
 	}

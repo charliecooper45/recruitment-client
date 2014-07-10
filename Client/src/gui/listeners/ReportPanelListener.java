@@ -4,6 +4,7 @@ import gui.ErrorDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -30,36 +31,40 @@ public class ReportPanelListener extends ClientListener implements ActionListene
 			JButton button = (JButton) source;
 			String text = button.getText();
 
-			if (text.equals("Get Report")) {
-				Report report = controller.getView().getReportPanelReport();
+			try {
+				if (text.equals("Get Report")) {
+					Report report = controller.getView().getReportPanelReport();
 
-				if (report != null) {
-					if (report.getReportType() == ReportType.CONSULTANT) {
-						Map<User, Map<EventType, Integer>> results = controller.getModel().getUserReport(report);
+					if (report != null) {
+						if (report.getReportType() == ReportType.CONSULTANT) {
+							Map<User, Map<EventType, Integer>> results = controller.getModel().getUserReport(report);
 
-						if (results != null) {
-							controller.getView().updateDisplayedUserReport(results);
-						} else {
-							controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
-						}
-					} else if (report.getReportType() == ReportType.VACANCY) {
-						Map<Vacancy, Map<EventType, Integer>> results = controller.getModel().getVacancyReport(report);
-						
-						if (results != null) {
-							controller.getView().updateDisplayedVacancyReport(results);
-						} else {
-							controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
-						}
-					} else if (report.getReportType() == ReportType.ORGANISATION) {
-						Map<Organisation, Map<Boolean, Integer>> results = controller.getModel().getOrganisationReport(report);
-						
-						if (results != null) {
-							controller.getView().updateDisplayedOrganisationReport(results);
-						} else {
-							controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
+							if (results != null) {
+								controller.getView().updateDisplayedUserReport(results);
+							} else {
+								controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
+							}
+						} else if (report.getReportType() == ReportType.VACANCY) {
+							Map<Vacancy, Map<EventType, Integer>> results = controller.getModel().getVacancyReport(report);
+
+							if (results != null) {
+								controller.getView().updateDisplayedVacancyReport(results);
+							} else {
+								controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
+							}
+						} else if (report.getReportType() == ReportType.ORGANISATION) {
+							Map<Organisation, Map<Boolean, Integer>> results = controller.getModel().getOrganisationReport(report);
+
+							if (results != null) {
+								controller.getView().updateDisplayedOrganisationReport(results);
+							} else {
+								controller.getView().showErrorDialog(ErrorDialogType.GET_REPORT_FAIL);
+							}
 						}
 					}
 				}
+			} catch (RemoteException e1) {
+				controller.exitApplication();
 			}
 		} else if (source instanceof JComboBox<?>) {
 			JComboBox<?> cmbBox = (JComboBox<?>) source;

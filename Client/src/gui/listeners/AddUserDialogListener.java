@@ -7,6 +7,7 @@ import interfaces.UserType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -27,28 +28,33 @@ public class AddUserDialogListener extends ClientListener implements ActionListe
 	public void actionPerformed(ActionEvent e) {
 		JButton button = (JButton) e.getSource();
 
-		switch (button.getText()) {
-		case "Confirm":
-			User user = controller.getView().getUserDialogUser(DialogType.ADD_USER);
+		try {
+			switch (button.getText()) {
+			case "Confirm":
+				User user = controller.getView().getUserDialogUser(DialogType.ADD_USER);
 
-			boolean added = controller.getModel().addUser(user);
+				boolean added = controller.getModel().addUser(user);
 
-			if (added) {
+				if (added) {
+					controller.getView().hideDialog(DialogType.ADD_USER);
+					controller.getView().showMessageDialog(MessageDialogType.USER_ADDED);
+
+					// update the displayed users
+					boolean userStatus = controller.getUserManagementPanelListener().getDisplayedUserStatus();
+					UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
+					List<User> users;
+					users = controller.getModel().getUsers(userType, userStatus);
+					controller.getView().updateDisplayedUsers(users);
+				} else {
+					controller.getView().showErrorDialog(ErrorDialogType.ADD_USER_FAIL);
+				}
+				break;
+			case "Cancel ":
 				controller.getView().hideDialog(DialogType.ADD_USER);
-				controller.getView().showMessageDialog(MessageDialogType.USER_ADDED);
-
-				// update the displayed users
-				boolean userStatus = controller.getUserManagementPanelListener().getDisplayedUserStatus();
-				UserType userType = controller.getUserManagementPanelListener().getDisplayedUserType();
-				List<User> users = controller.getModel().getUsers(userType, userStatus);
-				controller.getView().updateDisplayedUsers(users);
-			} else {
-				controller.getView().showErrorDialog(ErrorDialogType.ADD_USER_FAIL);
+				break;
 			}
-			break;
-		case "Cancel ":
-			controller.getView().hideDialog(DialogType.ADD_USER);
-			break;
+		} catch (RemoteException ex) {
+			controller.exitApplication();
 		}
 	}
 }

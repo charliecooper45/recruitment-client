@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 
@@ -72,6 +73,8 @@ public class AddCandidateDialogListener extends ClientListener implements Action
 					} catch (FileNotFoundException e1) {
 						// TODO NEXT B: handle exception
 						e1.printStackTrace();
+					} catch (RemoteException e1) {
+						controller.exitApplication();
 					}
 				}
 				break;

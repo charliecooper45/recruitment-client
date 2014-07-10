@@ -6,6 +6,7 @@ import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -30,31 +31,33 @@ public class RemoveEventDialogListener extends ClientListener implements ActionL
 		if (source instanceof JButton) {
 			JButton button = (JButton) source;
 			String text = button.getText().trim();
-			
-			switch (text) {
-			case "Confirm":
-				Event oldEvent = controller.getView().getEventDialogEvent(DialogType.REMOVE_EVENT);
-				boolean removed = controller.getModel().removeEvent(oldEvent.getEventId());
-				
-				if(removed) {
-					controller.getView().showMessageDialog(MessageDialogType.EVENT_REMOVED);
-					controller.getView().hideDialog(DialogType.REMOVE_EVENT);
-					
-					// update the events from the server
-					Candidate candidate = controller.getView().getCandidatePanelCandidate();
-					List<Event> events = controller.getModel().getCandidateEvents(candidate.getId());
+			try {
+				switch (text) {
+				case "Confirm":
+					Event oldEvent = controller.getView().getEventDialogEvent(DialogType.REMOVE_EVENT);
+					boolean removed = controller.getModel().removeEvent(oldEvent.getEventId());
 
-					// update the view to display the events
-					controller.getView().updateDisplayedCandidateEvents(events);
-				} else {
-					controller.getView().showErrorDialog(ErrorDialogType.REMOVE_EVENT_FAIL);
+					if (removed) {
+						controller.getView().showMessageDialog(MessageDialogType.EVENT_REMOVED);
+						controller.getView().hideDialog(DialogType.REMOVE_EVENT);
+
+						// update the events from the server
+						Candidate candidate = controller.getView().getCandidatePanelCandidate();
+						List<Event> events = controller.getModel().getCandidateEvents(candidate.getId());
+
+						// update the view to display the events
+						controller.getView().updateDisplayedCandidateEvents(events);
+					} else {
+						controller.getView().showErrorDialog(ErrorDialogType.REMOVE_EVENT_FAIL);
+					}
+					break;
+				case "Cancel":
+					controller.getView().hideDialog(DialogType.REMOVE_EVENT);
+					break;
 				}
-				break;
-			case "Cancel":
-				controller.getView().hideDialog(DialogType.REMOVE_EVENT);
-				break;
+			} catch (RemoteException e1) {
+				controller.exitApplication();
 			}
 		}
 	}
-
 }

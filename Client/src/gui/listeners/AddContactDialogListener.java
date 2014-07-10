@@ -6,6 +6,7 @@ import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 
@@ -35,24 +36,29 @@ public class AddContactDialogListener extends ClientListener implements ActionLi
 
 				if (contact != null) {
 					// the contact is valid and can be added
-					boolean contactAdded = controller.getModel().addContact(contact);
+					boolean contactAdded;
+					try {
+						contactAdded = controller.getModel().addContact(contact);
 
-					if (contactAdded) {
-						controller.getView().hideDialog(DialogType.ADD_CONTACT);
-						controller.getView().showMessageDialog(MessageDialogType.CONTACT_ADDED);
+						if (contactAdded) {
+							controller.getView().hideDialog(DialogType.ADD_CONTACT);
+							controller.getView().showMessageDialog(MessageDialogType.CONTACT_ADDED);
 
-						//TODO NEXT: if the organisation`s contacts are displayed then update them
-						/*
-						// check if the vacancies panel is displayed and then update if necessary
-						PanelType shownPanel = controller.getView().getDisplayedPanel();
-						if (shownPanel == PanelType.VACANCIES) {
-							VacanciesPanelListener listener = controller.getVacanciesPanelListener();
-							List<Vacancy> vacancies = controller.getModel().getVacancies(listener.getDisplayOpenVacancies(), listener.getSelectedUser());
-							controller.getView().updateVacanciesPanel(vacancies);
+							//TODO NEXT: if the organisation`s contacts are displayed then update them
+							/*
+							// check if the vacancies panel is displayed and then update if necessary
+							PanelType shownPanel = controller.getView().getDisplayedPanel();
+							if (shownPanel == PanelType.VACANCIES) {
+								VacanciesPanelListener listener = controller.getVacanciesPanelListener();
+								List<Vacancy> vacancies = controller.getModel().getVacancies(listener.getDisplayOpenVacancies(), listener.getSelectedUser());
+								controller.getView().updateVacanciesPanel(vacancies);
+							}
+							*/
+						} else {
+							controller.getView().showErrorDialog(ErrorDialogType.ADD_CONTACT_FAIL);
 						}
-						*/
-					} else {
-						controller.getView().showErrorDialog(ErrorDialogType.ADD_CONTACT_FAIL);
+					} catch (RemoteException e1) {
+						controller.exitApplication();
 					}
 				}
 				break;

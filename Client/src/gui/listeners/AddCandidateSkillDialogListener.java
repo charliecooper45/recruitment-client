@@ -7,6 +7,7 @@ import gui.MessageDialogType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 
@@ -27,30 +28,34 @@ public class AddCandidateSkillDialogListener extends ClientListener implements A
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
-		
+
 		if (source instanceof JButton) {
 			JButton button = (JButton) source;
 			String text = button.getText();
 
-			switch (text) {
-			case "Confirm":
-				Candidate candidate = controller.getView().getCandidatePanelCandidate();
-				Skill skill = controller.getView().getSkillDialogSkill(DialogType.ADD_CANDIDATE_SKILL);
-				boolean added = controller.getModel().addSkillToCandidate(skill, candidate, MainWindow.USER_ID);
-				
-				if(added) {
-					controller.getView().showMessageDialog(MessageDialogType.CANDIDATE_SKILL_ADDED);
-					
-					// update the skills displayed for the candidate
-					controller.getView().updateDisplayedCandidateSkills(controller.getModel().getCandidateSkills(candidate.getId()));
-				} else {
-					controller.getView().showErrorDialog(ErrorDialogType.ADD_CANDIDATE_SKILL_FAIL);
+			try {
+				switch (text) {
+				case "Confirm":
+					Candidate candidate = controller.getView().getCandidatePanelCandidate();
+					Skill skill = controller.getView().getSkillDialogSkill(DialogType.ADD_CANDIDATE_SKILL);
+					boolean added = controller.getModel().addSkillToCandidate(skill, candidate, MainWindow.USER_ID);
+
+					if (added) {
+						controller.getView().showMessageDialog(MessageDialogType.CANDIDATE_SKILL_ADDED);
+
+						// update the skills displayed for the candidate
+						controller.getView().updateDisplayedCandidateSkills(controller.getModel().getCandidateSkills(candidate.getId()));
+					} else {
+						controller.getView().showErrorDialog(ErrorDialogType.ADD_CANDIDATE_SKILL_FAIL);
+					}
+					controller.getView().hideDialog(DialogType.ADD_CANDIDATE_SKILL);
+					break;
+				case "Cancel ":
+					controller.getView().hideDialog(DialogType.ADD_CANDIDATE_SKILL);
+					break;
 				}
-				controller.getView().hideDialog(DialogType.ADD_CANDIDATE_SKILL);
-				break;
-			case "Cancel ":
-				controller.getView().hideDialog(DialogType.ADD_CANDIDATE_SKILL);
-				break;
+			} catch (RemoteException e) {
+				controller.exitApplication();
 			}
 		}
 	}
