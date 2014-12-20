@@ -48,6 +48,7 @@ public class TopMenuPanel extends JPanel {
 		}
 		menuOptions[0] = new MenuPanel("Vacancies", PanelType.VACANCIES);
 		menuOptions[0].setSelected(true);
+		menuOptions[0].setToolTipText("Displays the vacancies in the database.");
 		menuOptions[1] = new MenuPanel("My Candidate Pipeline", PanelType.PIPELINE);
 		menuOptions[2] = new MenuPanel("Organisations", PanelType.ORGANISATIONS);
 		menuOptions[3] = new MenuPanel("Search Candidates", PanelType.SEARCH);
